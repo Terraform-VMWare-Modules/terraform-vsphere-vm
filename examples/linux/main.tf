@@ -9,5 +9,5 @@ module "example-server-linux" {
   data_disk         = "true"
   data_disk_size_gb = 20
   dc                = "Datacenter"
-  ds_cluster        = "DEEDC-CS-ECOM-DEV"
+  ds_cluster        = "Data Store Cluster name"
 }

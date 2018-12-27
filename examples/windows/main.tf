@@ -10,5 +10,5 @@ module "example-server-windows-withdatadisk" {
   data_disk_size_gb = 20
   is_windows_image  = "true"
   dc                = "Datacenter"
-  ds_cluster        = "DEEDC-CS-ECOM-DEV"
+  ds_cluster        = "Data Store Cluster name"
 }
