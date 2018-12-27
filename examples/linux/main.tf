@@ -1,4 +1,4 @@
-module "example-server-linux" {
+module "example-server-linux-withdatadisk" {
   source            = "Module Source"                 
   version           = "v0.3.0"
   vmtemp            = "TemplateName"           
