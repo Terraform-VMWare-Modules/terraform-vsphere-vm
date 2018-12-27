@@ -43,7 +43,7 @@ variable "ipaddress" {
   default = ["10.0.0.1"]
 }
 variable "vmdomain" {
-  description = "default VM domain for linux guest customization"
+  description = "default VM domain for linux guest customization or Windows when join_windomain is selected"
   default = "Development"
 }
 variable "dc" {
@@ -71,5 +71,23 @@ variable "winadminpass" {
   default = "Str0ngP@ssw0rd!"
 }
 
+variable "join_windomain" {
+  description = "Boolean flag to set when want join windows server to AD"
+  default = "false"
+}
 
+variable "domainuser" {
+  description = "Domain admin user to join the server to AD"
+  default = ""
+}
+
+variable "domainpass" {
+  description = "Doamin User pssword to join the server to AD"
+  default = ""
+}
+
+variable "orgname" {
+  description = "Organization name for when joining windows server to AD"
+  default = "Terraform"
+}
 
