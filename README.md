@@ -1,4 +1,6 @@
-# Terraform vSphere Module for Virtual Machine Provisioning
+# Terraform vSphere Module
+
+For Virtual Machine Provisioning with (Linux/Windows) customization.
 
 ## Deploys (Single/Multiple) Virtual Machines to your vSphere environment
 
@@ -14,7 +16,9 @@ This Terraform module deploys single or multiple virtual machines of type (Linux
 
 ## Usage
 
-Following example contains the bare minimum options to be configured for the VM to be provisioned. You can choose between windows and linux customization by simply using the ´is_windows_image´ boolean switch. You can also download the entire module and use your own predefined variables to map your entire vSphere environment and use it within this module.
+Following example contains the bare minimum options to be configured for the VM to be provisioned. You can choose between windows and linux customization by simply using the ´is_windows_image´ boolean switch.
+
+You can also download the entire module and use your own predefined variables to map your entire vSphere environment and use it within this module.
 
 ```hcl
 module "example-server-linux-withdatadisk" {
