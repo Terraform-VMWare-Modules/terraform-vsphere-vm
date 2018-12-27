@@ -1,0 +1,10 @@
+# Compiled Files
+*.tfstate
+*.tfstate.backup
+
+#Module files
+.terraform/
+.DS_Store
+
+#Sensetive Info
+*private*
