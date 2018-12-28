@@ -11,6 +11,7 @@ This Terraform module deploys single or multiple virtual machines of type (Linux
 * Ability to deploy Multiple instances.
 * Ability to set IP and Gateway configuration for the VM.
 * Ability to choose vSphere resource pool or fall back to Cluster/ESXi root resource pool.
+* Ability to Deploy Windows images to WorkGroup or Domain.
 
 > Note: For module to work it needs number of required variables that need to correspond to an existing resources in vSphere. Please refer to variable section for the list of required variables.
 
@@ -22,8 +23,8 @@ You can also download the entire module and use your own predefined variables to
 
 ```hcl
 module "example-server-linux-withdatadisk" {
-  source            = "Module Source"
-  version           = "0.9.0"
+  source            = "Arman-Keyoumarsi/vm/vsphere"
+  version           = "0.9.2"
   vmtemp            = "TemplateName"
   instances         = 1
   vmname            = "example-server-windows"
@@ -36,8 +37,8 @@ module "example-server-linux-withdatadisk" {
 }
 
 module "example-server-windows-withdatadisk" {
-  source            = "Module Source"
-  version           = "0.9.0"
+  source            = "Arman-Keyoumarsi/vm/vsphere"
+  version           = "0.9.2"
   vmtemp            = "TemplateName"
   instances         = 1
   vmname            = "example-server-windows"
@@ -51,3 +52,56 @@ module "example-server-windows-withdatadisk" {
   winadminpass      = "Str0ngP@ssw0rd!"
 }
 ```
+
+> Note: When deploying a windows server in WorkGroup, we recommend to keep the Local Admin password set to its default and change it later via an script. Unfortunately Terraform redeploy the entire server if you change the local admin password within your code.
+
+## Advance Usage
+
+There are number of switches defined in the module, where you can use to enable different features for VM provisioning.
+
+### Main Feature Switches
+
+* You can use `is_windows_image = "true"` to set the customization type to Windows (By default it is set to Linux customization)
+* You can use `data_disk = "true"` to add one additional disk (Supported in both Linux and Windows deployment)
+  * By default it is set to 20GB. You can modify it by using `data_disk_size_gb` variable.
+* You can use `join_windomain = "true"` to join a windows server to AD domain.
+  * Requires following additional variables
+    * `domainuser` Domain account with necessary privileges to join a computer to the domain.
+    * `domainpass` Domain user password.
+    * `is_windows_image` needs to be set to `true` to force the module to use Windows customization.
+
+Below is an example of windows deployment with all available feature sets.
+
+```hcl
+module "example-server-windows-withdatadisk-domain" {
+  source            = "Arman-Keyoumarsi/vm/vsphere"
+  version           = "0.9.2"
+  vmtemp            = "TemplateName"
+  instances         = 1
+  vmname            = "example-server-windows"
+  vmrp              = "esxi/Resources"  
+  vlan              = "Name of the VLAN in vSphere"
+  is_windows_image  = "true"
+  data_disk         = "true"
+  data_disk_size_gb = 40
+  join_windomain    = "true"
+  domainpass        = "Domain Password"
+  domainuser        = "Domain User"
+  run_once          = ["echo Hello World"]
+  productkey        = "WC2BQ-8NRM3-FDDYY-2BFGV-KHKQY"
+  dc                = "Datacenter"
+  ds_cluster        = "Data Store Cluster name"
+  ipaddress         = ["10.0.0.13"]
+  vmdns             = ["1.1.1.1", "8.8.8.8"]
+  vmgateway         = "10.0.0.1"
+  winadminpass      = "Str0ngP@ssw0rd!"
+}
+```
+
+## Authors
+
+Originally created by [Arman Keyoumarsi](https://github.com/Arman-Keyoumarsi)
+
+## License
+
+[MIT](LICENSE)

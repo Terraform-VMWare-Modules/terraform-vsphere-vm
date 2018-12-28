@@ -11,7 +11,7 @@ variable "is_windows_image" {
 }
 variable "data_disk_size_gb" {
   description = "Storage data disk size size"
-  default     = ""
+  default     = 20
 }
 variable "data_disk" {
   type        = "string"
@@ -40,7 +40,7 @@ variable "ipv4submask" {
 variable "ipaddress" {
   description = "host(VM) IP address in list format, support more than one IP. Should correspond to number of instances"
   type    = "list"
-  default = ["10.0.0.1"]
+  default = ["10.0.0.13"]
 }
 variable "vmdomain" {
   description = "default VM domain for linux guest customization or Windows when join_windomain is selected"
@@ -70,17 +70,14 @@ variable "winadminpass" {
   description = "The administrator password for this virtual machine."
   default = "Str0ngP@ssw0rd!"
 }
-
 variable "join_windomain" {
   description = "Boolean flag to set when want join windows server to AD"
   default = "false"
 }
-
 variable "domainuser" {
   description = "Domain admin user to join the server to AD"
-  default = "DomainAdmin"
+  default = "Domain User"
 }
-
 variable "domainpass" {
   description = "Doamin User pssword to join the server to AD"
   default = "Str0ngP@ssw0rd!"
@@ -94,7 +91,6 @@ variable "run_once" {
   type = "list"
   default = []
 }
-
 variable "productkey" {
   description = "Product key to be used during windows customization. Defualt set to win2k16 KMS"
   default = "WC2BQ-8NRM3-FDDYY-2BFGV-KHKQY"
