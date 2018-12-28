@@ -139,6 +139,7 @@ resource "vsphere_virtual_machine" "WindowsVM" {
       windows_options {
         computer_name = "${var.vmname}${count.index+1}"
         admin_password = "${var.winadminpass}"
+        run_once_command_list = "${var.run_once}"
       }
 
       network_interface {
@@ -187,6 +188,7 @@ resource "vsphere_virtual_machine" "WindowsVM-withDataDisk" {
       windows_options {
         computer_name = "${var.vmname}${count.index+1}"
         admin_password = "${var.winadminpass}"
+        run_once_command_list = "${var.run_once}"
       }
 
       network_interface {
@@ -234,6 +236,8 @@ resource "vsphere_virtual_machine" "WindowsVM-Domain" {
         domain_admin_user = "${var.domainuser}"
         domain_admin_password = "${var.domainpass}"
         organization_name = "${var.orgname}"
+        run_once_command_list = "${var.run_once}"
+        product_key = "${var.productkey}"
       }
 
       network_interface {
@@ -246,7 +250,7 @@ resource "vsphere_virtual_machine" "WindowsVM-Domain" {
   }
 }
 
-// Creating Windows VM with no Data Disk. (Join to Domain)
+// Creating Windows VM with Data Disk. (Join to Domain)
 resource "vsphere_virtual_machine" "WindowsVM-withDataDisk-Domain" {
   count            = "${ var.is_windows_image == "true" && var.data_disk == "true" && var.join_windomain == "true" ? var.instances : 0}"
 
@@ -287,6 +291,8 @@ resource "vsphere_virtual_machine" "WindowsVM-withDataDisk-Domain" {
         domain_admin_user = "${var.domainuser}"
         domain_admin_password = "${var.domainpass}"
         organization_name = "${var.orgname}"
+        run_once_command_list = "${var.run_once}"
+        product_key = "${var.productkey}"
       }
 
       network_interface {

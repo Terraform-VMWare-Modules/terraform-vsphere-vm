@@ -78,16 +78,25 @@ variable "join_windomain" {
 
 variable "domainuser" {
   description = "Domain admin user to join the server to AD"
-  default = ""
+  default = "DomainAdmin"
 }
 
 variable "domainpass" {
   description = "Doamin User pssword to join the server to AD"
-  default = ""
+  default = "Str0ngP@ssw0rd!"
 }
-
 variable "orgname" {
   description = "Organization name for when joining windows server to AD"
   default = "Terraform"
+}
+variable "run_once" {
+  description = "List of Comamnd to run during first logon (Automatic login set to 1)"
+  type = "list"
+  default = []
+}
+
+variable "productkey" {
+  description = "Product key to be used during windows customization. Defualt set to win2k16 KMS"
+  default = "WC2BQ-8NRM3-FDDYY-2BFGV-KHKQY"
 }
 
