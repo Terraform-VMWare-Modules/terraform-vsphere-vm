@@ -1,4 +1,4 @@
-# Terraform vSphere LinuxVM example
+# Terraform vSphere WindowsVM example
 
 For Virtual Machine Provisioning with Windows customization.
 
