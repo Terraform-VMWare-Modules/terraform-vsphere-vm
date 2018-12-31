@@ -50,7 +50,7 @@ module "example-server-windowsvm-withdatadisk" {
 
 ```hcl
 module "example-server-windowsvm-withdatadisk-domain" {
-  source            = "Arman-Keyoumarsi/vm/vsphere"
+  source            = "Terraform-VMWare-Modules/vm/vsphere"
   version           = "0.9.2"
   vmtemp            = "TemplateName"
   instances         = 1
@@ -76,7 +76,7 @@ module "example-server-windowsvm-withdatadisk-domain" {
 
 ```hcl
 module "example-server-windowsvm-withdatadisk-domain" {
-  source            = "Arman-Keyoumarsi/vm/vsphere"
+  source            = "Terraform-VMWare-Modules/vm/vsphere"
   version           = "0.9.2"
   vmtemp            = "TemplateName"
   instances         = 1
