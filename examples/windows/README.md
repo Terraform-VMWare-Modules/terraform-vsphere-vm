@@ -1,4 +1,16 @@
-// Example of basic Windows VM
+# Terraform vSphere LinuxVM example
+
+For Virtual Machine Provisioning with Windows customization.
+
+> Note: For module to work it needs number of required variables corresponding to an existing resources in vSphere. Please refer to variable section for the list of required variables.
+
+## Usage
+
+Following example contains the bare minimum options to be configured for the Windows VM deployment.
+
+### Example of basic Windows VM
+
+```hcl
 module "example-server-windowsvm-withdatadisk" {
   source            = "Terraform-VMWare-Modules/vm/vsphere"
   version           = "0.9.2"
@@ -12,7 +24,11 @@ module "example-server-windowsvm-withdatadisk" {
   ds_cluster        = "Data Store Cluster name"
   winadminpass      = "Str0ngP@ssw0rd!" //Optional
 }
-// Example of Windows VM with additional
+```
+
+### Example of Windows VM with additional
+
+```hcl
 module "example-server-windowsvm-withdatadisk" {
   source            = "Terraform-VMWare-Modules/vm/vsphere"
   version           = "0.9.2"
@@ -28,7 +44,11 @@ module "example-server-windowsvm-withdatadisk" {
   ds_cluster        = "Data Store Cluster name"
   winadminpass      = "Str0ngP@ssw0rd!"
 }
-//Example of Windows VM joined to Domain!
+```
+
+### Example of Windows VM joined to Domain!
+
+```hcl
 module "example-server-windowsvm-withdatadisk-domain" {
   source            = "Arman-Keyoumarsi/vm/vsphere"
   version           = "0.9.2"
@@ -50,7 +70,11 @@ module "example-server-windowsvm-withdatadisk-domain" {
   vmgateway         = "10.0.0.1"
   winadminpass      = "Str0ngP@ssw0rd!"
 }
-//Example of Windows VM joined to Domain and with additional data disk!
+```
+
+### Example of Windows VM joined to Domain and with additional data disk
+
+```hcl
 module "example-server-windowsvm-withdatadisk-domain" {
   source            = "Arman-Keyoumarsi/vm/vsphere"
   version           = "0.9.2"
@@ -74,3 +98,12 @@ module "example-server-windowsvm-withdatadisk-domain" {
   vmgateway         = "10.0.0.1"
   winadminpass      = "Str0ngP@ssw0rd!"
 }
+```
+
+## Authors
+
+Originally created by [Arman Keyoumarsi](https://github.com/Arman-Keyoumarsi)
+
+## License
+
+[MIT](LICENSE)

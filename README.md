@@ -11,19 +11,19 @@ This Terraform module deploys single or multiple virtual machines of type (Linux
 * Ability to deploy Multiple instances.
 * Ability to set IP and Gateway configuration for the VM.
 * Ability to choose vSphere resource pool or fall back to Cluster/ESXi root resource pool.
-* Ability to Deploy Windows images to WorkGroup or Domain.
+* Ability to deploy Windows images to WorkGroup or Domain.
 
-> Note: For module to work it needs number of required variables that need to correspond to an existing resources in vSphere. Please refer to variable section for the list of required variables.
+> Note: For module to work it needs number of required variables corresponding to an existing resources in vSphere. Please refer to variable section for the list of required variables.
 
 ## Usage
 
-Following example contains the bare minimum options to be configured for the VM to be provisioned. You can choose between windows and linux customization by simply using the ´is_windows_image´ boolean switch.
+Following example contains the bare minimum options to be configured for (Linux/Windows) VM deployment. You can choose between windows and linux customization by simply using the ´is_windows_image´ boolean switch.
 
 You can also download the entire module and use your own predefined variables to map your entire vSphere environment and use it within this module.
 
 ```hcl
-module "example-server-linux-withdatadisk" {
-  source            = "Arman-Keyoumarsi/vm/vsphere"
+module "example-server-linuxvm-withdatadisk" {
+  source            = "Terraform-VMWare-Modules/vm/vsphere"
   version           = "0.9.2"
   vmtemp            = "TemplateName"
   instances         = 1
@@ -36,8 +36,8 @@ module "example-server-linux-withdatadisk" {
   ds_cluster        = "Data Store Cluster name"
 }
 
-module "example-server-windows-withdatadisk" {
-  source            = "Arman-Keyoumarsi/vm/vsphere"
+module "example-server-windowsvm-withdatadisk" {
+  source            = "Terraform-VMWare-Modules/vm/vsphere"
   version           = "0.9.2"
   vmtemp            = "TemplateName"
   instances         = 1
@@ -73,7 +73,7 @@ There are number of switches defined in the module, where you can use to enable 
 Below is an example of windows deployment with all available feature sets.
 
 ```hcl
-module "example-server-windows-withdatadisk-domain" {
+module "example-server-windowsvm-withdatadisk-domain" {
   source            = "Arman-Keyoumarsi/vm/vsphere"
   version           = "0.9.2"
   vmtemp            = "TemplateName"

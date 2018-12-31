@@ -3,7 +3,7 @@ variable "vmname" {
   default     = "terraformvm"
 }
 variable "vmtemp" {
-  description = "(Required)Name of the template available in the vSphere"
+  description = "Name of the template available in the vSphere"
 }
 variable "is_windows_image" {
   description = "Boolean flag to notify when the custom image is windows based."
@@ -47,13 +47,13 @@ variable "vmdomain" {
   default = "Development"
 }
 variable "dc" {
-  description = "(Required)Name of the datacenter you want to deploy the VM to"
+  description = "Name of the datacenter you want to deploy the VM to"
 }
 variable "vmrp" {
-  description = "(Required)Cluster resource pool that VM will be deployed to. you use following to choose default pool in the cluster (esxi1) or (Cluster)/Resources"
+  description = "Cluster resource pool that VM will be deployed to. you use following to choose default pool in the cluster (esxi1) or (Cluster)/Resources"
 }
 variable "ds_cluster" {
-  description = "(Required)Datastore cluster to deploy the VM."
+  description = "Datastore cluster to deploy the VM."
 }
 variable "vmfolder" {
   default = "Discovered virtual machine"
@@ -67,7 +67,7 @@ variable "vmdns" {
   default = ["8.8.8.8","1.1.1.1"]
    }
 variable "winadminpass" {
-  description = "The administrator password for this virtual machine."
+  description = "The administrator password for this virtual machine.(Required) when using join_windomain option"
   default = "Str0ngP@ssw0rd!"
 }
 variable "join_windomain" {
@@ -75,11 +75,11 @@ variable "join_windomain" {
   default = "false"
 }
 variable "domainuser" {
-  description = "Domain admin user to join the server to AD"
+  description = "Domain admin user to join the server to AD.(Required) when using join_windomain option"
   default = "Domain User"
 }
 variable "domainpass" {
-  description = "Doamin User pssword to join the server to AD"
+  description = "Doamin User pssword to join the server to AD.(Required) when using join_windomain option"
   default = "Str0ngP@ssw0rd!"
 }
 variable "orgname" {
