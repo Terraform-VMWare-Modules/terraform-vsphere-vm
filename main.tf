@@ -22,7 +22,7 @@ data "vsphere_virtual_machine" "template" {
 resource "vsphere_virtual_machine" "Linuxvm" {
    count            = "${ var.is_windows_image != "true" && var.data_disk == "false" ? var.instances : 0}"
   //Name of the server with index of count +1 to start from 1
-  name             = "${var.vmname}${count.index+1}}"
+  name             = "${var.vmname}${count.index+1}"
   resource_pool_id = "${data.vsphere_resource_pool.pool.id}"
   folder           = "${var.vmfolder}"
 
@@ -64,7 +64,7 @@ resource "vsphere_virtual_machine" "Linuxvm" {
 resource "vsphere_virtual_machine" "Linuxvm-withDataDisk" {
   count            = "${ var.is_windows_image != "true" && var.data_disk == "true" ? var.instances : 0}"
   //Name of the server with index of count +1 to start from 1
-  name             = "${var.vmname}${count.index+1}}"
+  name             = "${var.vmname}${count.index+1}"
   resource_pool_id = "${data.vsphere_resource_pool.pool.id}"
   folder           = "${var.vmfolder}"
 
