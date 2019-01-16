@@ -19,7 +19,7 @@ data "vsphere_virtual_machine" "template" {
   datacenter_id = "${data.vsphere_datacenter.dc.id}"
 }
 // Creating Linux VM with no Data Disk. Note: This the default option!!
-resource "vsphere_virtual_machine" "Linuxvm" {
+resource "vsphere_virtual_machine" "LinuxVM" {
   count            = "${ var.is_windows_image != "true" && var.data_disk == "false" ? var.instances : 0}"
   //Name of the server with index of count +1 to start from 1
   name             = "${var.vmname}${count.index+1}${var.vmnamesuffix}"
@@ -61,7 +61,7 @@ resource "vsphere_virtual_machine" "Linuxvm" {
   }
 }
 // Creating Linux VM with Data Disk.
-resource "vsphere_virtual_machine" "Linuxvm-withDataDisk" {
+resource "vsphere_virtual_machine" "LinuxVM-withDataDisk" {
   count            = "${ var.is_windows_image != "true" && var.data_disk == "true" ? var.instances : 0}"
   //Name of the server with index of count +1 to start from 1
   name             = "${var.vmname}${count.index+1}${var.vmnamesuffix}"

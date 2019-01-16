@@ -6,7 +6,6 @@ variable "vmnamesuffix" {
   description = "vmname suffix after numbered index coming from instance variable"
   default = ""
 }
-
 variable "vmtemp" {
   description = "Name of the template available in the vSphere"
 }
@@ -45,7 +44,7 @@ variable "ipv4submask" {
 variable "ipaddress" {
   description = "host(VM) IP address in list format, support more than one IP. Should correspond to number of instances"
   type    = "list"
-  default = ["10.0.0.13"]
+  default = [""]
 }
 variable "vmdomain" {
   description = "default VM domain for linux guest customization or Windows when join_windomain is selected"
@@ -69,7 +68,7 @@ variable "vmgateway" {
 }
 variable "vmdns" {
   type = "list"
-  default = ["8.8.8.8","1.1.1.1"]
+  default = []
    }
 variable "winadminpass" {
   description = "The administrator password for this virtual machine.(Required) when using join_windomain option"
