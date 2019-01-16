@@ -2,6 +2,11 @@ variable "vmname" {
   description = "The name of the virtual machine used to deploy the vms"
   default     = "terraformvm"
 }
+variable "vmnamesuffix" {
+  description = "vmname suffix after numbered index coming from instance variable"
+  default = ""
+}
+
 variable "vmtemp" {
   description = "Name of the template available in the vSphere"
 }
