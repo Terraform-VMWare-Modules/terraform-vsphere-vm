@@ -13,12 +13,11 @@ data "vsphere_network" "network" {
   name          = "${var.vlan}"
   datacenter_id = "${data.vsphere_datacenter.dc.id}"
 }
-
 data "vsphere_virtual_machine" "template" {
   name          = "${var.vmtemp}"
   datacenter_id = "${data.vsphere_datacenter.dc.id}"
 }
-// Creating Linux VM with no Data Disk. Note: This the default option!!
+// Creating Linux VM with no Data Disk. Note: This is the default option!!
 resource "vsphere_virtual_machine" "LinuxVM" {
   count            = "${ var.is_windows_image != "true" && var.data_disk == "false" ? var.instances : 0}"
   //Name of the server with index of count +1 to start from 1
