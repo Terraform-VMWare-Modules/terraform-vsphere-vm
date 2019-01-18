@@ -12,6 +12,7 @@ This Terraform module deploys single or multiple virtual machines of type (Linux
 * Ability to set IP and Gateway configuration for the VM.
 * Ability to choose vSphere resource pool or fall back to Cluster/ESXi root resource pool.
 * Ability to deploy Windows images to WorkGroup or Domain.
+* Ability to output VM names and IPs per module.
 
 > Note: For module to work it needs number of required variables corresponding to an existing resources in vSphere. Please refer to variable section for the list of required variables.
 
@@ -96,6 +97,15 @@ module "example-server-windowsvm-withdatadisk-domain" {
   vmgateway         = "10.0.0.1"
   winadminpass      = "Str0ngP@ssw0rd!"
 }
+
+output "vmnames" {
+  value = "${module.example-server-windowsvm-withdatadisk-domain.vm_name}"
+}
+
+output "vmnameswip" {
+  value = "${module.example-server-windowsvm-withdatadisk-domain.vm_ip}"
+}
+
 ```
 
 ## Authors
