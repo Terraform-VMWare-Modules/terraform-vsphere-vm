@@ -1,10 +1,12 @@
-# Compiled Files
-*.tfstate
-*.tfstate.backup
+#  Local .terraform directories
+**/.terraform/*
 
-#Module files
-.terraform/
-.DS_Store
+# .tfstate files
+*.tfstate
+*.tfstate.*
+
+# .tfvars files
+*.tfvars
 
 #Sensetive Info
 *private*
