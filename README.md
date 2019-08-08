@@ -1,12 +1,12 @@
-# Terraform vSphere Module
+# Terraform vSphere Module (:star2: All new features)
 
 For Virtual Machine Provisioning with (Linux/Windows) customization. Thanks to the new enhancements introduced in Terraform v0.12.6 this module include most the advance features that are available in the resource `vsphere_virtual_machine`. 
 
 :warning: The new version of this module only works with terraform version 0.12.6 and above :warning: 
 
 > This module now replace the functionality of the following modules:
-> * [`vm2nic`](https://registry.terraform.io/modules/Terraform-VMWare-Modules/vm2nic/vsphere/0.1.0)
-> * [`vm3nic`](https://registry.terraform.io/modules/Terraform-VMWare-Modules/vm3nic/vsphere/0.1.0)
+> * [`Terraform-VMWare-Modules-vm2nic`](https://registry.terraform.io/modules/Terraform-VMWare-Modules/vm2nic/vsphere/0.1.0)
+> * [`Terraform-VMWare-Modules-vm3nic`](https://registry.terraform.io/modules/Terraform-VMWare-Modules/vm3nic/vsphere/0.1.0)
 
 ## Deploys (Single/Multiple) Virtual Machines to your vSphere environment
 
