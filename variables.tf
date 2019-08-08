@@ -126,28 +126,28 @@ variable "dns_suffix_list" {
 
 variable "firmware" {
   description = "The firmware interface to use on the virtual machine. Can be one of bios or EFI."
-  default = "bios"
+  default     = "bios"
 }
 
 variable "num_cores_per_socket" {
   description = "The number of cores to distribute among the CPUs in this virtual machine. If specified, the value supplied to num_cpus must be evenly divisible by this value."
-  type = number
-  default = 1
+  type        = number
+  default     = 1
 }
 
 variable "cpu_hot_add_enabled" {
   description = "Allow CPUs to be added to this virtual machine while it is running."
-  default = null
+  default     = null
 }
 
 variable "cpu_hot_remove_enabled" {
   description = "Allow CPUs to be removed to this virtual machine while it is running."
-  default = null
+  default     = null
 }
 
 variable "memory_hot_add_enabled" {
   description = "Allow memory to be added to this virtual machine while it is running."
-  default = null
+  default     = null
 }
 
 variable "data_disk_size_gb" {
@@ -159,18 +159,18 @@ variable "data_disk_size_gb" {
 variable "thin_provisioned" {
   description = "If true, this disk is thin provisioned, with space for the file being allocated on an as-needed basis."
   type        = "list"
-  default = null
+  default     = null
 }
 
 variable "eagerly_scrub" {
   description = "if set to true, the disk space is zeroed out on VM creation. This will delay the creation of the disk or virtual machine. Cannot be set to true when thin_provisioned is true."
   type        = "list"
-  default = null
+  default     = null
 }
 
 variable "enable_disk_uuid" {
   description = "Expose the UUIDs of attached virtual disks to the virtual machine, allowing access to them in the guest."
-  default = null
+  default     = null
 }
 
 
@@ -199,7 +199,7 @@ variable "local_adminpass" {
 
 variable "workgroup" {
   description = "The workgroup name for this virtual machine. One of this or join_domain must be included."
-  default = null
+  default     = null
 }
 
 
@@ -225,17 +225,17 @@ variable "orgname" {
 
 variable "auto_logon" {
   description = " Specifies whether or not the VM automatically logs on as Administrator. Default: false"
-  default = null
+  default     = null
 }
 
 variable "auto_logon_count" {
   description = "Specifies how many times the VM should auto-logon the Administrator account when auto_logon is true. This should be set accordingly to ensure that all of your commands that run in run_once_command_list can log in to run"
-  default = null
+  default     = null
 }
 
 variable "time_zone" {
   description = "The new time zone for the virtual machine. This is a numeric, sysprep-dictated, timezone code."
-  default = null
+  default     = null
 }
 
 variable "run_once" {
@@ -251,5 +251,5 @@ variable "productkey" {
 
 variable "full_name" {
   description = "The full name of the user of this virtual machine. This populates the user field in the general Windows system information. Default - Administrator"
-  default = null
+  default     = null
 }

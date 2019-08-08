@@ -47,7 +47,7 @@ module "example-server-windowsvm-advanced" {
   }
   enable_disk_uuid = "true"
   auto_logon       = "true"
-  run_once         = ["mkdir c:\\admin", "echo runonce-test >> c:\\admin\\logs.txt"]
+  run_once         = ["command01", "command02"]
   orgname          = "Terraform-Module"
   workgroup        = "Module-Test"
   is_windows_image = "true"

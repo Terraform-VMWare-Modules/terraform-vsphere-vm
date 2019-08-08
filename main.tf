@@ -58,19 +58,19 @@ resource "vsphere_virtual_machine" "Linux" {
   annotation        = var.annotation
   extra_config      = var.extra_config
   firmware          = var.firmware
-  enable_disk_uuid = var.enable_disk_uuid
+  enable_disk_uuid  = var.enable_disk_uuid
 
   datastore_cluster_id = var.ds_cluster != "" ? data.vsphere_datastore_cluster.datastore_cluster[0].id : null
   datastore_id         = var.datastore != "" ? data.vsphere_datastore.datastore[0].id : null
 
-  num_cpus  = var.cpu_number
-  num_cores_per_socket = var.num_cores_per_socket
-  cpu_hot_add_enabled = var.cpu_hot_add_enabled
-  cpu_hot_remove_enabled = var.cpu_hot_remove_enabled 
-  memory    = var.ram_size
+  num_cpus               = var.cpu_number
+  num_cores_per_socket   = var.num_cores_per_socket
+  cpu_hot_add_enabled    = var.cpu_hot_add_enabled
+  cpu_hot_remove_enabled = var.cpu_hot_remove_enabled
+  memory                 = var.ram_size
   memory_hot_add_enabled = var.memory_hot_add_enabled
-  guest_id  = data.vsphere_virtual_machine.template.guest_id
-  scsi_type = data.vsphere_virtual_machine.template.scsi_type
+  guest_id               = data.vsphere_virtual_machine.template.guest_id
+  scsi_type              = data.vsphere_virtual_machine.template.scsi_type
 
 
   dynamic "network_interface" {
@@ -91,11 +91,11 @@ resource "vsphere_virtual_machine" "Linux" {
   dynamic "disk" {
     for_each = var.data_disk_size_gb
     content {
-      label       = "disk${disk.key + 1}"
-      size        = var.data_disk_size_gb[disk.key]
-      unit_number = disk.key + 1
+      label            = "disk${disk.key + 1}"
+      size             = var.data_disk_size_gb[disk.key]
+      unit_number      = disk.key + 1
       thin_provisioned = var.thin_provisioned != null ? var.thin_provisioned[disk.key] : null
-      eagerly_scrub = var.eagerly_scrub != null ? var.eagerly_scrub[disk.key] : null
+      eagerly_scrub    = var.eagerly_scrub != null ? var.eagerly_scrub[disk.key] : null
     }
   }
 
@@ -137,19 +137,19 @@ resource "vsphere_virtual_machine" "Windows" {
   annotation        = var.annotation
   extra_config      = var.extra_config
   firmware          = var.firmware
-  enable_disk_uuid = var.enable_disk_uuid
+  enable_disk_uuid  = var.enable_disk_uuid
 
   datastore_cluster_id = var.ds_cluster != "" ? data.vsphere_datastore_cluster.datastore_cluster[0].id : null
   datastore_id         = var.datastore != "" ? data.vsphere_datastore.datastore[0].id : null
 
-  num_cpus  = var.cpu_number
-  num_cores_per_socket = var.num_cores_per_socket
-  cpu_hot_add_enabled = var.cpu_hot_add_enabled
-  cpu_hot_remove_enabled = var.cpu_hot_remove_enabled 
-  memory    = var.ram_size
+  num_cpus               = var.cpu_number
+  num_cores_per_socket   = var.num_cores_per_socket
+  cpu_hot_add_enabled    = var.cpu_hot_add_enabled
+  cpu_hot_remove_enabled = var.cpu_hot_remove_enabled
+  memory                 = var.ram_size
   memory_hot_add_enabled = var.memory_hot_add_enabled
-  guest_id  = data.vsphere_virtual_machine.template.guest_id
-  scsi_type = data.vsphere_virtual_machine.template.scsi_type
+  guest_id               = data.vsphere_virtual_machine.template.guest_id
+  scsi_type              = data.vsphere_virtual_machine.template.scsi_type
 
 
   dynamic "network_interface" {
@@ -170,11 +170,11 @@ resource "vsphere_virtual_machine" "Windows" {
   dynamic "disk" {
     for_each = var.data_disk_size_gb
     content {
-      label       = "disk${disk.key + 1}"
-      size        = var.data_disk_size_gb[disk.key]
-      unit_number = disk.key + 1
+      label            = "disk${disk.key + 1}"
+      size             = var.data_disk_size_gb[disk.key]
+      unit_number      = disk.key + 1
       thin_provisioned = var.thin_provisioned != null ? var.thin_provisioned[disk.key] : null
-      eagerly_scrub = var.eagerly_scrub != null ? var.eagerly_scrub[disk.key] : null
+      eagerly_scrub    = var.eagerly_scrub != null ? var.eagerly_scrub[disk.key] : null
     }
   }
 
@@ -184,20 +184,20 @@ resource "vsphere_virtual_machine" "Windows" {
     timeout       = var.timeout
 
     customize {
-       windows_options {
-        computer_name    = "%{if var.vmnameliteral != ""}${var.vmnameliteral}%{else}${var.vmname}${count.index + 1}${var.vmnamesuffix}%{endif}"
-        admin_password = var.local_adminpass
-        workgroup = var.workgroup
+      windows_options {
+        computer_name         = "%{if var.vmnameliteral != ""}${var.vmnameliteral}%{else}${var.vmname}${count.index + 1}${var.vmnamesuffix}%{endif}"
+        admin_password        = var.local_adminpass
+        workgroup             = var.workgroup
         join_domain           = var.windomain
         domain_admin_user     = var.domain_admin_user
         domain_admin_password = var.domain_admin_password
         organization_name     = var.orgname
         run_once_command_list = var.run_once
-        auto_logon = var.auto_logon
-        auto_logon_count = var.auto_logon_count
-        time_zone = var.time_zone
+        auto_logon            = var.auto_logon
+        auto_logon_count      = var.auto_logon_count
+        time_zone             = var.time_zone
         product_key           = var.productkey
-        full_name = var.full_name
+        full_name             = var.full_name
       }
 
       dynamic "network_interface" {
