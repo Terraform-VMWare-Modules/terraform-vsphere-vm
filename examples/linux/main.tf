@@ -14,7 +14,7 @@ module "example-server-linuxvm" {
   datastore = "Data Store name(use ds_cluster for datastore cluster)"
 }
 // Example of Linux VM with more Advanced Features
-module "example-server-linuxvm-withdatadisk" {
+module "example-server-linuxvm-advanced" {
   source                 = "Terraform-VMWare-Modules/vm/vsphere"
   version                = "1.0.0"
   dc                     = "Datacenter"
