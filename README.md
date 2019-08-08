@@ -22,7 +22,7 @@ This Terraform module deploys single or multiple virtual machines of type (Linux
 * Ability to output VM names and IPs per module.
 * Ability assign tags and custom variables.
 * Ability to configure advance features for the vm.
-* Ability to deploy to either a datastore or a datastore cluster.
+* Ability to deploy either a datastore or a datastore cluster.
 * Ability to enable cpu and memory hot plug features for the VM.
 
 > Note: For module to work it needs number of required variables corresponding to an existing resources in vSphere. Please refer to variable section for the list of required variables.
