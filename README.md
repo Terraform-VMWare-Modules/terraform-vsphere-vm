@@ -1,18 +1,29 @@
 # Terraform vSphere Module
 
-For Virtual Machine Provisioning with (Linux/Windows) customization.
+For Virtual Machine Provisioning with (Linux/Windows) customization. Thanks to the new enhancements introduced in Terraform v0.12.6 this module include most the advance features that are available in the resource `vsphere_virtual_machine`. 
+
+:warning: The new version of this module only works with terraform version 0.12.6 and above :warning: 
+
+> This module now replace the functionality of the following modules:
+> * [`vm2nic`](https://registry.terraform.io/modules/Terraform-VMWare-Modules/vm2nic/vsphere/0.1.0)
+> * [`vm3nic`](https://registry.terraform.io/modules/Terraform-VMWare-Modules/vm3nic/vsphere/0.1.0)
 
 ## Deploys (Single/Multiple) Virtual Machines to your vSphere environment
 
 This Terraform module deploys single or multiple virtual machines of type (Linux/Windows) with following features:
 
 * Ability to specify Linux or Windows VM customization.
-* Ability to add extra data disk to the VM.
+* Ability to add extra data disk (up to 15) to the VM.
 * Ability to deploy Multiple instances.
 * Ability to set IP and Gateway configuration for the VM.
+* Ability to add multiple network cards for the VM
 * Ability to choose vSphere resource pool or fall back to Cluster/ESXi root resource pool.
 * Ability to deploy Windows images to WorkGroup or Domain.
 * Ability to output VM names and IPs per module.
+* Ability assign tags and custom variables.
+* Ability to configure advance features for the vm.
+* Ability to deploy to either a datastore or a datastore cluster.
+* Ability to enable cpu and memory hot plug features for the VM.
 
 > Note: For module to work it needs number of required variables corresponding to an existing resources in vSphere. Please refer to variable section for the list of required variables.
 
@@ -23,34 +34,35 @@ Following example contains the bare minimum options to be configured for (Linux/
 You can also download the entire module and use your own predefined variables to map your entire vSphere environment and use it within this module.
 
 ```hcl
-module "example-server-linuxvm-withdatadisk" {
-  source            = "Terraform-VMWare-Modules/vm/vsphere"
-  version           = "0.9.2"
-  vmtemp            = "TemplateName"
-  instances         = 1
-  vmname            = "example-server-windows"
-  vmrp              = "esxi/Resources"  
-  vlan              = "Name of the VLAN in vSphere"
-  data_disk         = "true"
-  data_disk_size_gb = 20
-  dc                = "Datacenter"
-  ds_cluster        = "Data Store Cluster name"
+module "example-server-linuxvm" {
+  source        = "Terraform-VMWare-Modules/vm/vsphere"
+  version       = "1.0.0"
+  vmtemp        = "TemplateName"
+  instances     = 1
+  vmname        = "example-server-windows"
+  vmrp          = "esxi/Resources"
+  network_cards = ["Name of the POrt Group in vSphere"]
+  ipv4 = {
+    "Name of the POrt Group in vSphere" = ["10.0.0.1"] # To use DHCP create Empty list for each instance
+  }
+  dc        = "Datacenter"
+  datastore = "Data Store name(use ds_cluster for datastore cluster)"
 }
 
-module "example-server-windowsvm-withdatadisk" {
-  source            = "Terraform-VMWare-Modules/vm/vsphere"
-  version           = "0.9.2"
-  vmtemp            = "TemplateName"
-  instances         = 1
-  vmname            = "example-server-windows"
-  vmrp              = "esxi/Resources"  
-  vlan              = "Name of the VLAN in vSphere"
-  data_disk         = "true"
-  data_disk_size_gb = 20
-  is_windows_image  = "true"
-  dc                = "Datacenter"
-  ds_cluster        = "Data Store Cluster name"
-  winadminpass      = "Str0ngP@ssw0rd!"
+module "example-server-windowsvm" {
+  source           = "Terraform-VMWare-Modules/vm/vsphere"
+  version          = "1.0.0"
+  vmtemp           = "TemplateName"
+  is_windows_image = "true"
+  instances        = 1
+  vmname           = "example-server-windows"
+  vmrp             = "esxi/Resources"
+  network_cards    = ["Name of the POrt Group in vSphere"]
+  ipv4 = {
+    "Name of the POrt Group in vSphere" = ["10.0.0.1"] # To use DHCP create Empty list for each instance
+  }
+  dc        = "Datacenter"
+  datastore = "Data Store name(use ds_cluster for datastore cluster)"
 }
 ```
 
@@ -63,47 +75,64 @@ There are number of switches defined in the module, where you can use to enable 
 ### Main Feature Switches
 
 * You can use `is_windows_image = "true"` to set the customization type to Windows (By default it is set to Linux customization)
-* You can use `data_disk = "true"` to add one additional disk (Supported in both Linux and Windows deployment)
-  * By default it is set to 20GB. You can modify it by using `data_disk_size_gb` variable.
-* You can use `join_windomain = "true"` to join a windows server to AD domain.
+* You can use `data_disk_size_gb = [20,30]` to add one additional disk (Supported in both Linux and Windows deployment)
+  * Above switch will create two additional disk of capacity 10 and 30gb for the VM.
+  * You can include `thin_provisioned` switch to define disk type for each additional disk.
+* You can use `windomain = "somedomain.com"` to join a windows server to AD domain.
   * Requires following additional variables
     * `domainuser` Domain account with necessary privileges to join a computer to the domain.
     * `domainpass` Domain user password.
     * `is_windows_image` needs to be set to `true` to force the module to use Windows customization.
 
-Below is an example of windows deployment with all available feature sets.
+Below is an example of windows deployment with some of the available feature sets.
 
 ```hcl
-module "example-server-windowsvm-withdatadisk-domain" {
-  source            = "Terraform-VMWare-Modules/vm/vsphere"
-  version           = "0.9.2"
-  vmtemp            = "TemplateName"
-  instances         = 1
-  vmname            = "example-server-windows"
-  vmrp              = "esxi/Resources"  
-  vlan              = "Name of the VLAN in vSphere"
-  is_windows_image  = "true"
-  data_disk         = "true"
-  data_disk_size_gb = 40
-  join_windomain    = "true"
-  domainpass        = "Domain Password"
-  domainuser        = "Domain User"
-  run_once          = ["echo Hello World"]
-  productkey        = "WC2BQ-8NRM3-FDDYY-2BFGV-KHKQY"
-  dc                = "Datacenter"
-  ds_cluster        = "Data Store Cluster name"
-  ipaddress         = ["10.0.0.13"]
-  vmdns             = ["1.1.1.1", "8.8.8.8"]
-  vmgateway         = "10.0.0.1"
-  winadminpass      = "Str0ngP@ssw0rd!"
+module "example-server-windowsvm-advanced" {
+  source                 = "Terraform-VMWare-Modules/vm/vsphere"
+  version                = "1.0.0"
+  dc                     = "Datacenter"
+  vmrp                   = "cluster/Resources" #Works with ESXi/Resources
+  vmfolder               = "Cattle"
+  ds_cluster             = "Datastore Cluster" #You can use datastore variable instead
+  vmtemp                 = "TemplateName"
+  instances              = 2
+  cpu_number             = 2
+  ram_size               = 2096
+  cpu_hot_add_enabled    = "true"
+  cpu_hot_remove_enabled = "true"
+  memory_hot_add_enabled = "true"
+  vmname                 = "AdvancedVM"
+  vmdomain               = "somedomain.com"
+  network_cards          = ["VM Network", "test-netwrok"] #Assign multiple cards
+  ipv4submask            = ["24", "8"]
+  ipv4 = { #assign IPs per card
+    "VM Network" = ["192.168.0.4", ""] // Here the first instance will use Static Ip and Second DHCP
+    "test"       = ["", "192.168.0.3"]
+  }
+  data_disk_size_gb = [10, 5] // Aditional Disk to be used
+  thin_provisioned  = ["true", "false"]
+  vmdns             = ["192.168.0.2", "192.168.0.1"]
+  vmgateway         = "192.168.0.1"
+  tags = {
+    "terraform-test-category"    = "terraform-test-tag"
+    "terraform-test-category-02" = "terraform-test-tag-02"
+  }
+  enable_disk_uuid = "true"
+  auto_logon       = "true"
+  run_once         = ["mkdir c:\\admin", "echo runonce-test >> c:\\admin\\logs.txt"]
+  orgname          = "Terraform-Module"
+  workgroup        = "Module-Test"
+  is_windows_image = "true"
+  firmware         = "efi"
+  local_adminpass  = "Password@Strong"
 }
 
 output "vmnames" {
-  value = "${module.example-server-windowsvm-withdatadisk-domain.vm_name}"
+  value = "${module.example-server-windowsvm-advanced.Windows-VM}"
 }
 
 output "vmnameswip" {
-  value = "${module.example-server-windowsvm-withdatadisk-domain.vm_ip}"
+  value = "${module.example-server-windowsvm-advanced.Windows-ip}"
 }
 
 ```

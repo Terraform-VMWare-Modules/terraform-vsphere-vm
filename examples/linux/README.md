@@ -13,34 +13,57 @@ Following example contains the bare minimum options to be configured for the Lin
 ```hcl
 module "example-server-linuxvm" {
   source            = "Terraform-VMWare-Modules/vm/vsphere"
-  version           = "0.9.2"
+  version           = "1.0.0"
   vmtemp            = "TemplateName"
   instances         = 1
   vmname            = "example-server-windows"
   vmrp              = "esxi/Resources"  
-  vlan              = "Name of the VLAN in vSphere"
-  data_disk         = "true"
-  data_disk_size_gb = 20
+  network_cards     = ["Name of the POrt Group in vSphere"]
+  ipv4 = {
+    "Name of the POrt Group in vSphere" = ["10.0.0.1"] # To use DHCP create Empty list for each instance
+  }
   dc                = "Datacenter"
-  ds_cluster        = "Data Store Cluster name"
+  datastore         = "Data Store name(use ds_cluster for datastore cluster)" 
 }
 ```
 
-### Example of Linux VM with Data Disk
+### Example of Advanced Linux VM Customization 
+
+Below example will deploy 2 instance of a virtual machine from a linux template. The virtual machines are configured to use 2 network cards with 2 additional disk.
+
+> You add up to 15 additional disk for each VM
 
 ```hcl
 module "example-server-linuxvm-withdatadisk" {
-  source            = "Terraform-VMWare-Modules/vm/vsphere"
-  version           = "0.9.2"
-  vmtemp            = "TemplateName"
-  instances         = 1
-  vmname            = "example-server-windows"
-  vmrp              = "esxi/Resources"  
-  vlan              = "Name of the VLAN in vSphere"
-  data_disk         = "true"
-  data_disk_size_gb = 20
-  dc                = "Datacenter"
-  ds_cluster        = "Data Store Cluster name"
+  source                 = "Terraform-VMWare-Modules/vm/vsphere"
+  version                = "1.0.0"
+  dc                     = "Datacenter"
+  vmrp                   = "cluster/Resources"
+  vmfolder               = "Cattle"
+  ds_cluster             = "Datastore Cluster"
+  vmtemp                 = "TemplateName"
+  instances              = 2
+  cpu_number             = 2
+  ram_size               = 2096
+  cpu_hot_add_enabled    = "true"
+  cpu_hot_remove_enabled = "true"
+  memory_hot_add_enabled = "true"
+  vmname                 = "AdvancedVM"
+  vmdomain               = "somedomain.com"
+  network_cards          = ["VM Network", "test-netwrok"]
+  ipv4submask            = ["24", "8"]
+  ipv4 = {
+    "VM Network" = ["192.168.0.4", ""] // Here the first instance will use Static Ip and Second set to DHCP
+    "test"       = ["", "192.168.0.3"]
+  }
+  data_disk_size_gb = [10, 5] // Aditional Disk to be used
+  thin_provisioned  = ["true", "false"]
+  vmdns             = ["192.168.0.2", "192.168.0.1"]
+  vmgateway         = "192.168.0.1"
+  tags = {
+    "terraform-test-category"    = "terraform-test-tag"
+    "terraform-test-category-02" = "terraform-test-tag-02"
+  }
 }
 ```
 
