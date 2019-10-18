@@ -42,7 +42,8 @@ data "vsphere_tag" "tag" {
 }
 
 locals {
-  len = length(var.ipv4submask) #Used for Subnet handeling
+  interface_count = length(var.ipv4submask) #Used for Subnet handeling
+  template_disk_count = length(data.vsphere_virtual_machine.template.disks)
 }
 
 // Cloning a Linux VM from a given template. Note: This is the default option!!
@@ -81,21 +82,29 @@ resource "vsphere_virtual_machine" "Linux" {
     }
   }
 
-  disk {
-    label            = "disk0"
-    size             = data.vsphere_virtual_machine.template.disks[0].size
-    thin_provisioned = data.vsphere_virtual_machine.template.disks[0].thin_provisioned
-    eagerly_scrub    = data.vsphere_virtual_machine.template.disks[0].eagerly_scrub
+  // Disks defined in the original template
+  dynamic "disk" {
+      for_each = data.vsphere_virtual_machine.template.disks
+      iterator = template_disks
+      content {
+          label            = "disk${template_disks.key}"
+          size             = data.vsphere_virtual_machine.template.disks[template_disks.key].size
+          unit_number      = template_disks.key
+          thin_provisioned = data.vsphere_virtual_machine.template.disks[template_disks.key].thin_provisioned
+          eagerly_scrub    = data.vsphere_virtual_machine.template.disks[template_disks.key].eagerly_scrub
+      }
   }
 
+  // Additional disks defined by Terraform config
   dynamic "disk" {
     for_each = var.data_disk_size_gb
+    iterator = terraform_disks
     content {
-      label            = "disk${disk.key + 1}"
-      size             = var.data_disk_size_gb[disk.key]
-      unit_number      = disk.key + 1
-      thin_provisioned = var.thin_provisioned != null ? var.thin_provisioned[disk.key] : null
-      eagerly_scrub    = var.eagerly_scrub != null ? var.eagerly_scrub[disk.key] : null
+      label            = "disk${terraform_disks.key + local.template_disk_count}"
+      size             = var.data_disk_size_gb[terraform_disks.key]
+      unit_number      = terraform_disks.key + local.template_disk_count
+      thin_provisioned = var.thin_provisioned != null ? var.thin_provisioned[terraform_disks.key] : null
+      eagerly_scrub    = var.eagerly_scrub != null ? var.eagerly_scrub[terraform_disks.key] : null
     }
   }
 
@@ -115,7 +124,7 @@ resource "vsphere_virtual_machine" "Linux" {
         for_each = var.network_cards
         content {
           ipv4_address = var.ipv4[var.network_cards[network_interface.key]][count.index]
-          ipv4_netmask = "%{if local.len == 1}${var.ipv4submask[0]}%{else}${var.ipv4submask[network_interface.key]}%{endif}"
+          ipv4_netmask = "%{if local.interface_count == 1}${var.ipv4submask[0]}%{else}${var.ipv4submask[network_interface.key]}%{endif}"
         }
       }
       dns_server_list = var.vmdns
@@ -160,21 +169,29 @@ resource "vsphere_virtual_machine" "Windows" {
     }
   }
 
-  disk {
-    label            = "disk0"
-    size             = data.vsphere_virtual_machine.template.disks[0].size
-    thin_provisioned = data.vsphere_virtual_machine.template.disks[0].thin_provisioned
-    eagerly_scrub    = data.vsphere_virtual_machine.template.disks[0].eagerly_scrub
+  // Disks defined in the original template
+  dynamic "disk" {
+      for_each = data.vsphere_virtual_machine.template.disks
+      iterator = template_disks
+      content {
+          label            = "disk${template_disks.key}"
+          size             = data.vsphere_virtual_machine.template.disks[template_disks.key].size
+          unit_number      = template_disks.key
+          thin_provisioned = data.vsphere_virtual_machine.template.disks[template_disks.key].thin_provisioned
+          eagerly_scrub    = data.vsphere_virtual_machine.template.disks[template_disks.key].eagerly_scrub
+      }
   }
 
+  // Additional disks defined by Terraform config
   dynamic "disk" {
     for_each = var.data_disk_size_gb
+    iterator = terraform_disks
     content {
-      label            = "disk${disk.key + 1}"
-      size             = var.data_disk_size_gb[disk.key]
-      unit_number      = disk.key + 1
-      thin_provisioned = var.thin_provisioned != null ? var.thin_provisioned[disk.key] : null
-      eagerly_scrub    = var.eagerly_scrub != null ? var.eagerly_scrub[disk.key] : null
+      label            = "disk${terraform_disks.key + local.template_disk_count}"
+      size             = var.data_disk_size_gb[terraform_disks.key]
+      unit_number      = terraform_disks.key + local.template_disk_count
+      thin_provisioned = var.thin_provisioned != null ? var.thin_provisioned[terraform_disks.key] : null
+      eagerly_scrub    = var.eagerly_scrub != null ? var.eagerly_scrub[terraform_disks.key] : null
     }
   }
 
@@ -204,7 +221,7 @@ resource "vsphere_virtual_machine" "Windows" {
         for_each = var.network_cards
         content {
           ipv4_address = var.ipv4[var.network_cards[network_interface.key]][count.index]
-          ipv4_netmask = "%{if local.len == 1}${var.ipv4submask[0]}%{else}${var.ipv4submask[network_interface.key]}%{endif}"
+          ipv4_netmask = "%{if local.interface_count == 1}${var.ipv4submask[0]}%{else}${var.ipv4submask[network_interface.key]}%{endif}"
         }
       }
       dns_server_list = var.vmdns
