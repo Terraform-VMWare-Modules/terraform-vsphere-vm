@@ -14,6 +14,25 @@ module "example-server-windowsvm-withdatadisk" {
   dc        = "Datacenter"
   datastore = "Data Store name(use ds_cluster for datastore cluster)"
 }
+// Example of basic Windows VM joined to the domain
+module "example-server-windowsvm-withdatadisk" {
+  source           = "Terraform-VMWare-Modules/vm/vsphere"
+  version          = "1.0.0"
+  vmtemp           = "TemplateName"
+  is_windows_image = "true"
+  windomain        = "Development.com"
+  domain_admin_user = "Domain admin user"
+  domain_admin_password = "SomePassword"
+  instances        = 1
+  vmname           = "example-server-windows"
+  vmrp             = "esxi/Resources"
+  network_cards    = ["Name of the POrt Group in vSphere"]
+  ipv4 = {
+    "Name of the POrt Group in vSphere" = ["10.0.0.1"] # To use DHCP create Empty list for each instance
+  }
+  dc        = "Datacenter"
+  datastore = "Data Store name(use ds_cluster for datastore cluster)"
+}
 //Example of Windows VM customization with advanced features
 module "example-server-windowsvm-advanced" {
   source                 = "Terraform-VMWare-Modules/vm/vsphere"
