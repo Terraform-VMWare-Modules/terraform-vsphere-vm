@@ -1,6 +1,6 @@
 # Terraform vSphere Module (:star2: All new features)
 
-For Virtual Machine Provisioning with (Linux/Windows) customization. Thanks to the new enhancements introduced in Terraform v0.12.6 this module include most the advance features that are available in the resource `vsphere_virtual_machine`. 
+For Virtual Machine Provisioning with (Linux/Windows) customization. Thanks to the new enhancements introduced in Terraform v0.12.6 this module include most of the advance features that are available in the resource `vsphere_virtual_machine`. 
 
 :warning: The new version of this module only works with terraform version 0.12.6 and above :warning: 
 
