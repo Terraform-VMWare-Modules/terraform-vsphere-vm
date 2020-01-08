@@ -42,7 +42,7 @@ data "vsphere_tag" "tag" {
 }
 
 locals {
-  interface_count = length(var.ipv4submask) #Used for Subnet handeling
+  interface_count     = length(var.ipv4submask) #Used for Subnet handeling
   template_disk_count = length(data.vsphere_virtual_machine.template.disks)
 }
 
@@ -73,6 +73,9 @@ resource "vsphere_virtual_machine" "Linux" {
   guest_id               = data.vsphere_virtual_machine.template.guest_id
   scsi_type              = data.vsphere_virtual_machine.template.scsi_type
 
+  wait_for_guest_net_routable = var.wait_for_guest_net_routable
+  wait_for_guest_ip_timeout   = var.wait_for_guest_ip_timeout
+  wait_for_guest_net_timeout  = var.wait_for_guest_net_timeout
 
   dynamic "network_interface" {
     for_each = var.network_cards
@@ -84,15 +87,15 @@ resource "vsphere_virtual_machine" "Linux" {
 
   // Disks defined in the original template
   dynamic "disk" {
-      for_each = data.vsphere_virtual_machine.template.disks
-      iterator = template_disks
-      content {
-          label            = "disk${template_disks.key}"
-          size             = data.vsphere_virtual_machine.template.disks[template_disks.key].size
-          unit_number      = template_disks.key
-          thin_provisioned = data.vsphere_virtual_machine.template.disks[template_disks.key].thin_provisioned
-          eagerly_scrub    = data.vsphere_virtual_machine.template.disks[template_disks.key].eagerly_scrub
-      }
+    for_each = data.vsphere_virtual_machine.template.disks
+    iterator = template_disks
+    content {
+      label            = "disk${template_disks.key}"
+      size             = data.vsphere_virtual_machine.template.disks[template_disks.key].size
+      unit_number      = template_disks.key
+      thin_provisioned = data.vsphere_virtual_machine.template.disks[template_disks.key].thin_provisioned
+      eagerly_scrub    = data.vsphere_virtual_machine.template.disks[template_disks.key].eagerly_scrub
+    }
   }
 
   // Additional disks defined by Terraform config
@@ -160,6 +163,9 @@ resource "vsphere_virtual_machine" "Windows" {
   guest_id               = data.vsphere_virtual_machine.template.guest_id
   scsi_type              = data.vsphere_virtual_machine.template.scsi_type
 
+  wait_for_guest_net_routable = var.wait_for_guest_net_routable
+  wait_for_guest_ip_timeout   = var.wait_for_guest_ip_timeout
+  wait_for_guest_net_timeout  = var.wait_for_guest_net_timeout
 
   dynamic "network_interface" {
     for_each = var.network_cards
@@ -171,15 +177,15 @@ resource "vsphere_virtual_machine" "Windows" {
 
   // Disks defined in the original template
   dynamic "disk" {
-      for_each = data.vsphere_virtual_machine.template.disks
-      iterator = template_disks
-      content {
-          label            = "disk${template_disks.key}"
-          size             = data.vsphere_virtual_machine.template.disks[template_disks.key].size
-          unit_number      = template_disks.key
-          thin_provisioned = data.vsphere_virtual_machine.template.disks[template_disks.key].thin_provisioned
-          eagerly_scrub    = data.vsphere_virtual_machine.template.disks[template_disks.key].eagerly_scrub
-      }
+    for_each = data.vsphere_virtual_machine.template.disks
+    iterator = template_disks
+    content {
+      label            = "disk${template_disks.key}"
+      size             = data.vsphere_virtual_machine.template.disks[template_disks.key].size
+      unit_number      = template_disks.key
+      thin_provisioned = data.vsphere_virtual_machine.template.disks[template_disks.key].thin_provisioned
+      eagerly_scrub    = data.vsphere_virtual_machine.template.disks[template_disks.key].eagerly_scrub
+    }
   }
 
   // Additional disks defined by Terraform config

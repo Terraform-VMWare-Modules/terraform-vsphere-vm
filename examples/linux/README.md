@@ -13,21 +13,21 @@ Following example contains the bare minimum options to be configured for the Lin
 ```hcl
 module "example-server-linuxvm" {
   source            = "Terraform-VMWare-Modules/vm/vsphere"
-  version           = "1.0.0"
+  version           = "1.0.2"
   vmtemp            = "TemplateName"
   instances         = 1
   vmname            = "example-server-windows"
-  vmrp              = "esxi/Resources"  
-  network_cards     = ["Name of the POrt Group in vSphere"]
+  vmrp              = "esxi/Resources"
+  network_cards     = ["Name of the Port Group in vSphere"]
   ipv4 = {
-    "Name of the POrt Group in vSphere" = ["10.0.0.1"] # To use DHCP create Empty list for each instance
+    "Name of the Port Group in vSphere" = ["10.0.0.1"] # To use DHCP create Empty list for each instance
   }
   dc                = "Datacenter"
-  datastore         = "Data Store name(use ds_cluster for datastore cluster)" 
+  datastore         = "Data Store name(use ds_cluster for datastore cluster)"
 }
 ```
 
-### Example of Advanced Linux VM Customization 
+### Example of Advanced Linux VM Customization
 
 Below example will deploy 2 instance of a virtual machine from a linux template. The virtual machines are configured to use 2 network cards with 2 additional disk.
 
@@ -36,7 +36,7 @@ Below example will deploy 2 instance of a virtual machine from a linux template.
 ```hcl
 module "example-server-linuxvm-withdatadisk" {
   source                 = "Terraform-VMWare-Modules/vm/vsphere"
-  version                = "1.0.0"
+  version                = "1.0.2"
   dc                     = "Datacenter"
   vmrp                   = "cluster/Resources"
   vmfolder               = "Cattle"

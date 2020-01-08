@@ -39,12 +39,12 @@ variable "network_cards" {
 
 variable "ipv4" {
   description = "host(VM) IP address in map format, support more than one IP. Should correspond to number of instances"
-  type        = "map"
+  type        = map
 }
 
 variable "ipv4submask" {
   description = "ipv4 Subnet mask"
-  type        = "list"
+  type        = list
   default     = ["24"]
 }
 
@@ -109,7 +109,7 @@ variable "annotation" {
 
 variable "linked_clone" {
   description = "Clone this virtual machine from a snapshot. Templates must have a single snapshot only in order to be eligible."
-  default     = "false"
+  default     = false
 }
 
 variable "timeout" {
@@ -152,19 +152,19 @@ variable "memory_hot_add_enabled" {
 
 variable "data_disk_size_gb" {
   description = "Storage data disk size size"
-  type        = "list"
+  type        = list
   default     = []
 }
 
 variable "thin_provisioned" {
   description = "If true, this disk is thin provisioned, with space for the file being allocated on an as-needed basis."
-  type        = "list"
+  type        = list
   default     = null
 }
 
 variable "eagerly_scrub" {
   description = "if set to true, the disk space is zeroed out on VM creation. This will delay the creation of the disk or virtual machine. Cannot be set to true when thin_provisioned is true."
-  type        = "list"
+  type        = list
   default     = null
 }
 
@@ -177,7 +177,7 @@ variable "enable_disk_uuid" {
 #Linux Customization Variables
 variable "hw_clock_utc" {
   description = "Tells the operating system that the hardware clock is set to UTC"
-  default     = "true"
+  default     = true
 }
 
 variable "vmdomain" {
@@ -189,7 +189,7 @@ variable "vmdomain" {
 #Windows Customization Variables
 variable "is_windows_image" {
   description = "Boolean flag to notify when the custom image is windows based."
-  default     = "false"
+  default     = false
 }
 
 variable "local_adminpass" {
@@ -201,7 +201,6 @@ variable "workgroup" {
   description = "The workgroup name for this virtual machine. One of this or join_domain must be included."
   default     = null
 }
-
 
 variable "windomain" {
   description = "The domain to join for this virtual machine. One of this or workgroup must be included."
@@ -252,4 +251,22 @@ variable "productkey" {
 variable "full_name" {
   description = "The full name of the user of this virtual machine. This populates the user field in the general Windows system information. Default - Administrator"
   default     = null
+}
+
+variable "wait_for_guest_net_routable" {
+  description = "Controls whether or not the guest network waiter waits for a routable address. When false, the waiter does not wait for a default gateway, nor are IP addresses checked against any discovered default gateways as part of its success criteria. This property is ignored if the wait_for_guest_ip_timeout waiter is used."
+  default     = true
+  type        = bool
+}
+
+variable "wait_for_guest_ip_timeout" {
+  description = "The amount of time, in minutes, to wait for an available guest IP address on this virtual machine. This should only be used if your version of VMware Tools does not allow the wait_for_guest_net_timeout waiter to be used. A value less than 1 disables the waiter."
+  default     = 0
+  type        = number
+}
+
+variable "wait_for_guest_net_timeout" {
+  description = "The amount of time, in minutes, to wait for an available IP address on this virtual machine's NICs. Older versions of VMware Tools do not populate this property. In those cases, this waiter can be disabled and the wait_for_guest_ip_timeout waiter can be used instead. A value less than 1 disables the waiter."
+  default     = 5
+  type        = number
 }
