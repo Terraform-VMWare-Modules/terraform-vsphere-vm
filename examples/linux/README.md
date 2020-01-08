@@ -50,7 +50,7 @@ module "example-server-linuxvm-withdatadisk" {
   memory_hot_add_enabled = "true"
   vmname                 = "AdvancedVM"
   vmdomain               = "somedomain.com"
-  network_cards          = ["VM Network", "test-netwrok"]
+  network_cards          = ["VM Network", "test-network"]
   ipv4submask            = ["24", "8"]
   ipv4 = {
     "VM Network" = ["192.168.0.4", ""] // Here the first instance will use Static Ip and Second set to DHCP

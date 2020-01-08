@@ -76,7 +76,7 @@ There are number of switches defined in the module, where you can use to enable 
 ### Main Feature Switches
 
 - You can use `is_windows_image = "true"` to set the customization type to Windows (By default it is set to Linux customization)
-- You can use `data_disk_size_gb = [20,30]` to add additional data disks (SupPorted in both Linux and Windows deployment)
+- You can use `data_disk_size_gb = [20,30]` to add additional data disks (Supported in both Linux and Windows deployment)
   - Above switch will create two additional disk of capacity 10 and 30gb for the VM.
   - You can include `thin_provisioned` switch to define disk type for each additional disk.
 - You can use `windomain = "somedomain.com"` to join a windows server to AD domain.
