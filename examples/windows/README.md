@@ -13,14 +13,14 @@ Following example contains the bare minimum options to be configured for the Win
 ```hcl
 module "example-server-windowsvm-withdatadisk" {
   source        = "Terraform-VMWare-Modules/vm/vsphere"
-  version       = "1.0.0"
+  version       = "1.0.2"
   vmtemp        = "TemplateName"
   instances     = 1
   vmname        = "example-server-windows"
   vmrp          = "esxi/Resources"
-  network_cards = ["Name of the POrt Group in vSphere"]
+  network_cards = ["Name of the Port Group in vSphere"]
   ipv4 = {
-    "Name of the POrt Group in vSphere" = ["10.0.0.1"] # To use DHCP create Empty list for each instance
+    "Name of the Port Group in vSphere" = ["10.0.0.1"] # To use DHCP create Empty list for each instance
   }
   dc        = "Datacenter"
   datastore = "Data Store name(use ds_cluster for datastore cluster)"
@@ -32,7 +32,7 @@ module "example-server-windowsvm-withdatadisk" {
 ```hcl
 module "example-server-windowsvm-advanced" {
    source                 = "Terraform-VMWare-Modules/vm/vsphere"
-  version                = "1.0.0"
+  version                = "1.0.2"
   dc                     = "Datacenter"
   vmrp                   = "cluster/Resources"
   vmfolder               = "Cattle"
@@ -52,7 +52,7 @@ module "example-server-windowsvm-advanced" {
     "VM Network" = ["192.168.0.4", ""] // Here the first instance will use Static Ip and Second DHCP
     "test"       = ["", "192.168.0.3"]
   }
-  data_disk_size_gb = [10, 5] // Aditional Disk to be used
+  data_disk_size_gb = [10, 5] // Aditional Disks to be used
   thin_provisioned  = ["true", "false"]
   vmdns             = ["192.168.0.2", "192.168.0.1"]
   vmgateway         = "192.168.0.1"
@@ -62,11 +62,11 @@ module "example-server-windowsvm-advanced" {
   }
   enable_disk_uuid = "true"
   auto_logon       = "true"
-  run_once         = ["mkdir c:\\admin", "echo runonce-test >> c:\\admin\\logs.txt"]
+  run_once         = ["mkdir c:\\admin", "echo runonce-test >> c:\\admin\\logs.txt", "powershell.exe \"New-Item C:\\test.txt\""]
   orgname          = "Terraform-Module"
   workgroup        = "Module-Test"
   is_windows_image = "true"
-  firmware         = "efi" 
+  firmware         = "efi"
   local_adminpass  = "Password@Strong"
 }
 ```
