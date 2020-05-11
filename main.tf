@@ -14,6 +14,18 @@ data "vsphere_datastore" "datastore" {
   datacenter_id = data.vsphere_datacenter.dc.id
 }
 
+data "vsphere_datastore" "disk_datastore" {
+  count         = var.disk_datastore != "" ? 1 : 0
+  name          = var.disk_datastore
+  datacenter_id = data.vsphere_datacenter.dc.id
+}
+
+data "vsphere_datastore" "data_disk_datastore" {
+  for_each      = toset(var.data_disk_datastore)
+  name          = each.key
+  datacenter_id = data.vsphere_datacenter.dc.id
+}
+
 data "vsphere_resource_pool" "pool" {
   name          = var.vmrp
   datacenter_id = data.vsphere_datacenter.dc.id
@@ -95,6 +107,7 @@ resource "vsphere_virtual_machine" "Linux" {
       unit_number      = template_disks.key
       thin_provisioned = data.vsphere_virtual_machine.template.disks[template_disks.key].thin_provisioned
       eagerly_scrub    = data.vsphere_virtual_machine.template.disks[template_disks.key].eagerly_scrub
+      datastore_id     = var.disk_datastore != null ? data.vsphere_datastore.disk_datastore[0].id : null
     }
   }
 
@@ -108,6 +121,7 @@ resource "vsphere_virtual_machine" "Linux" {
       unit_number      = terraform_disks.key + local.template_disk_count
       thin_provisioned = var.thin_provisioned != null ? var.thin_provisioned[terraform_disks.key] : null
       eagerly_scrub    = var.eagerly_scrub != null ? var.eagerly_scrub[terraform_disks.key] : null
+      datastore_id     = var.data_disk_datastore != null ? data.vsphere_datastore.data_disk_datastore[var.data_disk_datastore[terraform_disks.key]].id : null
     }
   }
 
@@ -185,6 +199,7 @@ resource "vsphere_virtual_machine" "Windows" {
       unit_number      = template_disks.key
       thin_provisioned = data.vsphere_virtual_machine.template.disks[template_disks.key].thin_provisioned
       eagerly_scrub    = data.vsphere_virtual_machine.template.disks[template_disks.key].eagerly_scrub
+      datastore_id     = var.disk_datastore != null ? data.vsphere_datastore.disk_datastore[0].id : null
     }
   }
 
@@ -198,6 +213,7 @@ resource "vsphere_virtual_machine" "Windows" {
       unit_number      = terraform_disks.key + local.template_disk_count
       thin_provisioned = var.thin_provisioned != null ? var.thin_provisioned[terraform_disks.key] : null
       eagerly_scrub    = var.eagerly_scrub != null ? var.eagerly_scrub[terraform_disks.key] : null
+      datastore_id     = var.data_disk_datastore != null ? data.vsphere_datastore.data_disk_datastore[var.data_disk_datastore[terraform_disks.key]].id : null
     }
   }
 
