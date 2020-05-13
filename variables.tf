@@ -66,6 +66,7 @@ variable "datastore" {
   default     = ""
 }
 
+
 variable "vmfolder" {
   description = "The path to the folder to put this virtual machine in, relative to the datacenter that the resource pool is in."
   default     = null
@@ -153,20 +154,6 @@ variable "data_disk_size_gb" {
   description = "Storage data disk size size"
   type        = list
   default     = []
-}
-
-variable "disk_datastore"{
-  type = string
-  default = null
-}
-
-variable "data_disk_datastore" {
-  type        = list
-  default     = []
-  # validation {
-  #   condition     = length(var.disk_datastore) == 0 || length(var.disk_datastore) == length(var.data_disk_size_gb)
-  #       error_message = "The list of disk datastore must be equal in length to disk_size_gb"
-  # }
 }
 
 variable "thin_provisioned" {

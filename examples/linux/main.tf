@@ -36,8 +36,6 @@ module "example-server-linuxvm-advanced" {
     "VM Network" = ["192.168.0.4", ""] // Here the first instance will use Static Ip and Second set to DHCP
     "test"       = ["", "192.168.0.3"]
   }
-  disk_datastore             = "vsanDatastore"
-  data_disk_datastore        = ["vsanDatastore", "nfsDatastore"]
   data_disk_size_gb = [10, 5] // Aditional Disks to be used
   thin_provisioned  = ["true", "false"]
   vmdns             = ["192.168.0.2", "192.168.0.1"]
