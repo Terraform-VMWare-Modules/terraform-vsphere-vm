@@ -66,6 +66,7 @@ variable "datastore" {
   default     = ""
 }
 
+
 variable "vmfolder" {
   description = "The path to the folder to put this virtual machine in, relative to the datacenter that the resource pool is in."
   default     = null
