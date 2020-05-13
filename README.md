@@ -1,4 +1,6 @@
-# Terraform vSphere Module (:star2: All new features)
+# Terraform vSphere Module
+
+![Terraform Version](https://img.shields.io/badge/Terraform-0.12.6-green.svg)
 
 For Virtual Machine Provisioning with (Linux/Windows) customization. Thanks to the new enhancements introduced in Terraform v0.12.6 this module include most of the advance features that are available in the resource `vsphere_virtual_machine`.
 
@@ -25,6 +27,7 @@ This Terraform module deploys single or multiple virtual machines of type (Linux
 - Ability to configure advance features for the vm.
 - Ability to deploy either a datastore or a datastore cluster.
 - Ability to enable cpu and memory hot plug features for the VM.
+- Ability to define different datastores for data disks
 
 > Note: For module to work it needs number of required variables corresponding to an existing resources in vSphere. Please refer to variable section for the list of required variables.
 
@@ -112,6 +115,8 @@ module "example-server-windowsvm-advanced" {
   }
   data_disk_size_gb = [10, 5] // Aditional Disk to be used
   thin_provisioned  = ["true", "false"]
+  disk_datastore             = "vsanDatastore" // This will store Template disk in the defined disk_datastore
+  data_disk_datastore        = ["vsanDatastore", "nfsDatastore"] // Datastores for additional data disks
   vmdns             = ["192.168.0.2", "192.168.0.1"]
   vmgateway         = "192.168.0.1"
   tags = {
