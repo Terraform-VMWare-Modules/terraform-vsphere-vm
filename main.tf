@@ -14,6 +14,18 @@ data "vsphere_datastore" "datastore" {
   datacenter_id = data.vsphere_datacenter.dc.id
 }
 
+data "vsphere_datastore" "disk_datastore" {
+  count         = var.disk_datastore != "" ? 1 : 0
+  name          = var.disk_datastore
+  datacenter_id = data.vsphere_datacenter.dc.id
+}
+
+data "vsphere_datastore" "data_disk_datastore" {
+  for_each      = toset(var.data_disk_datastore)
+  name          = each.key
+  datacenter_id = data.vsphere_datacenter.dc.id
+}
+
 data "vsphere_resource_pool" "pool" {
   name          = var.vmrp
   datacenter_id = data.vsphere_datacenter.dc.id
