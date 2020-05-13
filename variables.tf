@@ -156,8 +156,8 @@ variable "data_disk_size_gb" {
 }
 
 variable "disk_datastore"{
-  type = string
-  default = null
+  type        = string
+  default     = ""
 }
 
 variable "data_disk_datastore" {

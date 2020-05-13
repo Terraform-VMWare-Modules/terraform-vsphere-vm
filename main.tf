@@ -107,7 +107,7 @@ resource "vsphere_virtual_machine" "Linux" {
       unit_number      = template_disks.key
       thin_provisioned = data.vsphere_virtual_machine.template.disks[template_disks.key].thin_provisioned
       eagerly_scrub    = data.vsphere_virtual_machine.template.disks[template_disks.key].eagerly_scrub
-      datastore_id     = var.disk_datastore != null ? data.vsphere_datastore.disk_datastore[0].id : null
+      datastore_id     = var.disk_datastore != "" ? data.vsphere_datastore.disk_datastore[0].id : null
     }
   }
 
@@ -121,7 +121,7 @@ resource "vsphere_virtual_machine" "Linux" {
       unit_number      = terraform_disks.key + local.template_disk_count
       thin_provisioned = var.thin_provisioned != null ? var.thin_provisioned[terraform_disks.key] : null
       eagerly_scrub    = var.eagerly_scrub != null ? var.eagerly_scrub[terraform_disks.key] : null
-      datastore_id     = var.data_disk_datastore != null ? data.vsphere_datastore.data_disk_datastore[var.data_disk_datastore[terraform_disks.key]].id : null
+      datastore_id     = length(var.data_disk_datastore) > 0 ? data.vsphere_datastore.data_disk_datastore[var.data_disk_datastore[terraform_disks.key]].id : null
     }
   }
 
@@ -199,7 +199,7 @@ resource "vsphere_virtual_machine" "Windows" {
       unit_number      = template_disks.key
       thin_provisioned = data.vsphere_virtual_machine.template.disks[template_disks.key].thin_provisioned
       eagerly_scrub    = data.vsphere_virtual_machine.template.disks[template_disks.key].eagerly_scrub
-      datastore_id     = var.disk_datastore != null ? data.vsphere_datastore.disk_datastore[0].id : null
+      datastore_id     = var.disk_datastore != "" ? data.vsphere_datastore.disk_datastore[0].id : null
     }
   }
 
@@ -213,7 +213,7 @@ resource "vsphere_virtual_machine" "Windows" {
       unit_number      = terraform_disks.key + local.template_disk_count
       thin_provisioned = var.thin_provisioned != null ? var.thin_provisioned[terraform_disks.key] : null
       eagerly_scrub    = var.eagerly_scrub != null ? var.eagerly_scrub[terraform_disks.key] : null
-      datastore_id     = var.data_disk_datastore != null ? data.vsphere_datastore.data_disk_datastore[var.data_disk_datastore[terraform_disks.key]].id : null
+      datastore_id     = length(var.data_disk_datastore) > 0 ? data.vsphere_datastore.data_disk_datastore[var.data_disk_datastore[terraform_disks.key]].id : null
     }
   }
 
