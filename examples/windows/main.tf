@@ -1,7 +1,7 @@
 // Example of basic Windows VM
 module "example-server-windowsvm-withdatadisk" {
   source           = "Terraform-VMWare-Modules/vm/vsphere"
-  version          = "1.0.2"
+  version          = "1.1.0"
   vmtemp           = "TemplateName"
   is_windows_image = "true"
   instances        = 1
@@ -17,7 +17,7 @@ module "example-server-windowsvm-withdatadisk" {
 // Example of basic Windows VM joined to the domain
 module "example-server-windowsvm-withdatadisk" {
   source                = "Terraform-VMWare-Modules/vm/vsphere"
-  version               = "1.0.2"
+  version               = "1.1.0"
   vmtemp                = "TemplateName"
   is_windows_image      = "true"
   windomain             = "Development.com"
