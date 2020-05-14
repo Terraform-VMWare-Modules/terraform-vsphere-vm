@@ -1,6 +1,6 @@
 # Terraform vSphere Module
 
-![Terraform Version](https://img.shields.io/badge/Terraform-0.12.6-green.svg)
+![Terraform Version](https://img.shields.io/badge/Terraform-0.12.6-green.svg) [![TF Registry](https://img.shields.io/badge/terraform-registry-blue.svg)](https://registry.terraform.io/modules/Terraform-VMWare-Modules/vm/vsphere/) [![Changelog](https://img.shields.io/badge/changelog-release-green.svg)](https://github.com/Terraform-VMWare-Modules/terraform-vsphere-vm/releases) [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE) 
 
 For Virtual Machine Provisioning with (Linux/Windows) customization. Thanks to the new enhancements introduced in Terraform v0.12.6 this module include most of the advance features that are available in the resource `vsphere_virtual_machine`.
 
@@ -27,7 +27,8 @@ This Terraform module deploys single or multiple virtual machines of type (Linux
 - Ability to configure advance features for the vm.
 - Ability to deploy either a datastore or a datastore cluster.
 - Ability to enable cpu and memory hot plug features for the VM.
-- Ability to define different datastores for data disks
+- Ability to define different datastores for data disks.
+- Ability to define different scsi_controllers per disk including data disks.
 
 > Note: For module to work it needs number of required variables corresponding to an existing resources in vSphere. Please refer to variable section for the list of required variables.
 
@@ -40,7 +41,7 @@ You can also download the entire module and use your own predefined variables to
 ```hcl
 module "example-server-linuxvm" {
   source        = "Terraform-VMWare-Modules/vm/vsphere"
-  version       = "1.0.2"
+  version       = "1.1.0"
   vmtemp        = "TemplateName"
   instances     = 1
   vmname        = "example-server-windows"
@@ -55,7 +56,7 @@ module "example-server-linuxvm" {
 
 module "example-server-windowsvm" {
   source           = "Terraform-VMWare-Modules/vm/vsphere"
-  version          = "1.0.2"
+  version          = "1.1.0"
   vmtemp           = "TemplateName"
   is_windows_image = "true"
   instances        = 1
@@ -93,7 +94,7 @@ Below is an example of windows deployment with some of the available feature set
 ```hcl
 module "example-server-windowsvm-advanced" {
   source                 = "Terraform-VMWare-Modules/vm/vsphere"
-  version                = "1.0.2"
+  version                = "1.1.0"
   dc                     = "Datacenter"
   vmrp                   = "cluster/Resources" #Works with ESXi/Resources
   vmfolder               = "Cattle"
@@ -117,6 +118,9 @@ module "example-server-windowsvm-advanced" {
   thin_provisioned  = ["true", "false"]
   disk_datastore             = "vsanDatastore" // This will store Template disk in the defined disk_datastore
   data_disk_datastore        = ["vsanDatastore", "nfsDatastore"] // Datastores for additional data disks
+  scsi_type                 = "lsilogic" // Other acceptable value "pvscsi"
+  scsi_controller           = 0 // This will assign OS disk to controller 0
+  data_disk_scsi_controller = [0, 1] // This will create a new controller and assign second data disk to controller 1
   vmdns             = ["192.168.0.2", "192.168.0.1"]
   vmgateway         = "192.168.0.1"
   tags = {
