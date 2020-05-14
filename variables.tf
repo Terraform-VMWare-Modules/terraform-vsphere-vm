@@ -185,7 +185,7 @@ variable "scsi_type" {
 
 variable "scsi_controller"{
   type        = number
-  default     = null
+  default     = 0
   # validation {
   #   condition     = var.scsi_controller < 4 && var.scsi_controller > -1
   #       error_message = "The scsi_controller must be between 0 and 3"
