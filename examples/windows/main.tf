@@ -36,7 +36,7 @@ module "example-server-windowsvm-withdatadisk" {
 //Example of Windows VM customization with advanced features
 module "example-server-windowsvm-advanced" {
   source                 = "Terraform-VMWare-Modules/vm/vsphere"
-  version                = "1.0.3"
+  version                = "1.1.0"
   dc                     = "Datacenter"
   vmrp                   = "cluster/Resources"
   vmfolder               = "Cattle"
