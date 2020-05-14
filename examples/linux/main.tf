@@ -1,7 +1,7 @@
 // Simple Linux VM deployment
 module "example-server-linuxvm" {
   source        = "Terraform-VMWare-Modules/vm/vsphere"
-  version       = "1.0.2"
+  version       = "1.1.0"
   vmtemp        = "TemplateName"
   instances     = 1
   vmname        = "example-server-windows"
@@ -16,7 +16,7 @@ module "example-server-linuxvm" {
 // Example of Linux VM with more Advanced Features
 module "example-server-linuxvm-advanced" {
   source                 = "Terraform-VMWare-Modules/vm/vsphere"
-  version                = "1.0.3"
+  version                = "1.1.0"
   dc                     = "Datacenter"
   vmrp                   = "cluster/Resources"
   vmfolder               = "Cattle"
@@ -38,7 +38,7 @@ module "example-server-linuxvm-advanced" {
   }
   scsi_type = "lsilogic" # "pvscsi"
   scsi_controller = 0
-  data_disk_scsi_controller  = [0, 3]
+  data_disk_scsi_controller  = [0, 1]
   disk_datastore             = "vsanDatastore"
   data_disk_datastore        = ["vsanDatastore", "nfsDatastore"]
   data_disk_size_gb = [10, 5] // Aditional Disks to be used
