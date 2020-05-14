@@ -151,17 +151,19 @@ variable "memory_hot_add_enabled" {
 }
 
 variable "data_disk_size_gb" {
-  description = "Storage data disk size size"
+  description = "List of Storage data disk size"
   type        = list
   default     = []
 }
 
 variable "disk_datastore"{
+  description = "Define where the OS disk should be stored"
   type        = string
   default     = ""
 }
 
 variable "data_disk_datastore" {
+  description = "Define where the data disk should be stored, should be equal to number of defined data disks"
   type        = list
   default     = []
   # validation {
@@ -171,6 +173,7 @@ variable "data_disk_datastore" {
 }
 
 variable "data_disk_scsi_controller" {
+  description = "scsi_controller number for the data disk, should be equal to number of defined data disk"
   type        = list
   default     = []
   # validation {
@@ -179,11 +182,13 @@ variable "data_disk_scsi_controller" {
   # }
 }
 variable "scsi_type" {
+  description = "scsi_controller type, acceptable values lsilogic,pvscsi "
   type        = string
   default     = ""
 }
 
 variable "scsi_controller"{
+  description = "scsi_controller number for the main OS disk"
   type        = number
   default     = 0
   # validation {
