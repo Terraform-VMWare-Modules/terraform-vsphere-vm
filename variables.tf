@@ -170,6 +170,28 @@ variable "data_disk_datastore" {
   # }
 }
 
+variable "data_disk_scsi_controller" {
+  type        = list
+  default     = []
+  # validation {
+  #   condition     = max(var.data_disk_scsi_controller...) < 4 && max(var.data_disk_scsi_controller...) > -1
+  #       error_message = "The scsi_controller must be between 0 and 3"
+  # }
+}
+variable "scsi_type" {
+  type        = string
+  default     = ""
+}
+
+variable "scsi_controller"{
+  type        = number
+  default     = null
+  # validation {
+  #   condition     = var.scsi_controller < 4 && var.scsi_controller > -1
+  #       error_message = "The scsi_controller must be between 0 and 3"
+  # }
+}
+
 variable "thin_provisioned" {
   description = "If true, this disk is thin provisioned, with space for the file being allocated on an as-needed basis."
   type        = list

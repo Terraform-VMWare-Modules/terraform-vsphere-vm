@@ -16,7 +16,7 @@ module "example-server-linuxvm" {
 // Example of Linux VM with more Advanced Features
 module "example-server-linuxvm-advanced" {
   source                 = "Terraform-VMWare-Modules/vm/vsphere"
-  version                = "1.0.2"
+  version                = "1.0.3"
   dc                     = "Datacenter"
   vmrp                   = "cluster/Resources"
   vmfolder               = "Cattle"
@@ -36,6 +36,9 @@ module "example-server-linuxvm-advanced" {
     "VM Network" = ["192.168.0.4", ""] // Here the first instance will use Static Ip and Second set to DHCP
     "test"       = ["", "192.168.0.3"]
   }
+  scsi_type = "lsilogic" # "pvscsi"
+  scsi_controller = 0
+  data_disk_scsi_controller  = [0, 3]
   disk_datastore             = "vsanDatastore"
   data_disk_datastore        = ["vsanDatastore", "nfsDatastore"]
   data_disk_size_gb = [10, 5] // Aditional Disks to be used
