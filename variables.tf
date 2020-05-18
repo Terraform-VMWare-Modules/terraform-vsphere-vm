@@ -197,7 +197,7 @@ variable "scsi_controller"{
   # }
 }
 
-variable "thin_provisioned" {
+variable "data_disk_thin_provisioned" {
   description = "If true, this disk is thin provisioned, with space for the file being allocated on an as-needed basis."
   type        = list
   default     = null
