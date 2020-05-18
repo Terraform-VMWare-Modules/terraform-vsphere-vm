@@ -94,7 +94,7 @@ resource "vsphere_virtual_machine" "Linux" {
     for_each = var.network_cards
     content {
       network_id   = data.vsphere_network.network[network_interface.key].id
-      adapter_type = data.vsphere_virtual_machine.template.network_interface_types[0]
+      adapter_type = var.network_type != null ? var.network_type[network_interface.key] : data.vsphere_virtual_machine.template.network_interface_types[0]
     }
   }
 
@@ -187,7 +187,7 @@ resource "vsphere_virtual_machine" "Windows" {
     for_each = var.network_cards
     content {
       network_id   = data.vsphere_network.network[network_interface.key].id
-      adapter_type = data.vsphere_virtual_machine.template.network_interface_types[0]
+      adapter_type = var.network_type != null ? var.network_type[network_interface.key] : data.vsphere_virtual_machine.template.network_interface_types[0]
     }
   }
 
