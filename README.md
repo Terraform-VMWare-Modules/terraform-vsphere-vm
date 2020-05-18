@@ -82,7 +82,7 @@ There are number of switches defined in the module, where you can use to enable 
 - You can use `is_windows_image = "true"` to set the customization type to Windows (By default it is set to Linux customization)
 - You can use `data_disk_size_gb = [20,30]` to add additional data disks (Supported in both Linux and Windows deployment)
   - Above switch will create two additional disk of capacity 10 and 30gb for the VM.
-  - You can include `thin_provisioned` switch to define disk type for each additional disk.
+  - You can include `data_disk_thin_provisioned` switch to define disk type for each additional disk.
 - You can use `windomain = "somedomain.com"` to join a windows server to AD domain.
   - Requires following additional variables
     - `domainuser` Domain account with necessary privileges to join a computer to the domain.
@@ -115,7 +115,7 @@ module "example-server-windowsvm-advanced" {
     "test"       = ["", "192.168.0.3"]
   }
   data_disk_size_gb = [10, 5] // Aditional Disk to be used
-  thin_provisioned  = ["true", "false"]
+  data_disk_thin_provisioned  = ["true", "false"]
   disk_datastore             = "vsanDatastore" // This will store Template disk in the defined disk_datastore
   data_disk_datastore        = ["vsanDatastore", "nfsDatastore"] // Datastores for additional data disks
   scsi_type                 = "lsilogic" // Other acceptable value "pvscsi"

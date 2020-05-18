@@ -53,7 +53,7 @@ module "example-server-windowsvm-advanced" {
     "test"       = ["", "192.168.0.3"]
   }
   data_disk_size_gb = [10, 5] // Aditional Disks to be used
-  thin_provisioned  = ["true", "false"]
+  data_disk_thin_provisioned  = ["true", "false"]
   vmdns             = ["192.168.0.2", "192.168.0.1"]
   vmgateway         = "192.168.0.1"
   tags = {

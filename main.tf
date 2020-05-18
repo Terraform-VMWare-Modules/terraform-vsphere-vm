@@ -213,7 +213,7 @@ resource "vsphere_virtual_machine" "Windows" {
       label            = "disk${terraform_disks.key + local.template_disk_count}"
       size             = var.data_disk_size_gb[terraform_disks.key]
       unit_number      = length(var.data_disk_scsi_controller) > 0 ? var.data_disk_scsi_controller[terraform_disks.key] * 15 + terraform_disks.key + (var.scsi_controller == var.data_disk_scsi_controller[terraform_disks.key] ? local.template_disk_count : 0) : terraform_disks.key + local.template_disk_count
-      thin_provisioned = var.thin_provisioned != null ? var.thin_provisioned[terraform_disks.key] : null
+      thin_provisioned = var.data_disk_thin_provisioned != null ? var.data_disk_thin_provisioned[terraform_disks.key] : null
       eagerly_scrub    = var.eagerly_scrub != null ? var.eagerly_scrub[terraform_disks.key] : null
       datastore_id     = length(var.data_disk_datastore) > 0 ? data.vsphere_datastore.data_disk_datastore[var.data_disk_datastore[terraform_disks.key]].id : null
     }
