@@ -103,7 +103,7 @@ resource "vsphere_virtual_machine" "Linux" {
     for_each = data.vsphere_virtual_machine.template.disks
     iterator = template_disks
     content {
-      label            = "disk${template_disks.key}"
+      label            = length(var.disk_label) > 0 ? var.disk_label[template_disks.key] : "disk${template_disks.key}"
       size             = data.vsphere_virtual_machine.template.disks[template_disks.key].size
       unit_number      = var.scsi_controller != null ? var.scsi_controller * 15 + template_disks.key : template_disks.key
       thin_provisioned = data.vsphere_virtual_machine.template.disks[template_disks.key].thin_provisioned
@@ -117,7 +117,7 @@ resource "vsphere_virtual_machine" "Linux" {
     for_each = var.data_disk_size_gb
     iterator = terraform_disks
     content {
-      label            = "disk${terraform_disks.key + local.template_disk_count}"
+      label            = length(var.data_disk_label) > 0 ? var.data_disk_label[terraform_disks.key] : "disk${terraform_disks.key + local.template_disk_count}"
       size             = var.data_disk_size_gb[terraform_disks.key]
       unit_number      = length(var.data_disk_scsi_controller) > 0 ? var.data_disk_scsi_controller[terraform_disks.key] * 15 + terraform_disks.key + (var.scsi_controller == var.data_disk_scsi_controller[terraform_disks.key] ? local.template_disk_count : 0) : terraform_disks.key + local.template_disk_count
       thin_provisioned = var.thin_provisioned != null ? var.thin_provisioned[terraform_disks.key] : null
@@ -196,7 +196,7 @@ resource "vsphere_virtual_machine" "Windows" {
     for_each = data.vsphere_virtual_machine.template.disks
     iterator = template_disks
     content {
-      label            = "disk${template_disks.key}"
+      label            = length(var.disk_label) > 0 ? var.disk_label[template_disks.key] : "disk${template_disks.key}"
       size             = data.vsphere_virtual_machine.template.disks[template_disks.key].size
       unit_number      = var.scsi_controller != null ? var.scsi_controller * 15 + template_disks.key : template_disks.key
       thin_provisioned = data.vsphere_virtual_machine.template.disks[template_disks.key].thin_provisioned
@@ -210,7 +210,7 @@ resource "vsphere_virtual_machine" "Windows" {
     for_each = var.data_disk_size_gb
     iterator = terraform_disks
     content {
-      label            = "disk${terraform_disks.key + local.template_disk_count}"
+      label            = length(var.data_disk_label) > 0 ? var.data_disk_label[terraform_disks.key] : "disk${terraform_disks.key + local.template_disk_count}"
       size             = var.data_disk_size_gb[terraform_disks.key]
       unit_number      = length(var.data_disk_scsi_controller) > 0 ? var.data_disk_scsi_controller[terraform_disks.key] * 15 + terraform_disks.key + (var.scsi_controller == var.data_disk_scsi_controller[terraform_disks.key] ? local.template_disk_count : 0) : terraform_disks.key + local.template_disk_count
       thin_provisioned = var.thin_provisioned != null ? var.thin_provisioned[terraform_disks.key] : null

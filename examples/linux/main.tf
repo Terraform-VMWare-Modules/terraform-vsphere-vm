@@ -36,6 +36,8 @@ module "example-server-linuxvm-advanced" {
     "VM Network" = ["192.168.0.4", ""] // Here the first instance will use Static Ip and Second set to DHCP
     "test"       = ["", "192.168.0.3"]
   }
+  disk_label                 = ["tpl-disk-1"]
+  data_disk_label            = ["label1", "label2"]
   scsi_type = "lsilogic" # "pvscsi"
   scsi_controller = 0
   data_disk_scsi_controller  = [0, 1]

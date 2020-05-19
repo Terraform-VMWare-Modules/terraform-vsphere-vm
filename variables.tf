@@ -150,6 +150,18 @@ variable "memory_hot_add_enabled" {
   default     = null
 }
 
+variable "disk_label" {
+  description = "Storage data disk labels"
+  type        = list
+  default     = []
+}
+
+variable "data_disk_label" {
+  description = "Storage data disk labels"
+  type        = list
+  default     = []
+}
+
 variable "data_disk_size_gb" {
   description = "List of Storage data disk size"
   type        = list
@@ -213,7 +225,6 @@ variable "enable_disk_uuid" {
   description = "Expose the UUIDs of attached virtual disks to the virtual machine, allowing access to them in the guest."
   default     = null
 }
-
 
 #Linux Customization Variables
 variable "hw_clock_utc" {
