@@ -41,7 +41,7 @@ You can also download the entire module and use your own predefined variables to
 ```hcl
 module "example-server-linuxvm" {
   source        = "Terraform-VMWare-Modules/vm/vsphere"
-  version       = "1.1.0"
+  version       = "1.2.0"
   vmtemp        = "TemplateName"
   instances     = 1
   vmname        = "example-server-windows"
@@ -56,7 +56,7 @@ module "example-server-linuxvm" {
 
 module "example-server-windowsvm" {
   source           = "Terraform-VMWare-Modules/vm/vsphere"
-  version          = "1.1.0"
+  version          = "1.2.0"
   vmtemp           = "TemplateName"
   is_windows_image = "true"
   instances        = 1
@@ -94,7 +94,7 @@ Below is an example of windows deployment with some of the available feature set
 ```hcl
 module "example-server-windowsvm-advanced" {
   source                 = "Terraform-VMWare-Modules/vm/vsphere"
-  version                = "1.1.0"
+  version                = "1.2.0"
   dc                     = "Datacenter"
   vmrp                   = "cluster/Resources" #Works with ESXi/Resources
   vmfolder               = "Cattle"
@@ -109,6 +109,7 @@ module "example-server-windowsvm-advanced" {
   vmname                 = "AdvancedVM"
   vmdomain               = "somedomain.com"
   network_cards          = ["VM Network", "test-network"] #Assign multiple cards
+  network_type              = ["vmxnet3", "vmxnet3"]
   ipv4submask            = ["24", "8"]
   ipv4 = { #assign IPs per card
     "VM Network" = ["192.168.0.4", ""] // Here the first instance will use Static Ip and Second DHCP
@@ -116,6 +117,8 @@ module "example-server-windowsvm-advanced" {
   }
   data_disk_size_gb = [10, 5] // Aditional Disk to be used
   thin_provisioned  = ["true", "false"]
+  disk_label                = ["tpl-disk-1"]
+  data_disk_label           = ["label1", "label2"]
   disk_datastore             = "vsanDatastore" // This will store Template disk in the defined disk_datastore
   data_disk_datastore        = ["vsanDatastore", "nfsDatastore"] // Datastores for additional data disks
   scsi_type                 = "lsilogic" // Other acceptable value "pvscsi"
