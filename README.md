@@ -29,6 +29,7 @@ This Terraform module deploys single or multiple virtual machines of type (Linux
 - Ability to enable cpu and memory hot plug features for the VM.
 - Ability to define different datastores for data disks.
 - Ability to define different scsi_controllers per disk, including data disks.
+- Ability to define network type per interface and disk label per attached disk.
 
 > Note: For module to work it needs number of required variables corresponding to an existing resources in vSphere. Please refer to variable section for the list of required variables.
 
