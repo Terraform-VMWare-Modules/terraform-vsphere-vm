@@ -227,6 +227,7 @@ variable "enable_disk_uuid" {
 }
 
 variable "network_type" {
+  description = "Define network type for each network interface"
   type =  list
   default = null
 }
