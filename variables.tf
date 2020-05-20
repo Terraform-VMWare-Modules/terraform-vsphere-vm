@@ -226,6 +226,11 @@ variable "enable_disk_uuid" {
   default     = null
 }
 
+variable "network_type" {
+  type =  list
+  default = null
+}
+
 #Linux Customization Variables
 variable "hw_clock_utc" {
   description = "Tells the operating system that the hardware clock is set to UTC"

@@ -67,6 +67,7 @@ module "example-server-linuxvm-withdatadisk" {
   thin_provisioned  = ["true", "false"]
   vmdns             = ["192.168.0.2", "192.168.0.1"]
   vmgateway         = "192.168.0.1"
+  network_type = ["vmxnet3", "vmxnet3"]
   tags = {
     "terraform-test-category"    = "terraform-test-tag"
     "terraform-test-category-02" = "terraform-test-tag-02"
