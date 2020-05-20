@@ -53,6 +53,13 @@ module "example-server-windowsvm-advanced" {
     "test"       = ["", "192.168.0.3"]
   }
   data_disk_size_gb = [10, 5] // Aditional Disks to be used
+  disk_label                 = ["tpl-disk-1"]
+  data_disk_label            = ["label1", "label2"]
+  scsi_type = "lsilogic" # "pvscsi"
+  scsi_controller = 0 # template disk scsi_controller
+  data_disk_scsi_controller  = [0, 1]
+  disk_datastore             = "vsanDatastore"
+  data_disk_datastore        = ["vsanDatastore", "nfsDatastore"]
   thin_provisioned  = ["true", "false"]
   vmdns             = ["192.168.0.2", "192.168.0.1"]
   vmgateway         = "192.168.0.1"
