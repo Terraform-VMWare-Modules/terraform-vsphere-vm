@@ -13,7 +13,7 @@ Following example contains the bare minimum options to be configured for the Lin
 ```hcl
 module "example-server-linuxvm" {
   source            = "Terraform-VMWare-Modules/vm/vsphere"
-  version           = "1.2.0"
+  version           = "Latest X.X.X"
   vmtemp            = "TemplateName"
   instances         = 1
   vmname            = "example-server-windows"
@@ -36,7 +36,7 @@ Below example will deploy 2 instance of a virtual machine from a linux template.
 ```hcl
 module "example-server-linuxvm-withdatadisk" {
   source                 = "Terraform-VMWare-Modules/vm/vsphere"
-  version                = "1.2.0"
+  version                = "Latest X.X.X"
   dc                     = "Datacenter"
   vmrp                   = "cluster/Resources"
   vmfolder               = "Cattle"
