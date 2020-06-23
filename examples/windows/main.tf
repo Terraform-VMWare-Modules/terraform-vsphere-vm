@@ -1,7 +1,7 @@
 // Example of basic Windows VM
 module "example-server-windowsvm-withdatadisk" {
   source           = "Terraform-VMWare-Modules/vm/vsphere"
-  version          = "1.1.0"
+  version          = "Latest X.X.X"
   vmtemp           = "TemplateName"
   is_windows_image = "true"
   instances        = 1
@@ -36,7 +36,7 @@ module "example-server-windowsvm-withdatadisk" {
 //Example of Windows VM customization with advanced features
 module "example-server-windowsvm-advanced" {
   source                 = "Terraform-VMWare-Modules/vm/vsphere"
-  version                = "1.1.0"
+  version                = "Latest X.X.X"
   dc                     = "Datacenter"
   vmrp                   = "cluster/Resources"
   vmfolder               = "Cattle"
@@ -56,18 +56,18 @@ module "example-server-windowsvm-advanced" {
     "VM Network" = ["192.168.0.4", ""] // Here the first instance will use Static Ip and Second DHCP
     "test"       = ["", "192.168.0.3"]
   }
-  disk_label                 = ["tpl-disk-1"]
-  data_disk_label            = ["label1", "label2"]
-  scsi_type = "lsilogic" # "pvscsi"
-  scsi_controller = 0
-  data_disk_scsi_controller  = [0, 3]
-  disk_datastore             = "vsanDatastore"
-  data_disk_datastore        = ["vsanDatastore", "nfsDatastore"]
-  data_disk_size_gb = [10, 5] // Aditional Disks to be used
-  thin_provisioned  = ["true", "false"]
-  vmdns             = ["192.168.0.2", "192.168.0.1"]
-  vmgateway         = "192.168.0.1"
-  network_type = ["vmxnet3", "vmxnet3"]
+  disk_label                = ["tpl-disk-1"]
+  data_disk_label           = ["label1", "label2"]
+  scsi_type                 = "lsilogic" # "pvscsi"
+  scsi_controller           = 0
+  data_disk_scsi_controller = [0, 3]
+  disk_datastore            = "vsanDatastore"
+  data_disk_datastore       = ["vsanDatastore", "nfsDatastore"]
+  data_disk_size_gb         = [10, 5] // Aditional Disks to be used
+  thin_provisioned          = ["true", "false"]
+  vmdns                     = ["192.168.0.2", "192.168.0.1"]
+  vmgateway                 = "192.168.0.1"
+  network_type              = ["vmxnet3", "vmxnet3"]
   tags = {
     "terraform-test-category"    = "terraform-test-tag"
     "terraform-test-category-02" = "terraform-test-tag-02"

@@ -13,7 +13,7 @@ Following example contains the bare minimum options to be configured for the Win
 ```hcl
 module "example-server-windowsvm-withdatadisk" {
   source        = "Terraform-VMWare-Modules/vm/vsphere"
-  version       = "1.2.0"
+  version       = "Latest X.X.X"
   vmtemp        = "TemplateName"
   instances     = 1
   vmname        = "example-server-windows"
@@ -32,7 +32,7 @@ module "example-server-windowsvm-withdatadisk" {
 ```hcl
 module "example-server-windowsvm-advanced" {
    source                 = "Terraform-VMWare-Modules/vm/vsphere"
-  version                = "1.2.0"
+  version                = "Latest X.X.X"
   dc                     = "Datacenter"
   vmrp                   = "cluster/Resources"
   vmfolder               = "Cattle"

@@ -16,6 +16,7 @@ module "example-server-linuxvm" {
 // Example of Linux VM with more Advanced Features
 module "example-server-linuxvm-advanced" {
   source                 = "Terraform-VMWare-Modules/vm/vsphere"
+  vm_depends_on          = [module.example-server-linuxvm] # This force the second module to wait for first VM to be created first
   version                = "Latest X.X.X"
   dc                     = "Datacenter"
   vmrp                   = "cluster/Resources"

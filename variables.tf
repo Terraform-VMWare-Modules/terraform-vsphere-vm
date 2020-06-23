@@ -168,7 +168,7 @@ variable "data_disk_size_gb" {
   default     = []
 }
 
-variable "disk_datastore"{
+variable "disk_datastore" {
   description = "Define where the OS disk should be stored"
   type        = string
   default     = ""
@@ -199,7 +199,7 @@ variable "scsi_type" {
   default     = ""
 }
 
-variable "scsi_controller"{
+variable "scsi_controller" {
   description = "scsi_controller number for the main OS disk"
   type        = number
   default     = 0
@@ -228,8 +228,8 @@ variable "enable_disk_uuid" {
 
 variable "network_type" {
   description = "Define network type for each network interface"
-  type =  list
-  default = null
+  type        = list
+  default     = null
 }
 
 #Linux Customization Variables
@@ -327,4 +327,10 @@ variable "wait_for_guest_net_timeout" {
   description = "The amount of time, in minutes, to wait for an available IP address on this virtual machine's NICs. Older versions of VMware Tools do not populate this property. In those cases, this waiter can be disabled and the wait_for_guest_ip_timeout waiter can be used instead. A value less than 1 disables the waiter."
   default     = 5
   type        = number
+}
+
+variable "vm_depends_on" {
+  description = "Add any external depend on module here like vm_depends_on = [module.fw_core01.firewall]"
+  type        = any
+  default     = null
 }
