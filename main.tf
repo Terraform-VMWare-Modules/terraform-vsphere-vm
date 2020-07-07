@@ -43,14 +43,16 @@ data "vsphere_virtual_machine" "template" {
 }
 
 data "vsphere_tag_category" "category" {
-  count = var.tags != null ? length(var.tags) : 0
-  name  = keys(var.tags)[count.index]
+  count      = var.tags != null ? length(var.tags) : 0
+  name       = keys(var.tags)[count.index]
+  depends_on = [var.vm_depends_on]
 }
 
 data "vsphere_tag" "tag" {
   count       = var.tags != null ? length(var.tags) : 0
   name        = var.tags[keys(var.tags)[count.index]]
   category_id = "${data.vsphere_tag_category.category[count.index].id}"
+  depends_on  = [var.vm_depends_on]
 }
 
 locals {
