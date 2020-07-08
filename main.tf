@@ -43,16 +43,14 @@ data "vsphere_virtual_machine" "template" {
 }
 
 data "vsphere_tag_category" "category" {
-  count      = var.tags != null ? length(var.tags) : 0
-  name       = keys(var.tags)[count.index]
-  depends_on = [var.vm_depends_on]
+  count = var.tags != null ? length(var.tags) : 0
+  name  = keys(var.tags)[count.index]
 }
 
 data "vsphere_tag" "tag" {
   count       = var.tags != null ? length(var.tags) : 0
   name        = var.tags[keys(var.tags)[count.index]]
   category_id = "${data.vsphere_tag_category.category[count.index].id}"
-  depends_on  = [var.vm_depends_on]
 }
 
 locals {
@@ -68,7 +66,7 @@ resource "vsphere_virtual_machine" "Linux" {
 
   resource_pool_id  = data.vsphere_resource_pool.pool.id
   folder            = var.vmfolder
-  tags              = data.vsphere_tag.tag[*].id
+  tags              = var.tag_ids != null ? var.tag_ids : data.vsphere_tag.tag[*].id
   custom_attributes = var.custom_attributes
   annotation        = var.annotation
   extra_config      = var.extra_config
@@ -163,7 +161,7 @@ resource "vsphere_virtual_machine" "Windows" {
 
   resource_pool_id  = data.vsphere_resource_pool.pool.id
   folder            = var.vmfolder
-  tags              = data.vsphere_tag.tag[*].id
+  tags              = var.tag_ids != null ? var.tag_ids : data.vsphere_tag.tag[*].id
   custom_attributes = var.custom_attributes
   annotation        = var.annotation
   extra_config      = var.extra_config
