@@ -85,6 +85,7 @@ resource "vsphere_virtual_machine" "Linux" {
   memory                 = var.ram_size
   memory_hot_add_enabled = var.memory_hot_add_enabled
   guest_id               = data.vsphere_virtual_machine.template.guest_id
+  scsi_bus_sharing       = var.scsi_bus_sharing
   scsi_type              = var.scsi_type != "" ? var.scsi_type : data.vsphere_virtual_machine.template.scsi_type
   scsi_controller_count  = length(var.data_disk_scsi_controller) > 0 ? max(max(var.data_disk_scsi_controller...) + 1, var.scsi_controller) : 1
 
@@ -178,6 +179,7 @@ resource "vsphere_virtual_machine" "Windows" {
   memory                 = var.ram_size
   memory_hot_add_enabled = var.memory_hot_add_enabled
   guest_id               = data.vsphere_virtual_machine.template.guest_id
+  scsi_bus_sharing       = var.scsi_bus_sharing
   scsi_type              = var.scsi_type != "" ? var.scsi_type : data.vsphere_virtual_machine.template.scsi_type
   scsi_controller_count  = length(var.data_disk_scsi_controller) > 0 ? max(max(var.data_disk_scsi_controller...) + 1, var.scsi_controller) : 1
 
