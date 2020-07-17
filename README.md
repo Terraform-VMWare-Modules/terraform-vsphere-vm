@@ -22,6 +22,7 @@ This Terraform module deploys single or multiple virtual machines of type (Linux
 - Ability to configure advance features for the vm.
 - Ability to deploy either a datastore or a datastore cluster.
 - Ability to enable cpu and memory hot plug features for the VM.
+- Ability to enable cpu and memory reservations for the VM.
 - Ability to define different datastores for data disks.
 - Ability to define different scsi_controllers per disk, including data disks.
 - Ability to define network type per interface and disk label per attached disk.
@@ -100,6 +101,8 @@ module "example-server-windowsvm-advanced" {
   instances              = 2
   cpu_number             = 2
   ram_size               = 2096
+  cpu_reservation        = 2000
+  memory_reservation     = 2000
   cpu_hot_add_enabled    = "true"
   cpu_hot_remove_enabled = "true"
   memory_hot_add_enabled = "true"
