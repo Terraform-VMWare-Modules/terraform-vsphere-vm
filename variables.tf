@@ -27,6 +27,12 @@ variable "cpu_number" {
   default     = 2
 }
 
+variable "cpu_reservation" {
+  description = "The amount of CPU (in MHz) that this virtual machine is guaranteed."
+  default     = null
+}
+
+
 variable "ram_size" {
   description = "VM RAM size in megabytes"
   default     = 4096
@@ -147,6 +153,11 @@ variable "cpu_hot_remove_enabled" {
 
 variable "memory_hot_add_enabled" {
   description = "Allow memory to be added to this virtual machine while it is running."
+  default     = null
+}
+
+variable "memory_reservation" {
+  description = "The amount of memory (in MB) that this virtual machine is guaranteed."
   default     = null
 }
 
