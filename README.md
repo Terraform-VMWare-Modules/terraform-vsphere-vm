@@ -4,8 +4,6 @@
 
 For Virtual Machine Provisioning with (Linux/Windows) customization. Thanks to the new enhancements introduced in Terraform v0.12.6 this module include most of the advance features that are available in the resource `vsphere_virtual_machine`.
 
-:warning: The new version of this module only works with terraform version 0.12.6 and above :warning:
-
 ## Deploys (Single/Multiple) Virtual Machines to your vSphere environment
 
 This Terraform module deploys single or multiple virtual machines of type (Linux/Windows) with following features:
@@ -39,7 +37,7 @@ You can also download the entire module and use your own predefined variables to
 ```hcl
 module "example-server-linuxvm" {
   source        = "Terraform-VMWare-Modules/vm/vsphere"
-  version       = "1.3.0"
+  version       = "X.X.X"
   vmtemp        = "TemplateName"
   instances     = 1
   vmname        = "example-server-windows"
@@ -54,7 +52,7 @@ module "example-server-linuxvm" {
 
 module "example-server-windowsvm" {
   source           = "Terraform-VMWare-Modules/vm/vsphere"
-  version          = "1.2.0"
+  version          = "X.X.X"
   vmtemp           = "TemplateName"
   is_windows_image = "true"
   instances        = 1
@@ -92,7 +90,7 @@ Below is an example of windows deployment with some of the available feature set
 ```hcl
 module "example-server-windowsvm-advanced" {
   source                 = "Terraform-VMWare-Modules/vm/vsphere"
-  version                = "1.3.0"
+  version                = "X.X.X"
   dc                     = "Datacenter"
   vmrp                   = "cluster/Resources" #Works with ESXi/Resources
   vmfolder               = "Cattle"
