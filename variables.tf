@@ -204,6 +204,13 @@ variable "data_disk_scsi_controller" {
   #       error_message = "The scsi_controller must be between 0 and 3"
   # }
 }
+
+variable "scsi_bus_sharing" {
+  description = "scsi_bus_sharing mode, acceptable values physicalSharing,virtualSharing,noSharing"
+  type        = string
+  default     = null
+}
+
 variable "scsi_type" {
   description = "scsi_controller type, acceptable values lsilogic,pvscsi "
   type        = string

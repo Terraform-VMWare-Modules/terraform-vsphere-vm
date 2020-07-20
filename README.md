@@ -119,6 +119,7 @@ module "example-server-windowsvm-advanced" {
   data_disk_label           = ["label1", "label2"]
   disk_datastore             = "vsanDatastore" // This will store Template disk in the defined disk_datastore
   data_disk_datastore        = ["vsanDatastore", "nfsDatastore"] // Datastores for additional data disks
+  scsi_bus_sharing          = "physicalSharing" // The modes are physicalSharing, virtualSharing, and noSharing
   scsi_type                 = "lsilogic" // Other acceptable value "pvscsi"
   scsi_controller           = 0 // This will assign OS disk to controller 0
   data_disk_scsi_controller = [0, 1] // This will create a new controller and assign second data disk to controller 1
