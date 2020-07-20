@@ -90,8 +90,14 @@ variable "vmdns" {
 
 #Global Customization Variables
 variable "tags" {
-  description = "The names of any tags to attach to this resource. They shoud already exist"
+  description = "The names of any tags to attach to this resource. They must already exist."
   type        = map
+  default     = null
+}
+
+variable "tag_ids" {
+  description = "The ids of any tags to attach to this resource. They must already exist."
+  type        = list
   default     = null
 }
 
@@ -349,6 +355,12 @@ variable "wait_for_guest_net_timeout" {
 
 variable "vm_depends_on" {
   description = "Add any external depend on module here like vm_depends_on = [module.fw_core01.firewall]"
+  type        = any
+  default     = null
+}
+
+variable "tag_depends_on" {
+  description = "Add any external depend on module here like tag_depends_on = [vsphere_tag.foo.id]"
   type        = any
   default     = null
 }
