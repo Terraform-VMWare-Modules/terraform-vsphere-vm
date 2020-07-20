@@ -197,7 +197,7 @@ variable "data_disk_scsi_controller" {
 variable "scsi_bus_sharing" {
   description = "scsi_bus_sharing mode, acceptable values physicalSharing,virtualSharing,noSharing"
   type        = string
-  default     = "noSharing"
+  default     = null
 }
 
 variable "scsi_type" {
