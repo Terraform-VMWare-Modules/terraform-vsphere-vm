@@ -351,3 +351,9 @@ variable "vm_depends_on" {
   type        = any
   default     = null
 }
+
+variable "tag_depends_on" {
+  description = "Add any external depend on module here like tag_depends_on = [vsphere_tag.foo.id]"
+  type        = any
+  default     = null
+}
