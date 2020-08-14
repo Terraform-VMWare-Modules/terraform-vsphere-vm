@@ -40,7 +40,7 @@ module "example-server-linuxvm" {
   version       = "X.X.X"
   vmtemp        = "TemplateName"
   instances     = 1
-  vmname        = "example-server-windows"
+  vmname        = "example-server-linux"
   vmrp          = "esxi/Resources"
   network_cards = ["Name of the Port Group in vSphere"]
   ipv4 = {
