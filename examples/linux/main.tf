@@ -25,9 +25,9 @@ module "example-server-linuxvm-advanced" {
   instances              = 2
   cpu_number             = 2
   ram_size               = 2096
-  cpu_hot_add_enabled    = "true"
-  cpu_hot_remove_enabled = "true"
-  memory_hot_add_enabled = "true"
+  cpu_hot_add_enabled    = true
+  cpu_hot_remove_enabled = true
+  memory_hot_add_enabled = true
   vmname                 = "AdvancedVM"
   vmdomain               = "somedomain.com"
   network_cards          = ["VM Network", "test-network"]
@@ -44,7 +44,7 @@ module "example-server-linuxvm-advanced" {
   disk_datastore            = "vsanDatastore"
   data_disk_datastore       = ["vsanDatastore", "nfsDatastore"]
   data_disk_size_gb         = [10, 5] // Aditional Disks to be used
-  thin_provisioned          = ["true", "false"]
+  thin_provisioned          = [true, false]
   vmdns                     = ["192.168.0.2", "192.168.0.1"]
   vmgateway                 = "192.168.0.1"
   network_type              = ["vmxnet3", "vmxnet3"]

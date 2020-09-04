@@ -1,6 +1,6 @@
 # Terraform vSphere Module
 
-![Terraform Version](https://img.shields.io/badge/Terraform-0.12.6-green.svg) [![TF Registry](https://img.shields.io/badge/terraform-registry-blue.svg)](https://registry.terraform.io/modules/Terraform-VMWare-Modules/vm/vsphere/) [![Changelog](https://img.shields.io/badge/changelog-release-green.svg)](https://github.com/Terraform-VMWare-Modules/terraform-vsphere-vm/releases) [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE) 
+![Terraform Version](https://img.shields.io/badge/Terraform-0.12.6-green.svg) [![TF Registry](https://img.shields.io/badge/terraform-registry-blue.svg)](https://registry.terraform.io/modules/Terraform-VMWare-Modules/vm/vsphere/) [![Changelog](https://img.shields.io/badge/changelog-release-green.svg)](https://github.com/Terraform-VMWare-Modules/terraform-vsphere-vm/releases) [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 
 For Virtual Machine Provisioning with (Linux/Windows) customization. Thanks to the new enhancements introduced in Terraform v0.12.6 this module include most of the advance features that are available in the resource `vsphere_virtual_machine`.
 
@@ -54,7 +54,7 @@ module "example-server-windowsvm" {
   source           = "Terraform-VMWare-Modules/vm/vsphere"
   version          = "X.X.X"
   vmtemp           = "TemplateName"
-  is_windows_image = "true"
+  is_windows_image = true
   instances        = 1
   vmname           = "example-server-windows"
   vmrp             = "esxi/Resources"
@@ -75,7 +75,7 @@ There are number of switches defined in the module, where you can use to enable 
 
 ### Main Feature Switches
 
-- You can use `is_windows_image = "true"` to set the customization type to Windows (By default it is set to Linux customization)
+- You can use `is_windows_image = true` to set the customization type to Windows (By default it is set to Linux customization)
 - You can use `data_disk_size_gb = [20,30]` to add additional data disks (Supported in both Linux and Windows deployment)
   - Above switch will create two additional disk of capacity 10 and 30gb for the VM.
   - You can include `thin_provisioned` switch to define disk type for each additional disk.
@@ -101,9 +101,9 @@ module "example-server-windowsvm-advanced" {
   ram_size               = 2096
   cpu_reservation        = 2000
   memory_reservation     = 2000
-  cpu_hot_add_enabled    = "true"
-  cpu_hot_remove_enabled = "true"
-  memory_hot_add_enabled = "true"
+  cpu_hot_add_enabled    = true
+  cpu_hot_remove_enabled = true
+  memory_hot_add_enabled = true
   vmname                 = "AdvancedVM"
   vmdomain               = "somedomain.com"
   network_cards          = ["VM Network", "test-network"] #Assign multiple cards
@@ -114,7 +114,7 @@ module "example-server-windowsvm-advanced" {
     "test"       = ["", "192.168.0.3"]
   }
   data_disk_size_gb = [10, 5] // Aditional Disk to be used
-  thin_provisioned  = ["true", "false"]
+  thin_provisioned  = [true, false]
   disk_label                = ["tpl-disk-1"]
   data_disk_label           = ["label1", "label2"]
   disk_datastore             = "vsanDatastore" // This will store Template disk in the defined disk_datastore
@@ -129,12 +129,12 @@ module "example-server-windowsvm-advanced" {
     "terraform-test-category"    = "terraform-test-tag"
     "terraform-test-category-02" = "terraform-test-tag-02"
   }
-  enable_disk_uuid = "true"
-  auto_logon       = "true"
+  enable_disk_uuid = true
+  auto_logon       = true
   run_once         = ["command01", "command02"] // You can also run Powershell commands
   orgname          = "Terraform-Module"
   workgroup        = "Module-Test"
-  is_windows_image = "true"
+  is_windows_image = true
   firmware         = "efi"
   local_adminpass  = "Password@Strong"
 }

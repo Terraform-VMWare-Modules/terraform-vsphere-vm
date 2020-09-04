@@ -3,7 +3,7 @@ module "example-server-windowsvm-withdatadisk" {
   source           = "Terraform-VMWare-Modules/vm/vsphere"
   version          = "Latest X.X.X"
   vmtemp           = "TemplateName"
-  is_windows_image = "true"
+  is_windows_image = true
   instances        = 1
   vmname           = "example-server-windows"
   vmrp             = "esxi/Resources"
@@ -19,7 +19,7 @@ module "example-server-windowsvm-withdatadisk" {
   source                = "Terraform-VMWare-Modules/vm/vsphere"
   version               = "1.1.0"
   vmtemp                = "TemplateName"
-  is_windows_image      = "true"
+  is_windows_image      = true
   windomain             = "Development.com"
   domain_admin_user     = "Domain admin user"
   domain_admin_password = "SomePassword"
@@ -45,9 +45,9 @@ module "example-server-windowsvm-advanced" {
   instances              = 2
   cpu_number             = 2
   ram_size               = 2096
-  cpu_hot_add_enabled    = "true"
-  cpu_hot_remove_enabled = "true"
-  memory_hot_add_enabled = "true"
+  cpu_hot_add_enabled    = true
+  cpu_hot_remove_enabled = true
+  memory_hot_add_enabled = true
   vmname                 = "AdvancedVM"
   vmdomain               = "somedomain.com"
   network_cards          = ["VM Network", "test-network"]
@@ -64,7 +64,7 @@ module "example-server-windowsvm-advanced" {
   disk_datastore            = "vsanDatastore"
   data_disk_datastore       = ["vsanDatastore", "nfsDatastore"]
   data_disk_size_gb         = [10, 5] // Aditional Disks to be used
-  thin_provisioned          = ["true", "false"]
+  thin_provisioned          = [true, false]
   vmdns                     = ["192.168.0.2", "192.168.0.1"]
   vmgateway                 = "192.168.0.1"
   network_type              = ["vmxnet3", "vmxnet3"]
@@ -72,12 +72,12 @@ module "example-server-windowsvm-advanced" {
     "terraform-test-category"    = "terraform-test-tag"
     "terraform-test-category-02" = "terraform-test-tag-02"
   }
-  enable_disk_uuid = "true"
-  auto_logon       = "true"
+  enable_disk_uuid = true
+  auto_logon       = true
   run_once         = ["command01", "powershell.exe \"New-Item C:\\test.txt\""] // You can also run Powershell commands
   orgname          = "Terraform-Module"
   workgroup        = "Module-Test"
-  is_windows_image = "true"
+  is_windows_image = true
   firmware         = "efi"
   local_adminpass  = "Password123"
 }
