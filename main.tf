@@ -62,7 +62,7 @@ locals {
 
 // Cloning a Linux VM from a given template. Note: This is the default option!!
 resource "vsphere_virtual_machine" "Linux" {
-  count      = var.is_windows_image != "true" ? var.instances : 0
+  count      = var.is_windows_image ? 0 : var.instances
   depends_on = [var.vm_depends_on]
   name       = "%{if var.vmnameliteral != ""}${var.vmnameliteral}%{else}${var.vmname}${count.index + 1}${var.vmnamesuffix}%{endif}"
 
@@ -158,7 +158,7 @@ resource "vsphere_virtual_machine" "Linux" {
 }
 
 resource "vsphere_virtual_machine" "Windows" {
-  count      = var.is_windows_image == "true" ? var.instances : 0
+  count      = var.is_windows_image ? var.instances : 0
   depends_on = [var.vm_depends_on]
   name       = "%{if var.vmnameliteral != ""}${var.vmnameliteral}%{else}${var.vmname}${count.index + 1}${var.vmnamesuffix}%{endif}"
 
