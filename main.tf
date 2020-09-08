@@ -95,6 +95,8 @@ resource "vsphere_virtual_machine" "Linux" {
   wait_for_guest_ip_timeout   = var.wait_for_guest_ip_timeout
   wait_for_guest_net_timeout  = var.wait_for_guest_net_timeout
 
+  ignored_guest_ips = var.ignored_guest_ips
+
   dynamic "network_interface" {
     for_each = var.network_cards
     content {
@@ -155,6 +157,18 @@ resource "vsphere_virtual_machine" "Linux" {
       ipv4_gateway    = var.vmgateway
     }
   }
+
+  // Advanced options
+  hv_mode = var.hv_mode
+  ept_rvi_mode = var.ept_rvi_mode
+  nested_hv_enabled  = var.nested_hv_enabled
+  enable_logging = var.enable_logging
+  cpu_performance_counters_enabled = var.cpu_performance_counters_enabled
+  swap_placement_policy = var.swap_placement_policy
+  latency_sensitivity = var.latency_sensitivity
+
+  shutdown_wait_timeout = var.shutdown_wait_timeout
+  force_power_off = var.force_power_off
 }
 
 resource "vsphere_virtual_machine" "Windows" {
@@ -190,6 +204,8 @@ resource "vsphere_virtual_machine" "Windows" {
   wait_for_guest_net_routable = var.wait_for_guest_net_routable
   wait_for_guest_ip_timeout   = var.wait_for_guest_ip_timeout
   wait_for_guest_net_timeout  = var.wait_for_guest_net_timeout
+
+  ignored_guest_ips = var.ignored_guest_ips
 
   dynamic "network_interface" {
     for_each = var.network_cards
@@ -261,4 +277,16 @@ resource "vsphere_virtual_machine" "Windows" {
       ipv4_gateway    = var.vmgateway
     }
   }
+
+  // Advanced options
+  hv_mode = var.hv_mode
+  ept_rvi_mode = var.ept_rvi_mode
+  nested_hv_enabled  = var.nested_hv_enabled
+  enable_logging = var.enable_logging
+  cpu_performance_counters_enabled = var.cpu_performance_counters_enabled
+  swap_placement_policy = var.swap_placement_policy
+  latency_sensitivity = var.latency_sensitivity
+
+  shutdown_wait_timeout = var.shutdown_wait_timeout
+  force_power_off = var.force_power_off
 }
