@@ -89,7 +89,12 @@ resource "vsphere_virtual_machine" "Linux" {
   guest_id               = data.vsphere_virtual_machine.template.guest_id
   scsi_bus_sharing       = var.scsi_bus_sharing
   scsi_type              = var.scsi_type != "" ? var.scsi_type : data.vsphere_virtual_machine.template.scsi_type
-  scsi_controller_count  = length(var.data_disk_scsi_controller) > 0 ? max(max(var.data_disk_scsi_controller...) + 1, var.scsi_controller) : 1
+  scsi_controller_count  = max(max(flatten([
+                            for item in values(var.data_disk): [
+                              for elem, val in item:
+                                elem == "data_disk_scsi_controller"? val : 0
+                                ]
+                            ])... )+ 1, var.scsi_controller)
 
   wait_for_guest_net_routable = var.wait_for_guest_net_routable
   wait_for_guest_ip_timeout   = var.wait_for_guest_ip_timeout
@@ -121,15 +126,15 @@ resource "vsphere_virtual_machine" "Linux" {
 
   // Additional disks defined by Terraform config
   dynamic "disk" {
-    for_each = var.data_disk_size_gb
+    for_each = var.data_disk
     iterator = terraform_disks
     content {
-      label            = length(var.data_disk_label) > 0 ? var.data_disk_label[terraform_disks.key] : "disk${terraform_disks.key + local.template_disk_count}"
-      size             = var.data_disk_size_gb[terraform_disks.key]
-      unit_number      = length(var.data_disk_scsi_controller) > 0 ? var.data_disk_scsi_controller[terraform_disks.key] * 15 + terraform_disks.key + (var.scsi_controller == var.data_disk_scsi_controller[terraform_disks.key] ? local.template_disk_count : 0) : terraform_disks.key + local.template_disk_count
-      thin_provisioned = var.thin_provisioned != null ? var.thin_provisioned[terraform_disks.key] : null
-      eagerly_scrub    = var.eagerly_scrub != null ? var.eagerly_scrub[terraform_disks.key] : null
-      datastore_id     = length(var.data_disk_datastore) > 0 ? data.vsphere_datastore.data_disk_datastore[var.data_disk_datastore[terraform_disks.key]].id : null
+      label            = terraform_disks.key
+      size             = terraform_disks.value["size_gb"]
+      unit_number      = contains(keys((terraform_disks.value)), "data_disk_scsi_controller") ? terraform_disks.value["data_disk_scsi_controller"] * 15 + index(keys(var.data_disk), terraform_disks.key) + (var.scsi_controller == tonumber(terraform_disks.value["data_disk_scsi_controller"]) ? local.template_disk_count : 0) :  index(keys(var.data_disk), terraform_disks.key) + local.template_disk_count
+      thin_provisioned = contains(keys((terraform_disks.value)), "thin_provisioned") ? terraform_disks.value["thin_provisioned"] : null
+      eagerly_scrub    = contains(keys((terraform_disks.value)), "eagerly_scrub") ? terraform_disks.value["eagerly_scrub"] : null
+      datastore_id     = contains(keys((terraform_disks.value)), "data_disk_datastore") ? terraform_disks.value["data_disk_datastore"] : null
     }
   }
 
@@ -199,7 +204,12 @@ resource "vsphere_virtual_machine" "Windows" {
   guest_id               = data.vsphere_virtual_machine.template.guest_id
   scsi_bus_sharing       = var.scsi_bus_sharing
   scsi_type              = var.scsi_type != "" ? var.scsi_type : data.vsphere_virtual_machine.template.scsi_type
-  scsi_controller_count  = length(var.data_disk_scsi_controller) > 0 ? max(max(var.data_disk_scsi_controller...) + 1, var.scsi_controller) : 1
+  scsi_controller_count  = max(max(flatten([
+                            for item in values(var.data_disk): [
+                              for elem, val in item:
+                                elem == "data_disk_scsi_controller"? val : 0
+                                ]
+                            ])... )+ 1, var.scsi_controller)
 
   wait_for_guest_net_routable = var.wait_for_guest_net_routable
   wait_for_guest_ip_timeout   = var.wait_for_guest_ip_timeout
@@ -231,15 +241,15 @@ resource "vsphere_virtual_machine" "Windows" {
 
   // Additional disks defined by Terraform config
   dynamic "disk" {
-    for_each = var.data_disk_size_gb
+    for_each = var.data_disk
     iterator = terraform_disks
     content {
-      label            = length(var.data_disk_label) > 0 ? var.data_disk_label[terraform_disks.key] : "disk${terraform_disks.key + local.template_disk_count}"
-      size             = var.data_disk_size_gb[terraform_disks.key]
-      unit_number      = length(var.data_disk_scsi_controller) > 0 ? var.data_disk_scsi_controller[terraform_disks.key] * 15 + terraform_disks.key + (var.scsi_controller == var.data_disk_scsi_controller[terraform_disks.key] ? local.template_disk_count : 0) : terraform_disks.key + local.template_disk_count
-      thin_provisioned = var.thin_provisioned != null ? var.thin_provisioned[terraform_disks.key] : null
-      eagerly_scrub    = var.eagerly_scrub != null ? var.eagerly_scrub[terraform_disks.key] : null
-      datastore_id     = length(var.data_disk_datastore) > 0 ? data.vsphere_datastore.data_disk_datastore[var.data_disk_datastore[terraform_disks.key]].id : null
+      label            = terraform_disks.key
+      size             = terraform_disks.value["size_gb"]
+      unit_number      = contains(keys((terraform_disks.value)), "data_disk_scsi_controller") ? terraform_disks.value["data_disk_scsi_controller"] * 15 + index(keys(var.data_disk), terraform_disks.key) + (var.scsi_controller == tonumber(terraform_disks.value["data_disk_scsi_controller"]) ? local.template_disk_count : 0) :  index(keys(var.data_disk), terraform_disks.key) + local.template_disk_count
+      thin_provisioned = contains(keys((terraform_disks.value)), "thin_provisioned") ? terraform_disks.value["thin_provisioned"] : null
+      eagerly_scrub    = contains(keys((terraform_disks.value)), "eagerly_scrub") ? terraform_disks.value["eagerly_scrub"] : null
+      datastore_id     = contains(keys((terraform_disks.value)), "data_disk_datastore") ? terraform_disks.value["data_disk_datastore"] : null
     }
   }
 

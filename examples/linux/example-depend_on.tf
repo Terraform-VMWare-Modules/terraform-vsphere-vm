@@ -38,14 +38,24 @@ module "example-server-linuxvm-advanced" {
     "test"       = ["", "192.168.0.3"]
   }
   disk_label                = ["tpl-disk-1"]
-  data_disk_label           = ["label1", "label2"]
   scsi_type                 = "lsilogic" # "pvscsi"
-  scsi_controller           = 0
-  data_disk_scsi_controller = [0, 1]
+  scsi_controller           = 1
   disk_datastore            = "vsanDatastore"
-  data_disk_datastore       = ["vsanDatastore", "nfsDatastore"]
-  data_disk_size_gb         = [10, 5] // Aditional Disks to be used
-  thin_provisioned          = [true, false]
+  data_disk = {
+    disk1 = {
+      size_gb = 10,
+      thin_provisioned = false
+      data_disk_scsi_controller = 0
+    },
+    disk2 = {
+      size_gb = 15,
+      thin_provisioned = true
+      data_disk_scsi_controller = 1
+    }
+    disk3 = {
+      size_gb = 20,
+      data_disk_datastore = "nfsDatastore"
+    }
   vmdns                     = ["192.168.0.2", "192.168.0.1"]
   vmgateway                 = "192.168.0.1"
   network_type              = ["vmxnet3", "vmxnet3"]

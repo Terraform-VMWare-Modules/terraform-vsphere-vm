@@ -176,17 +176,13 @@ variable "disk_label" {
   default     = []
 }
 
-variable "data_disk_label" {
-  description = "Storage data disk labels."
-  type        = list
-  default     = []
+variable "data_disk" {
+  description = "Storage data disk parameters"
+  type        = map(map(string))
+  default     = {}
+
 }
 
-variable "data_disk_size_gb" {
-  description = "List of Storage data disk size."
-  type        = list
-  default     = []
-}
 
 variable "disk_datastore" {
   description = "Define where the OS disk should be stored."
@@ -204,15 +200,6 @@ variable "data_disk_datastore" {
   # }
 }
 
-variable "data_disk_scsi_controller" {
-  description = "scsi_controller number for the data disk, should be equal to number of defined data disk."
-  type        = list
-  default     = []
-  # validation {
-  #   condition     = max(var.data_disk_scsi_controller...) < 4 && max(var.data_disk_scsi_controller...) > -1
-  #       error_message = "The scsi_controller must be between 0 and 3"
-  # }
-}
 
 variable "scsi_bus_sharing" {
   description = "scsi_bus_sharing mode, acceptable values physicalSharing,virtualSharing,noSharing."
@@ -236,17 +223,6 @@ variable "scsi_controller" {
   # }
 }
 
-variable "thin_provisioned" {
-  description = "If true, this disk is thin provisioned, with space for the file being allocated on an as-needed basis."
-  type        = list
-  default     = null
-}
-
-variable "eagerly_scrub" {
-  description = "if set to true, the disk space is zeroed out on VM creation. This will delay the creation of the disk or virtual machine. Cannot be set to true when thin_provisioned is true."
-  type        = list
-  default     = null
-}
 
 variable "enable_disk_uuid" {
   description = "Expose the UUIDs of attached virtual disks to the virtual machine, allowing access to them in the guest."
