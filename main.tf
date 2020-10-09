@@ -89,7 +89,7 @@ resource "vsphere_virtual_machine" "Linux" {
   guest_id               = data.vsphere_virtual_machine.template.guest_id
   scsi_bus_sharing       = var.scsi_bus_sharing
   scsi_type              = var.scsi_type != "" ? var.scsi_type : data.vsphere_virtual_machine.template.scsi_type
-  scsi_controller_count  = max(max(flatten([
+  scsi_controller_count  = max(max(0, flatten([
                             for item in values(var.data_disk): [
                               for elem, val in item:
                                 elem == "data_disk_scsi_controller"? val : 0
