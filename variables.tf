@@ -188,7 +188,7 @@ variable "data_disk_size_gb" {
   default     = []
 }
 
-variable "override_template_disk_size" {
+variable "disk_size_gb" {
   description = "List of disk sizes to override template disk size."
   type = list
   default = null
