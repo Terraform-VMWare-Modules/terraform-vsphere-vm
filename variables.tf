@@ -188,6 +188,12 @@ variable "data_disk_size_gb" {
   default     = []
 }
 
+variable "disk_size_gb" {
+  description = "List of disk sizes to override template disk size."
+  type = list
+  default = null
+}
+
 variable "disk_datastore" {
   description = "Define where the OS disk should be stored."
   type        = string
