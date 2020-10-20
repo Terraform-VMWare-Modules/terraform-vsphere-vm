@@ -183,6 +183,11 @@ variable "data_disk" {
 
 }
 
+variable "disk_size_gb" {
+  description = "List of disk sizes to override template disk size."
+  type        = list
+  default     = null
+}
 
 variable "disk_datastore" {
   description = "Define where the OS disk should be stored."
@@ -288,7 +293,7 @@ variable "orgname" {
 
 variable "auto_logon" {
   description = " Specifies whether or not the VM automatically logs on as Administrator. Default: false."
-  type = bool
+  type        = bool
   default     = null
 }
 
