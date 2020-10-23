@@ -32,8 +32,8 @@ data "vsphere_resource_pool" "pool" {
 }
 
 data "vsphere_network" "network" {
-  count         = var.network_cards != null ? length(var.network_cards) : 0
-  name          = var.network_cards[count.index]
+  for_each      = var.network_cards
+  name          = each.key
   datacenter_id = data.vsphere_datacenter.dc.id
 }
 
@@ -56,15 +56,14 @@ data "vsphere_tag" "tag" {
 }
 
 locals {
-  interface_count     = length(var.ipv4submask) #Used for Subnet handeling
   template_disk_count = length(data.vsphere_virtual_machine.template.disks)
 }
 
 // Cloning a Linux VM from a given template. Note: This is the default option!!
 resource "vsphere_virtual_machine" "Linux" {
-  count      = var.is_windows_image ? 0 : var.instances
+  count      = var.is_windows_image ? 0 : 1
   depends_on = [var.vm_depends_on]
-  name       = "%{if var.vmnameliteral != ""}${var.vmnameliteral}%{else}${var.vmname}${count.index + 1}${var.vmnamesuffix}%{endif}"
+  name       = "%{if var.vmnameliteral != ""}${var.vmnameliteral}%{else}${var.vmname}${var.vmnamesuffix}%{endif}"
 
   resource_pool_id  = data.vsphere_resource_pool.pool.id
   folder            = var.vmfolder
@@ -83,13 +82,18 @@ resource "vsphere_virtual_machine" "Linux" {
   cpu_hot_add_enabled    = var.cpu_hot_add_enabled
   cpu_hot_remove_enabled = var.cpu_hot_remove_enabled
   cpu_reservation        = var.cpu_reservation
-  memory_reservation     = var.memory_reservation 
+  memory_reservation     = var.memory_reservation
   memory                 = var.ram_size
   memory_hot_add_enabled = var.memory_hot_add_enabled
   guest_id               = data.vsphere_virtual_machine.template.guest_id
   scsi_bus_sharing       = var.scsi_bus_sharing
   scsi_type              = var.scsi_type != "" ? var.scsi_type : data.vsphere_virtual_machine.template.scsi_type
-  scsi_controller_count  = length(var.data_disk_scsi_controller) > 0 ? max(max(var.data_disk_scsi_controller...) + 1, var.scsi_controller) : 1
+  scsi_controller_count = max(max(0, flatten([
+    for item in values(var.data_disk) : [
+      for elem, val in item :
+      elem == "data_disk_scsi_controller" ? val : 0
+    ]
+  ])...) + 1, var.scsi_controller)
 
   wait_for_guest_net_routable = var.wait_for_guest_net_routable
   wait_for_guest_ip_timeout   = var.wait_for_guest_ip_timeout
@@ -101,7 +105,7 @@ resource "vsphere_virtual_machine" "Linux" {
     for_each = var.network_cards
     content {
       network_id   = data.vsphere_network.network[network_interface.key].id
-      adapter_type = var.network_type != null ? var.network_type[network_interface.key] : data.vsphere_virtual_machine.template.network_interface_types[0]
+      adapter_type = lookup(network_interface.value, "type", null)
     }
   }
 
@@ -110,7 +114,7 @@ resource "vsphere_virtual_machine" "Linux" {
     for_each = data.vsphere_virtual_machine.template.disks
     iterator = template_disks
     content {
-      label            = length(var.disk_label) > 0 ? var.disk_label[template_disks.key] : "disk${template_disks.key}"
+      label            = "disk${template_disks.key}"
       size             = var.disk_size_gb != null ? var.disk_size_gb[template_disks.key] : data.vsphere_virtual_machine.template.disks[template_disks.key].size
       unit_number      = var.scsi_controller != null ? var.scsi_controller * 15 + template_disks.key : template_disks.key
       thin_provisioned = data.vsphere_virtual_machine.template.disks[template_disks.key].thin_provisioned
@@ -121,15 +125,15 @@ resource "vsphere_virtual_machine" "Linux" {
 
   // Additional disks defined by Terraform config
   dynamic "disk" {
-    for_each = var.data_disk_size_gb
+    for_each = var.data_disk
     iterator = terraform_disks
     content {
-      label            = length(var.data_disk_label) > 0 ? var.data_disk_label[terraform_disks.key] : "disk${terraform_disks.key + local.template_disk_count}"
-      size             = var.data_disk_size_gb[terraform_disks.key]
-      unit_number      = length(var.data_disk_scsi_controller) > 0 ? var.data_disk_scsi_controller[terraform_disks.key] * 15 + terraform_disks.key + (var.scsi_controller == var.data_disk_scsi_controller[terraform_disks.key] ? local.template_disk_count : 0) : terraform_disks.key + local.template_disk_count
-      thin_provisioned = var.thin_provisioned != null ? var.thin_provisioned[terraform_disks.key] : null
-      eagerly_scrub    = var.eagerly_scrub != null ? var.eagerly_scrub[terraform_disks.key] : null
-      datastore_id     = length(var.data_disk_datastore) > 0 ? data.vsphere_datastore.data_disk_datastore[var.data_disk_datastore[terraform_disks.key]].id : null
+      label            = terraform_disks.key
+      size             = terraform_disks.value["size_gb"]
+      unit_number      = lookup(terraform_disks.value, "data_disk_scsi_controller", 0) ? terraform_disks.value.data_disk_scsi_controller * 15 + index(keys(var.data_disk), terraform_disks.key) + (var.scsi_controller == tonumber(terraform_disks.value["data_disk_scsi_controller"]) ? local.template_disk_count : 0) : index(keys(var.data_disk), terraform_disks.key) + local.template_disk_count
+      thin_provisioned = lookup(terraform_disks.value, "thin_provisioned", "true")
+      eagerly_scrub    = lookup(terraform_disks.value, "eagerly_scrub", "false")
+      datastore_id     = lookup(terraform_disks.value, "data_disk_datastore", null)
     }
   }
 
@@ -148,8 +152,8 @@ resource "vsphere_virtual_machine" "Linux" {
       dynamic "network_interface" {
         for_each = var.network_cards
         content {
-          ipv4_address = var.ipv4[var.network_cards[network_interface.key]][count.index]
-          ipv4_netmask = "%{if local.interface_count == 1}${var.ipv4submask[0]}%{else}${var.ipv4submask[network_interface.key]}%{endif}"
+          ipv4_address = lookup(network_interface.value, "ipv4", null)
+          ipv4_netmask = lookup(network_interface.value, "ipv4submask", "24")
         }
       }
       dns_server_list = var.vmdns
@@ -159,20 +163,20 @@ resource "vsphere_virtual_machine" "Linux" {
   }
 
   // Advanced options
-  hv_mode = var.hv_mode
-  ept_rvi_mode = var.ept_rvi_mode
-  nested_hv_enabled  = var.nested_hv_enabled
-  enable_logging = var.enable_logging
+  hv_mode                          = var.hv_mode
+  ept_rvi_mode                     = var.ept_rvi_mode
+  nested_hv_enabled                = var.nested_hv_enabled
+  enable_logging                   = var.enable_logging
   cpu_performance_counters_enabled = var.cpu_performance_counters_enabled
-  swap_placement_policy = var.swap_placement_policy
-  latency_sensitivity = var.latency_sensitivity
+  swap_placement_policy            = var.swap_placement_policy
+  latency_sensitivity              = var.latency_sensitivity
 
   shutdown_wait_timeout = var.shutdown_wait_timeout
-  force_power_off = var.force_power_off
+  force_power_off       = var.force_power_off
 }
 
 resource "vsphere_virtual_machine" "Windows" {
-  count      = var.is_windows_image ? var.instances : 0
+  count      = var.is_windows_image ? 1 : 0
   depends_on = [var.vm_depends_on]
   name       = "%{if var.vmnameliteral != ""}${var.vmnameliteral}%{else}${var.vmname}${count.index + 1}${var.vmnamesuffix}%{endif}"
 
@@ -193,13 +197,18 @@ resource "vsphere_virtual_machine" "Windows" {
   cpu_hot_add_enabled    = var.cpu_hot_add_enabled
   cpu_hot_remove_enabled = var.cpu_hot_remove_enabled
   cpu_reservation        = var.cpu_reservation
-  memory_reservation     = var.memory_reservation 
+  memory_reservation     = var.memory_reservation
   memory                 = var.ram_size
   memory_hot_add_enabled = var.memory_hot_add_enabled
   guest_id               = data.vsphere_virtual_machine.template.guest_id
   scsi_bus_sharing       = var.scsi_bus_sharing
   scsi_type              = var.scsi_type != "" ? var.scsi_type : data.vsphere_virtual_machine.template.scsi_type
-  scsi_controller_count  = length(var.data_disk_scsi_controller) > 0 ? max(max(var.data_disk_scsi_controller...) + 1, var.scsi_controller) : 1
+  scsi_controller_count = max(max(flatten([
+    for item in values(var.data_disk) : [
+      for elem, val in item :
+      elem == "data_disk_scsi_controller" ? val : 0
+    ]
+  ])...) + 1, var.scsi_controller)
 
   wait_for_guest_net_routable = var.wait_for_guest_net_routable
   wait_for_guest_ip_timeout   = var.wait_for_guest_ip_timeout
@@ -211,7 +220,7 @@ resource "vsphere_virtual_machine" "Windows" {
     for_each = var.network_cards
     content {
       network_id   = data.vsphere_network.network[network_interface.key].id
-      adapter_type = var.network_type != null ? var.network_type[network_interface.key] : data.vsphere_virtual_machine.template.network_interface_types[0]
+      adapter_type = lookup(network_interface.value, "type", null)
     }
   }
 
@@ -220,7 +229,7 @@ resource "vsphere_virtual_machine" "Windows" {
     for_each = data.vsphere_virtual_machine.template.disks
     iterator = template_disks
     content {
-      label            = length(var.disk_label) > 0 ? var.disk_label[template_disks.key] : "disk${template_disks.key}"
+      label            = "disk${template_disks.key}"
       size             = var.disk_size_gb != null ? var.disk_size_gb[template_disks.key] : data.vsphere_virtual_machine.template.disks[template_disks.key].size
       unit_number      = var.scsi_controller != null ? var.scsi_controller * 15 + template_disks.key : template_disks.key
       thin_provisioned = data.vsphere_virtual_machine.template.disks[template_disks.key].thin_provisioned
@@ -231,15 +240,15 @@ resource "vsphere_virtual_machine" "Windows" {
 
   // Additional disks defined by Terraform config
   dynamic "disk" {
-    for_each = var.data_disk_size_gb
+    for_each = var.data_disk
     iterator = terraform_disks
     content {
-      label            = length(var.data_disk_label) > 0 ? var.data_disk_label[terraform_disks.key] : "disk${terraform_disks.key + local.template_disk_count}"
-      size             = var.data_disk_size_gb[terraform_disks.key]
-      unit_number      = length(var.data_disk_scsi_controller) > 0 ? var.data_disk_scsi_controller[terraform_disks.key] * 15 + terraform_disks.key + (var.scsi_controller == var.data_disk_scsi_controller[terraform_disks.key] ? local.template_disk_count : 0) : terraform_disks.key + local.template_disk_count
-      thin_provisioned = var.thin_provisioned != null ? var.thin_provisioned[terraform_disks.key] : null
-      eagerly_scrub    = var.eagerly_scrub != null ? var.eagerly_scrub[terraform_disks.key] : null
-      datastore_id     = length(var.data_disk_datastore) > 0 ? data.vsphere_datastore.data_disk_datastore[var.data_disk_datastore[terraform_disks.key]].id : null
+      label            = terraform_disks.key
+      size             = terraform_disks.value["size_gb"]
+      unit_number      = lookup(terraform_disks.value, "data_disk_scsi_controller", 0) ? terraform_disks.value.data_disk_scsi_controller * 15 + index(keys(var.data_disk), terraform_disks.key) + (var.scsi_controller == tonumber(terraform_disks.value["data_disk_scsi_controller"]) ? local.template_disk_count : 0) : index(keys(var.data_disk), terraform_disks.key) + local.template_disk_count
+      thin_provisioned = lookup(terraform_disks.value, "thin_provisioned", "true")
+      eagerly_scrub    = lookup(terraform_disks.value, "eagerly_scrub", "false")
+      datastore_id     = lookup(terraform_disks.value, "data_disk_datastore", null)
     }
   }
 
@@ -268,8 +277,8 @@ resource "vsphere_virtual_machine" "Windows" {
       dynamic "network_interface" {
         for_each = var.network_cards
         content {
-          ipv4_address = var.ipv4[var.network_cards[network_interface.key]][count.index]
-          ipv4_netmask = "%{if local.interface_count == 1}${var.ipv4submask[0]}%{else}${var.ipv4submask[network_interface.key]}%{endif}"
+          ipv4_address = lookup(network_interface.value, "ipv4", null)
+          ipv4_netmask = lookup(network_interface.value, "ipv4submask", "24")
         }
       }
       dns_server_list = var.vmdns
@@ -279,14 +288,14 @@ resource "vsphere_virtual_machine" "Windows" {
   }
 
   // Advanced options
-  hv_mode = var.hv_mode
-  ept_rvi_mode = var.ept_rvi_mode
-  nested_hv_enabled  = var.nested_hv_enabled
-  enable_logging = var.enable_logging
+  hv_mode                          = var.hv_mode
+  ept_rvi_mode                     = var.ept_rvi_mode
+  nested_hv_enabled                = var.nested_hv_enabled
+  enable_logging                   = var.enable_logging
   cpu_performance_counters_enabled = var.cpu_performance_counters_enabled
-  swap_placement_policy = var.swap_placement_policy
-  latency_sensitivity = var.latency_sensitivity
+  swap_placement_policy            = var.swap_placement_policy
+  latency_sensitivity              = var.latency_sensitivity
 
   shutdown_wait_timeout = var.shutdown_wait_timeout
-  force_power_off = var.force_power_off
+  force_power_off       = var.force_power_off
 }
