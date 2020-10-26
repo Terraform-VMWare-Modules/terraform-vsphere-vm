@@ -32,8 +32,8 @@ data "vsphere_resource_pool" "pool" {
 }
 
 data "vsphere_network" "network" {
-  count         = var.network_cards != null ? length(var.network_cards) : 0
-  name          = var.network_cards[count.index]
+  count         = length(var.network)
+  name          = keys(var.network)[count.index]
   datacenter_id = data.vsphere_datacenter.dc.id
 }
 
@@ -51,7 +51,7 @@ data "vsphere_tag_category" "category" {
 data "vsphere_tag" "tag" {
   count       = var.tags != null ? length(var.tags) : 0
   name        = var.tags[keys(var.tags)[count.index]]
-  category_id = "${data.vsphere_tag_category.category[count.index].id}"
+  category_id = data.vsphere_tag_category.category[count.index].id
   depends_on  = [var.tag_depends_on]
 }
 
@@ -83,7 +83,7 @@ resource "vsphere_virtual_machine" "Linux" {
   cpu_hot_add_enabled    = var.cpu_hot_add_enabled
   cpu_hot_remove_enabled = var.cpu_hot_remove_enabled
   cpu_reservation        = var.cpu_reservation
-  memory_reservation     = var.memory_reservation 
+  memory_reservation     = var.memory_reservation
   memory                 = var.ram_size
   memory_hot_add_enabled = var.memory_hot_add_enabled
   guest_id               = data.vsphere_virtual_machine.template.guest_id
@@ -98,7 +98,7 @@ resource "vsphere_virtual_machine" "Linux" {
   ignored_guest_ips = var.ignored_guest_ips
 
   dynamic "network_interface" {
-    for_each = var.network_cards
+    for_each = keys(var.network) #data.vsphere_network.network[*].id #other option
     content {
       network_id   = data.vsphere_network.network[network_interface.key].id
       adapter_type = var.network_type != null ? var.network_type[network_interface.key] : data.vsphere_virtual_machine.template.network_interface_types[0]
@@ -146,10 +146,10 @@ resource "vsphere_virtual_machine" "Linux" {
       }
 
       dynamic "network_interface" {
-        for_each = var.network_cards
+        for_each = keys(var.network)
         content {
-          ipv4_address = var.ipv4[var.network_cards[network_interface.key]][count.index]
-          ipv4_netmask = "%{if local.interface_count == 1}${var.ipv4submask[0]}%{else}${var.ipv4submask[network_interface.key]}%{endif}"
+          ipv4_address = var.network[keys(var.network)[network_interface.key]][count.index]
+          ipv4_netmask = "%{if length(var.ipv4submask) == 1}${var.ipv4submask[0]}%{else}${var.ipv4submask[network_interface.key]}%{endif}"
         }
       }
       dns_server_list = var.vmdns
@@ -159,16 +159,16 @@ resource "vsphere_virtual_machine" "Linux" {
   }
 
   // Advanced options
-  hv_mode = var.hv_mode
-  ept_rvi_mode = var.ept_rvi_mode
-  nested_hv_enabled  = var.nested_hv_enabled
-  enable_logging = var.enable_logging
+  hv_mode                          = var.hv_mode
+  ept_rvi_mode                     = var.ept_rvi_mode
+  nested_hv_enabled                = var.nested_hv_enabled
+  enable_logging                   = var.enable_logging
   cpu_performance_counters_enabled = var.cpu_performance_counters_enabled
-  swap_placement_policy = var.swap_placement_policy
-  latency_sensitivity = var.latency_sensitivity
+  swap_placement_policy            = var.swap_placement_policy
+  latency_sensitivity              = var.latency_sensitivity
 
   shutdown_wait_timeout = var.shutdown_wait_timeout
-  force_power_off = var.force_power_off
+  force_power_off       = var.force_power_off
 }
 
 resource "vsphere_virtual_machine" "Windows" {
@@ -193,7 +193,7 @@ resource "vsphere_virtual_machine" "Windows" {
   cpu_hot_add_enabled    = var.cpu_hot_add_enabled
   cpu_hot_remove_enabled = var.cpu_hot_remove_enabled
   cpu_reservation        = var.cpu_reservation
-  memory_reservation     = var.memory_reservation 
+  memory_reservation     = var.memory_reservation
   memory                 = var.ram_size
   memory_hot_add_enabled = var.memory_hot_add_enabled
   guest_id               = data.vsphere_virtual_machine.template.guest_id
@@ -208,7 +208,7 @@ resource "vsphere_virtual_machine" "Windows" {
   ignored_guest_ips = var.ignored_guest_ips
 
   dynamic "network_interface" {
-    for_each = var.network_cards
+    for_each = keys(var.network)
     content {
       network_id   = data.vsphere_network.network[network_interface.key].id
       adapter_type = var.network_type != null ? var.network_type[network_interface.key] : data.vsphere_virtual_machine.template.network_interface_types[0]
@@ -266,10 +266,10 @@ resource "vsphere_virtual_machine" "Windows" {
       }
 
       dynamic "network_interface" {
-        for_each = var.network_cards
+        for_each = keys(var.network)
         content {
-          ipv4_address = var.ipv4[var.network_cards[network_interface.key]][count.index]
-          ipv4_netmask = "%{if local.interface_count == 1}${var.ipv4submask[0]}%{else}${var.ipv4submask[network_interface.key]}%{endif}"
+          ipv4_address = var.network[keys(var.network)[network_interface.key]][count.index]
+          ipv4_netmask = "%{if length(var.ipv4submask) == 1}${var.ipv4submask[0]}%{else}${var.ipv4submask[network_interface.key]}%{endif}"
         }
       }
       dns_server_list = var.vmdns
@@ -279,14 +279,14 @@ resource "vsphere_virtual_machine" "Windows" {
   }
 
   // Advanced options
-  hv_mode = var.hv_mode
-  ept_rvi_mode = var.ept_rvi_mode
-  nested_hv_enabled  = var.nested_hv_enabled
-  enable_logging = var.enable_logging
+  hv_mode                          = var.hv_mode
+  ept_rvi_mode                     = var.ept_rvi_mode
+  nested_hv_enabled                = var.nested_hv_enabled
+  enable_logging                   = var.enable_logging
   cpu_performance_counters_enabled = var.cpu_performance_counters_enabled
-  swap_placement_policy = var.swap_placement_policy
-  latency_sensitivity = var.latency_sensitivity
+  swap_placement_policy            = var.swap_placement_policy
+  latency_sensitivity              = var.latency_sensitivity
 
   shutdown_wait_timeout = var.shutdown_wait_timeout
-  force_power_off = var.force_power_off
+  force_power_off       = var.force_power_off
 }

@@ -1,3 +1,23 @@
+#Network Section
+variable "network" {
+  description = "Define PortGroup and IPs for each VM"
+  type        = map(list(string))
+  default     = {}
+}
+
+variable "network_type" {
+  description = "Define network type for each network interface."
+  type        = list
+  default     = null
+}
+
+variable "ipv4submask" {
+  description = "ipv4 Subnet mask."
+  type        = list
+  default     = ["24"]
+}
+
+###########################################
 variable "vmname" {
   description = "The name of the virtual machine used to deploy the vms."
   default     = "terraformvm"
@@ -36,22 +56,6 @@ variable "cpu_reservation" {
 variable "ram_size" {
   description = "VM RAM size in megabytes."
   default     = 4096
-}
-
-variable "network_cards" {
-  description = ""
-  type        = list(string)
-}
-
-variable "ipv4" {
-  description = "host(VM) IP address in map format, support more than one IP. Should correspond to number of instances."
-  type        = map
-}
-
-variable "ipv4submask" {
-  description = "ipv4 Subnet mask."
-  type        = list
-  default     = ["24"]
 }
 
 variable "dc" {
@@ -190,8 +194,8 @@ variable "data_disk_size_gb" {
 
 variable "disk_size_gb" {
   description = "List of disk sizes to override template disk size."
-  type = list
-  default = null
+  type        = list
+  default     = null
 }
 
 variable "disk_datastore" {
@@ -260,12 +264,6 @@ variable "enable_disk_uuid" {
   default     = null
 }
 
-variable "network_type" {
-  description = "Define network type for each network interface."
-  type        = list
-  default     = null
-}
-
 #Linux Customization Variables
 variable "hw_clock_utc" {
   description = "Tells the operating system that the hardware clock is set to UTC."
@@ -318,7 +316,7 @@ variable "orgname" {
 
 variable "auto_logon" {
   description = " Specifies whether or not the VM automatically logs on as Administrator. Default: false."
-  type = bool
+  type        = bool
   default     = null
 }
 

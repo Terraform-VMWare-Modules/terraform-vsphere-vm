@@ -7,7 +7,7 @@ We love your input! We want to make contributing to this project as easy and tra
 - Proposing new features
 - Becoming a maintainer
 
-## We Do have Dedicated Slack Channel
+## We Do have a Dedicated Slack Channel
 You can join the channel using the following [link](https://join.slack.com/t/terraformvmware/shared_invite/zt-elw5yhds-kPT_QMBWaHGLCPkPJKxYeA).
 
 ## We Develop with Github
