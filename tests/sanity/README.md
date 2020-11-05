@@ -1,6 +1,8 @@
 # Sanity Test for new Functionality
 
-You need to run the plan using tfvars. Example:
+**Copy of a TF Plan shoud be submmited with each PR, new functionality/variable should be explicitly added here.**
+
+### tfvars Example:
 
 ```hcl
 viserver   = "fill"
