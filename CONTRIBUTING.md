@@ -19,7 +19,7 @@ Pull requests are the best way to propose changes to the codebase (we use [Githu
 1. Fork the repo and create your branch from `master`.
 2. If you've added code that should be tested, add tests.
   1. This should be done via sanity test section.
-  2. Attched copy of the passed TF Plan. (Remove sensetive info if necessary)
+  2. Attach copy of the passed TF Plan. (Remove sensitive info if necessary)
 3. If you've changed variables/functionality, update the documentation.
 4. Ensure the test suite passes.
 5. Make sure your code lints.

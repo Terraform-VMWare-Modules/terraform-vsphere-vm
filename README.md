@@ -20,46 +20,43 @@ This Terraform module deploys single or multiple virtual machines of type (Linux
 
 > Note: For module to work it needs number of required variables corresponding to an existing resources in vSphere. Please refer to variable section for the list of required variables.
 
-## Usage
+## Getting started
 
 Following example contains the bare minimum options to be configured for (Linux/Windows) VM deployment. You can choose between windows and linux customization by simply using the ´is_windows_image´ boolean switch.
 
 You can also download the entire module and use your own predefined variables to map your entire vSphere environment and use it within this module.
 
+__Create a main.tf file and copy the following code. fill the required data and run terraform plan.__
+
 ```hcl
+
+# Configure the VMware vSphere Provider
+provider "vsphere" {
+  user           = "fill"
+  password       = "fill"
+  vsphere_server = "fill" 
+
+  # if you have a self-signed cert
+  allow_unverified_ssl = true
+}
+
+# Deploy 2 linux VMs
 module "example-server-linuxvm" {
   source        = "Terraform-VMWare-Modules/vm/vsphere"
   version       = "X.X.X"
-  vmtemp        = "TemplateName"
-  instances     = 1
+  vmtemp        = "VM Template Name (Should Alrerady exist)"
+  instances     = 2
   vmname        = "example-server-linux"
-  vmrp          = "esxi/Resources"
-  network_cards = ["Name of the Port Group in vSphere"]
-  ipv4 = {
-    "Name of the Port Group in vSphere" = ["10.0.0.1"] # To use DHCP create Empty list for each instance
+  vmrp          = "esxi/Resources - or name of a resource pool"
+  network = {
+    "Name of the Port Group in vSphere" = ["10.13.113.2", "10.13.113.3"] # To use DHCP create Empty list ["",""]
   }
+  vmgateway         = "10.13.113.1"
   dc        = "Datacenter"
   datastore = "Data Store name(use ds_cluster for datastore cluster)"
 }
 
-module "example-server-windowsvm" {
-  source           = "Terraform-VMWare-Modules/vm/vsphere"
-  version          = "X.X.X"
-  vmtemp           = "TemplateName"
-  is_windows_image = true
-  instances        = 1
-  vmname           = "example-server-windows"
-  vmrp             = "esxi/Resources"
-  network_cards    = ["Name of the Port Group in vSphere"]
-  ipv4 = {
-    "Name of the Port Group in vSphere" = ["10.0.0.1"] # To use DHCP create Empty list for each instance
-  }
-  dc        = "Datacenter"
-  datastore = "Data Store name(use ds_cluster for datastore cluster)"
-}
 ```
-
-> Note: When deploying a windows server in WorkGroup, we recommend to keep the Local Admin password set to its default and change it later via an script. Unfortunately Terraform redeploy the entire server if you change the local admin password within your code.
 
 ## Advance Usage
 
@@ -68,16 +65,15 @@ There are number of switches defined in the module, where you can use to enable 
 ### Main Feature Switches
 
 - You can use `is_windows_image = true` to set the customization type to Windows (By default it is set to Linux customization)
-- You can use `data_disk_size_gb = [20,30]` to add additional data disks (Supported in both Linux and Windows deployment)
-  - Above switch will create two additional disk of capacity 10 and 30gb for the VM.
-  - You can include `thin_provisioned` switch to define disk type for each additional disk.
 - You can use `windomain = "somedomain.com"` to join a windows server to AD domain.
   - Requires following additional variables
     - `domainuser` Domain account with necessary privileges to join a computer to the domain.
     - `domainpass` Domain user password.
     - `is_windows_image` needs to be set to `true` to force the module to use Windows customization.
 
-Below is an example of windows deployment with some of the available feature sets.
+> Note: When deploying a windows server in WorkGroup, we recommend to keep the Local Admin password set to its default and change it later via an script. Unfortunately Terraform redeploy the entire server if you change the local admin password within your code.
+
+Below is an example of windows deployment with some of the available feature sets. For complete list of available features refer to [variable.tf](https://github.com/Terraform-VMWare-Modules/terraform-vsphere-vm/blob/master/variables.tf)
 
 ```hcl
 module "example-server-windowsvm-advanced" {
@@ -89,38 +85,35 @@ module "example-server-windowsvm-advanced" {
   ds_cluster             = "Datastore Cluster" #You can use datastore variable instead
   vmtemp                 = "TemplateName"
   instances              = 2
-  cpu_number             = 2
-  ram_size               = 2096
-  cpu_reservation        = 2000
-  memory_reservation     = 2000
-  cpu_hot_add_enabled    = true
-  cpu_hot_remove_enabled = true
-  memory_hot_add_enabled = true
   vmname                 = "AdvancedVM"
   vmdomain               = "somedomain.com"
-  network_cards          = ["VM Network", "test-network"] #Assign multiple cards
-  network_type              = ["vmxnet3", "vmxnet3"]
-  ipv4submask            = ["24", "8"]
-  ipv4 = { #assign IPs per card
-    "VM Network" = ["192.168.0.4", ""] // Here the first instance will use Static Ip and Second DHCP
-    "test"       = ["", "192.168.0.3"]
+  network = {
+    "Name of the Port Group in vSphere" = ["10.13.113.2", "10.13.113.3"] # To use DHCP create Empty list ["",""]
+    "Second Network Card"       = ["", ""]
   }
-  data_disk_size_gb = [10, 5] // Aditional Disk to be used
-  thin_provisioned  = [true, false]
-  disk_label                = ["tpl-disk-1"]
-  data_disk_label           = ["label1", "label2"]
-  disk_datastore             = "vsanDatastore" // This will store Template disk in the defined disk_datastore
-  data_disk_datastore        = ["vsanDatastore", "nfsDatastore"] // Datastores for additional data disks
+  ipv4submask            = ["24", "8"]
+  network_type              = ["vmxnet3", "vmxnet3"]
+  tags = {
+    "terraform-test-category" = "terraform-test-tag"
+  }
+  data_disk = {
+    disk1 = {
+      size_gb                   = 30,
+      thin_provisioned          = false,
+      data_disk_scsi_controller = 0,
+    },
+    disk2 = {
+      size_gb                   = 70,
+      thin_provisioned          = true,
+      data_disk_scsi_controller = 1,
+      datastore_id              = "datastore-90679"
+    }
+  }
   scsi_bus_sharing          = "physicalSharing" // The modes are physicalSharing, virtualSharing, and noSharing
   scsi_type                 = "lsilogic" // Other acceptable value "pvscsi"
   scsi_controller           = 0 // This will assign OS disk to controller 0
-  data_disk_scsi_controller = [0, 1] // This will create a new controller and assign second data disk to controller 1
   vmdns             = ["192.168.0.2", "192.168.0.1"]
   vmgateway         = "192.168.0.1"
-  tags = {
-    "terraform-test-category"    = "terraform-test-tag"
-    "terraform-test-category-02" = "terraform-test-tag-02"
-  }
   enable_disk_uuid = true
   auto_logon       = true
   run_once         = ["command01", "command02"] // You can also run Powershell commands
@@ -138,8 +131,13 @@ output "vmnames" {
 output "vmnameswip" {
   value = "${module.example-server-windowsvm-advanced.Windows-ip}"
 }
-
 ```
+
+## Contributing
+
+This module is the work of many contributors. We appreciate your help!
+
+To contribute, please read the [contribution guidelines](https://github.com/Terraform-VMWare-Modules/terraform-vsphere-vm/blob/master/CONTRIBUTING.md)
 
 ## Authors
 
