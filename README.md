@@ -2,29 +2,21 @@
 
 ![Terraform Version](https://img.shields.io/badge/Terraform-0.12.6-green.svg) [![TF Registry](https://img.shields.io/badge/terraform-registry-blue.svg)](https://registry.terraform.io/modules/Terraform-VMWare-Modules/vm/vsphere/) [![Changelog](https://img.shields.io/badge/changelog-release-green.svg)](https://github.com/Terraform-VMWare-Modules/terraform-vsphere-vm/releases) [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 
-For Virtual Machine Provisioning with (Linux/Windows) customization. Thanks to the new enhancements introduced in Terraform v0.12.6 this module include most of the advance features that are available in the resource `vsphere_virtual_machine`.
+For Virtual Machine Provisioning with (Linux/Windows) customization. Based on Terraform v0.13, this module include most of the advance features that are available in the resource `vsphere_virtual_machine`.
 
 ## Deploys (Single/Multiple) Virtual Machines to your vSphere environment
 
 This Terraform module deploys single or multiple virtual machines of type (Linux/Windows) with following features:
 
 - Ability to specify Linux or Windows VM customization.
-- Ability to add extra data disk (up to 15) to the VM.
-- Ability to deploy Multiple instances.
-- Ability to set IP and Gateway configuration for the VM.
-- Ability to add multiple network cards for the VM
-- Ability to choose vSphere resource pool or fall back to Cluster/ESXi root resource pool.
-- Ability to deploy Windows images to WorkGroup or Domain.
-- Ability to output VM names and IPs per module.
-- Ability assign tags and custom variables.
+- Ability to add multiple network cards for the VM   
+- Ability to assign tags and custom variables.
 - Ability to configure advance features for the vm.
 - Ability to deploy either a datastore or a datastore cluster.
-- Ability to enable cpu and memory hot plug features for the VM.
-- Ability to enable cpu and memory reservations for the VM.
-- Ability to define different datastores for data disks.
-- Ability to define different scsi_controllers per disk, including data disks.
-- Ability to define network type per interface and disk label per attached disk.
-- Ability to define depend on using variable vm_depends_on
+  - Add extra data disk (up to 15) to the VM.
+  - Different datastores for data disks (datastore_id).
+  - Different scsi_controllers per disk, including data disks.
+- Ability to define depend on using variable vm_depends_on & tag_depends_on
 
 > Note: For module to work it needs number of required variables corresponding to an existing resources in vSphere. Please refer to variable section for the list of required variables.
 
