@@ -73,7 +73,7 @@ There are number of switches defined in the module, where you can use to enable 
 
 > Note: When deploying a windows server in WorkGroup, we recommend to keep the Local Admin password set to its default and change it later via an script. Unfortunately Terraform redeploy the entire server if you change the local admin password within your code.
 
-Below is an example of windows deployment with some of the available feature sets. For complete list of available features refer to [variable.tf](https://github.com/Terraform-VMWare-Modules/terraform-vsphere-vm/blob/master/variables.tf)
+Below is an example of windows deployment with some of the available feature sets. For complete list of available features please refer to [variable.tf](https://github.com/Terraform-VMWare-Modules/terraform-vsphere-vm/blob/master/variables.tf)
 
 ```hcl
 module "example-server-windowsvm-advanced" {
