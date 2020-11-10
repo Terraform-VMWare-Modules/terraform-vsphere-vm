@@ -62,8 +62,6 @@ module "example-server-linuxvm" {
 
 There are number of switches defined in the module, where you can use to enable different features for VM provisioning.
 
-### Main Feature Switches
-
 - You can use `is_windows_image = true` to set the customization type to Windows (By default it is set to Linux customization)
 - You can use `windomain = "somedomain.com"` to join a windows server to AD domain.
   - Requires following additional variables
