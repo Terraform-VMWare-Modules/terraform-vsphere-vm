@@ -1,6 +1,20 @@
 # ChanegLog
 
-## Removed varsiables
+## v2.0.0
+__New Variables__
+```hcl
+variable "network" {
+  description = "Define PortGroup and IPs for each VM"
+  type        = map(list(string))
+  default     = {}
+}
+variable "data_disk" {
+  description = "Storage data disk parameter, example"
+  type        = map(map(string))
+  default     = {}
+}
+```
+__Removed varsiables__
 
 ```hcl
 #Network Section
