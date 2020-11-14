@@ -1,6 +1,8 @@
 # Smoke Test
 
-You need to run the plan using tfvars. Example:
+You need to run the plan using vars.tfvars 
+
+### Example:
 
 ```hcl
 viserver   = "fill"
