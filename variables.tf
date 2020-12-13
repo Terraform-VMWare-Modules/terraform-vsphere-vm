@@ -7,13 +7,13 @@ variable "network" {
 
 variable "network_type" {
   description = "Define network type for each network interface."
-  type        = list
+  type        = list(any)
   default     = null
 }
 
 variable "ipv4submask" {
   description = "ipv4 Subnet mask."
-  type        = list
+  type        = list(any)
   default     = ["24"]
 }
 
@@ -36,13 +36,13 @@ variable "data_disk" {
 
 variable "disk_label" {
   description = "Storage data disk labels."
-  type        = list
+  type        = list(any)
   default     = []
 }
 
 variable "disk_size_gb" {
   description = "List of disk sizes to override template disk size."
-  type        = list
+  type        = list(any)
   default     = null
 }
 
@@ -79,6 +79,12 @@ variable "enable_disk_uuid" {
   type        = bool
   default     = null
 }
+
+variable "storage_policy_id" {
+  description = "(Optional) The UUID of the storage policy to assign to VM home directory."
+  default     = null
+}
+
 ###########################################
 variable "vmname" {
   description = "The name of the virtual machine used to deploy the vms."
@@ -146,25 +152,25 @@ variable "vmdns" {
 #Global Customization Variables
 variable "tags" {
   description = "The names of any tags to attach to this resource. They must already exist."
-  type        = map
+  type        = map(any)
   default     = null
 }
 
 variable "tag_ids" {
   description = "The ids of any tags to attach to this resource. They must already exist."
-  type        = list
+  type        = list(any)
   default     = null
 }
 
 variable "custom_attributes" {
   description = "Map of custom attribute ids to attribute value strings to set for virtual machine."
-  type        = map
+  type        = map(any)
   default     = null
 }
 
 variable "extra_config" {
   description = "Extra configuration data for this virtual machine. Can be used to supply advanced parameters not normally in configuration, such as instance metadata.'disk.enableUUID', 'True'."
-  type        = map
+  type        = map(any)
   default     = null
 }
 
