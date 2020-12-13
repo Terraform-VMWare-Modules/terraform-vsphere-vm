@@ -23,7 +23,7 @@ vm = {
     vmgateway         = "10.13.13.1"
     dns_servers       = ["1.1.1.1"]
     network = {
-      "DEEDC-ECOM-INT-VLAN189" = ["10.13.13.2"],
+      "VM Networks" = ["10.13.13.2"],
     }
   }
 }

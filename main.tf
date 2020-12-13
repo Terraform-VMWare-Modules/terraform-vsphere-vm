@@ -68,6 +68,7 @@ resource "vsphere_virtual_machine" "Linux" {
   extra_config      = var.extra_config
   firmware          = var.firmware
   enable_disk_uuid  = var.enable_disk_uuid
+  storage_policy_id = var.storage_policy_id
 
   datastore_cluster_id = var.datastore_cluster != "" ? data.vsphere_datastore_cluster.datastore_cluster[0].id : null
   datastore_id         = var.datastore != "" ? data.vsphere_datastore.datastore[0].id : null
