@@ -1,7 +1,9 @@
-# ChanegLog
+# ChangeLog
 
 ## v2.0.0
+
 __New Variables__
+
 ```hcl
 variable "network" {
   description = "Define PortGroup and IPs for each VM"
@@ -14,6 +16,7 @@ variable "data_disk" {
   default     = {}
 }
 ```
+
 __Removed varsiables__
 
 ```hcl

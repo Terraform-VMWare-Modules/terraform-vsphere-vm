@@ -88,7 +88,8 @@ variable "storage_policy_id" {
 ###########################################
 variable "vmname" {
   description = "The name of the virtual machine used to deploy the vms."
-  default     = "terraformvm"
+  type = list(string)
+  default     = ["terraform-vm"]
 }
 
 variable "vmnamesuffix" {
