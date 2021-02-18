@@ -32,8 +32,23 @@ data "vsphere_network" "network" {
 }
 
 data "vsphere_virtual_machine" "template" {
+  count         = var.content_library == null ? 1 : 0
   name          = var.vmtemp
   datacenter_id = data.vsphere_datacenter.dc.id
+}
+
+data "vsphere_content_library" "library" {
+  count = var.content_library != null ? 1 : 0
+  name  = var.content_library
+  depends_on = [var.tag_depends_on]
+}
+
+data "vsphere_content_library_item" "library_item_template" {
+  count = var.content_library != null ? 1 : 0
+  name       = var.vmtemp
+  library_id = data.vsphere_content_library.library[0].id
+  type       = var.vmtemp_type
+  depends_on = [var.tag_depends_on]
 }
 
 data "vsphere_tag_category" "category" {
@@ -51,7 +66,7 @@ data "vsphere_tag" "tag" {
 
 locals {
   interface_count     = length(var.ipv4submask) #Used for Subnet handeling
-  template_disk_count = length(data.vsphere_virtual_machine.template.disks)
+  template_disk_count = var.content_library == null ? length(data.vsphere_virtual_machine.template[0].disks) : 0
 }
 
 // Cloning a Linux VM from a given template. Note: This is the default option!!
@@ -81,9 +96,9 @@ resource "vsphere_virtual_machine" "Linux" {
   memory_reservation     = var.memory_reservation
   memory                 = var.ram_size
   memory_hot_add_enabled = var.memory_hot_add_enabled
-  guest_id               = data.vsphere_virtual_machine.template.guest_id
+  guest_id               = data.vsphere_virtual_machine.template[0].guest_id
   scsi_bus_sharing       = var.scsi_bus_sharing
-  scsi_type              = var.scsi_type != "" ? var.scsi_type : data.vsphere_virtual_machine.template.scsi_type
+  scsi_type              = var.scsi_type != "" ? var.scsi_type : data.vsphere_virtual_machine.template[0].scsi_type
   scsi_controller_count = max(max(0, flatten([
     for item in values(var.data_disk) : [
       for elem, val in item :
@@ -100,19 +115,19 @@ resource "vsphere_virtual_machine" "Linux" {
     for_each = keys(var.network) #data.vsphere_network.network[*].id #other option
     content {
       network_id   = data.vsphere_network.network[network_interface.key].id
-      adapter_type = var.network_type != null ? var.network_type[network_interface.key] : data.vsphere_virtual_machine.template.network_interface_types[0]
+      adapter_type = var.network_type != null ? var.network_type[network_interface.key] : data.vsphere_virtual_machine.template[0].network_interface_types[0]
     }
   }
   // Disks defined in the original template
   dynamic "disk" {
-    for_each = data.vsphere_virtual_machine.template.disks
+    for_each = var.content_library == null ? data.vsphere_virtual_machine.template[0].disks : {}
     iterator = template_disks
     content {
       label            = length(var.disk_label) > 0 ? var.disk_label[template_disks.key] : "disk${template_disks.key}"
-      size             = var.disk_size_gb != null ? var.disk_size_gb[template_disks.key] : data.vsphere_virtual_machine.template.disks[template_disks.key].size
+      size             = var.disk_size_gb != null ? var.disk_size_gb[template_disks.key] : data.vsphere_virtual_machine.template[0].disks[template_disks.key].size
       unit_number      = var.scsi_controller != null ? var.scsi_controller * 15 + template_disks.key : template_disks.key
-      thin_provisioned = data.vsphere_virtual_machine.template.disks[template_disks.key].thin_provisioned
-      eagerly_scrub    = data.vsphere_virtual_machine.template.disks[template_disks.key].eagerly_scrub
+      thin_provisioned = data.vsphere_virtual_machine.template[0].disks[template_disks.key].thin_provisioned
+      eagerly_scrub    = data.vsphere_virtual_machine.template[0].disks[template_disks.key].eagerly_scrub
       datastore_id     = var.disk_datastore != "" ? data.vsphere_datastore.disk_datastore[0].id : null
     }
   }
@@ -130,7 +145,7 @@ resource "vsphere_virtual_machine" "Linux" {
     }
   }
   clone {
-    template_uuid = data.vsphere_virtual_machine.template.id
+    template_uuid = var.content_library == null ? data.vsphere_virtual_machine.template[0].id : data.vsphere_content_library_item.library_item_template[0].id
     linked_clone  = var.linked_clone
     timeout       = var.timeout
 
@@ -192,9 +207,9 @@ resource "vsphere_virtual_machine" "Windows" {
   memory_reservation     = var.memory_reservation
   memory                 = var.ram_size
   memory_hot_add_enabled = var.memory_hot_add_enabled
-  guest_id               = data.vsphere_virtual_machine.template.guest_id
+  guest_id               = var.content_library == null ? data.vsphere_virtual_machine.template[0].guest_id : var.guest_os
   scsi_bus_sharing       = var.scsi_bus_sharing
-  scsi_type              = var.scsi_type != "" ? var.scsi_type : data.vsphere_virtual_machine.template.scsi_type
+  scsi_type              = var.scsi_type != "" ? var.scsi_type : data.vsphere_virtual_machine.template[0].scsi_type
   scsi_controller_count = max(max(0, flatten([
     for item in values(var.data_disk) : [
       for elem, val in item :
@@ -211,20 +226,20 @@ resource "vsphere_virtual_machine" "Windows" {
     for_each = keys(var.network)
     content {
       network_id   = data.vsphere_network.network[network_interface.key].id
-      adapter_type = var.network_type != null ? var.network_type[network_interface.key] : data.vsphere_virtual_machine.template.network_interface_types[0]
+      adapter_type = var.network_type != null ? var.network_type[network_interface.key] : data.vsphere_virtual_machine.template[0].network_interface_types[0]
     }
   }
 
   // Disks defined in the original template
   dynamic "disk" {
-    for_each = data.vsphere_virtual_machine.template.disks
+    for_each = var.content_library == null ? data.vsphere_virtual_machine.template[0].disks : {}
     iterator = template_disks
     content {
       label            = length(var.disk_label) > 0 ? var.disk_label[template_disks.key] : "disk${template_disks.key}"
-      size             = var.disk_size_gb != null ? var.disk_size_gb[template_disks.key] : data.vsphere_virtual_machine.template.disks[template_disks.key].size
+      size             = var.disk_size_gb != null ? var.disk_size_gb[template_disks.key] : data.vsphere_virtual_machine.template[0].disks[template_disks.key].size
       unit_number      = var.scsi_controller != null ? var.scsi_controller * 15 + template_disks.key : template_disks.key
-      thin_provisioned = data.vsphere_virtual_machine.template.disks[template_disks.key].thin_provisioned
-      eagerly_scrub    = data.vsphere_virtual_machine.template.disks[template_disks.key].eagerly_scrub
+      thin_provisioned = data.vsphere_virtual_machine.template[0].disks[template_disks.key].thin_provisioned
+      eagerly_scrub    = data.vsphere_virtual_machine.template[0].disks[template_disks.key].eagerly_scrub
       datastore_id     = var.disk_datastore != "" ? data.vsphere_datastore.disk_datastore[0].id : null
     }
   }
@@ -243,7 +258,7 @@ resource "vsphere_virtual_machine" "Windows" {
     }
   }
   clone {
-    template_uuid = data.vsphere_virtual_machine.template.id
+    template_uuid = var.content_library == null ? data.vsphere_virtual_machine.template[0].id : data.vsphere_content_library_item.library_item_template[0].id
     linked_clone  = var.linked_clone
     timeout       = var.timeout
 

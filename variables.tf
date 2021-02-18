@@ -103,6 +103,27 @@ variable "vmnameliteral" {
 
 variable "vmtemp" {
   description = "Name of the template available in the vSphere."
+  default = null
+}
+
+variable "vmtemp_type" {
+  description = "Type of the template available in the vSphere. (Used with content_library)"
+  default = null
+
+  validation {
+    condition     = can(regex("^(ovf)|(iso)|(vm-template)$", var.vmtemp_type))
+    error_message = "The vmtemp_type value must be ovf, iso, or vm-template."
+  }
+}
+
+variable "content_library" {
+  description = "Name of the content library where the template is available in the vSphere."
+  default = null
+}
+
+variable "guest_os" {
+  description = "Guest OS of template. (use when deploying from content library)"
+  default = "other"
 }
 
 variable "instances" {
@@ -119,7 +140,6 @@ variable "cpu_reservation" {
   description = "The amount of CPU (in MHz) that this virtual machine is guaranteed."
   default     = null
 }
-
 
 variable "ram_size" {
   description = "VM RAM size in megabytes."
