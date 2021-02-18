@@ -120,7 +120,6 @@ variable "cpu_reservation" {
   default     = null
 }
 
-
 variable "ram_size" {
   description = "VM RAM size in megabytes."
   default     = 4096
@@ -200,6 +199,11 @@ variable "dns_suffix_list" {
 variable "firmware" {
   description = "The firmware interface to use on the virtual machine. Can be one of bios or EFI."
   default     = "bios"
+}
+
+variable "efi_secure_boot" {
+  description = "Enables EFI secure boot. Can be only be true when firmware is EFI."
+  default     = "false"
 }
 
 variable "num_cores_per_socket" {
