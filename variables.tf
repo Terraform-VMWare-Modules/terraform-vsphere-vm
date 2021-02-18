@@ -11,6 +11,12 @@ variable "network_type" {
   default     = null
 }
 
+variable "network_dvswitch" {
+  description = "Define dvswitch used for network on each network interface."
+  type        = list(any)
+  default     = null
+}
+
 variable "ipv4submask" {
   description = "ipv4 Subnet mask."
   type        = list(any)

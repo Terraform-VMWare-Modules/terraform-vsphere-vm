@@ -25,10 +25,17 @@ data "vsphere_resource_pool" "pool" {
   datacenter_id = data.vsphere_datacenter.dc.id
 }
 
+data "vsphere_distributed_virtual_switch" "dvs" {
+  count         = length(var.network_dvswitch)
+  name          = var.network_dvswitch[count.index]
+  datacenter_id = data.vsphere_datacenter.dc.id
+}
+
 data "vsphere_network" "network" {
   count         = length(var.network)
   name          = keys(var.network)[count.index]
   datacenter_id = data.vsphere_datacenter.dc.id
+  distributed_virtual_switch_uuid = var.network_dvswitch != null ? data.vsphere_distributed_virtual_switch.dvs[count.index].id : null
 }
 
 data "vsphere_virtual_machine" "template" {
