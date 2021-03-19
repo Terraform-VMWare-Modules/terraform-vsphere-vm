@@ -1,14 +1,14 @@
 module "example-server-windowsvm-advanced" {
-  source     = "Terraform-VMWare-Modules/vm/vsphere"
-  version    = "X.X.X"
-  dc         = "Datacenter"
-  vmrp       = "cluster/Resources" #Works with ESXi/Resources
-  vmfolder   = "Cattle"
-  ds_cluster = "Datastore Cluster" #You can use datastore variable instead
-  vmtemp     = "TemplateName"
-  instances  = 2
-  vmname     = "AdvancedVM"
-  vmdomain   = "somedomain.com"
+  source            = "Terraform-VMWare-Modules/vm/vsphere"
+  version           = "X.X.X"
+  dc                = "Datacenter"
+  vmrp              = "cluster/Resources" #Works with ESXi/Resources
+  vmfolder          = "Cattle"
+  datastore_cluster = "Datastore Cluster" #You can use datastore variable instead
+  vmtemp            = "TemplateName"
+  instances         = 2
+  vmname            = "AdvancedVM"
+  vmdomain          = "somedomain.com"
   network = {
     "Name of the Port Group in vSphere" = ["10.13.113.2", "10.13.113.3"] # To use DHCP create Empty list ["",""]
   }

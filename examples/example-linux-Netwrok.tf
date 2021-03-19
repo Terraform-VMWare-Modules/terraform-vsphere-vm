@@ -5,7 +5,7 @@ module "example-server-linuxvm-advanced" {
   dc                     = "Datacenter"
   vmrp                   = "cluster/Resources"
   vmfolder               = "Cattle"
-  ds_cluster             = "Datastore Cluster"
+  datastore_cluster      = "Datastore Cluster"
   vmtemp                 = "TemplateName"
   instances              = 2
   cpu_number             = 2
