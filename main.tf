@@ -60,15 +60,16 @@ resource "vsphere_virtual_machine" "Linux" {
   depends_on = [var.vm_depends_on]
   name       = "%{if var.vmnameliteral != ""}${var.vmnameliteral}%{else}${var.vmname}${count.index + 1}${var.vmnamesuffix}%{endif}"
 
-  resource_pool_id  = data.vsphere_resource_pool.pool.id
-  folder            = var.vmfolder
-  tags              = var.tag_ids != null ? var.tag_ids : data.vsphere_tag.tag[*].id
-  custom_attributes = var.custom_attributes
-  annotation        = var.annotation
-  extra_config      = var.extra_config
-  firmware          = var.firmware
-  enable_disk_uuid  = var.enable_disk_uuid
-  storage_policy_id = var.storage_policy_id
+  resource_pool_id        = data.vsphere_resource_pool.pool.id
+  folder                  = var.vmfolder
+  tags                    = var.tag_ids != null ? var.tag_ids : data.vsphere_tag.tag[*].id
+  custom_attributes       = var.custom_attributes
+  annotation              = var.annotation
+  extra_config            = var.extra_config
+  firmware                = var.firmware
+  efi_secure_boot_enabled = var.efi_secure_boot
+  enable_disk_uuid        = var.enable_disk_uuid
+  storage_policy_id       = var.storage_policy_id
 
   datastore_cluster_id = var.datastore_cluster != "" ? data.vsphere_datastore_cluster.datastore_cluster[0].id : null
   datastore_id         = var.datastore != "" ? data.vsphere_datastore.datastore[0].id : null
@@ -172,14 +173,15 @@ resource "vsphere_virtual_machine" "Windows" {
   depends_on = [var.vm_depends_on]
   name       = "%{if var.vmnameliteral != ""}${var.vmnameliteral}%{else}${var.vmname}${count.index + 1}${var.vmnamesuffix}%{endif}"
 
-  resource_pool_id  = data.vsphere_resource_pool.pool.id
-  folder            = var.vmfolder
-  tags              = var.tag_ids != null ? var.tag_ids : data.vsphere_tag.tag[*].id
-  custom_attributes = var.custom_attributes
-  annotation        = var.annotation
-  extra_config      = var.extra_config
-  firmware          = var.firmware
-  enable_disk_uuid  = var.enable_disk_uuid
+  resource_pool_id        = data.vsphere_resource_pool.pool.id
+  folder                  = var.vmfolder
+  tags                    = var.tag_ids != null ? var.tag_ids : data.vsphere_tag.tag[*].id
+  custom_attributes       = var.custom_attributes
+  annotation              = var.annotation
+  extra_config            = var.extra_config
+  firmware                = var.firmware
+  efi_secure_boot_enabled = var.efi_secure_boot
+  enable_disk_uuid        = var.enable_disk_uuid
 
   datastore_cluster_id = var.datastore_cluster != "" ? data.vsphere_datastore_cluster.datastore_cluster[0].id : null
   datastore_id         = var.datastore != "" ? data.vsphere_datastore.datastore[0].id : null
