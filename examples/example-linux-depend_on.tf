@@ -11,7 +11,7 @@ module "example-server-linuxvm" {
     "Name of the Port Group in vSphere" = ["10.0.0.1"] # To use DHCP create empty string for each instance
   }
   dc        = "Datacenter"
-  datastore = "Data Store name(use ds_cluster for datastore cluster)"
+  datastore = "Data Store name(use datastore_cluster for datastore cluster)"
 }
 // Example of Linux VM with more Advanced Features
 module "example-server-linuxvm-advanced" {
@@ -21,7 +21,7 @@ module "example-server-linuxvm-advanced" {
   dc                     = "Datacenter"
   vmrp                   = "cluster/Resources"
   vmfolder               = "Cattle"
-  ds_cluster             = "Datastore Cluster"
+  datastore_cluster      = "Datastore Cluster"
   vmtemp                 = "TemplateName"
   instances              = 2
   cpu_number             = 2

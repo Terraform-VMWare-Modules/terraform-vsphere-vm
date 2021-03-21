@@ -53,7 +53,7 @@ module "example-server-linuxvm" {
   }
   vmgateway         = "10.13.113.1"
   dc        = "Datacenter"
-  datastore = "Data Store name(use ds_cluster for datastore cluster)"
+  datastore = "Data Store name(use datastore_cluster for datastore cluster)"
 }
 
 ```
@@ -80,7 +80,7 @@ module "example-server-windowsvm-advanced" {
   dc                     = "Datacenter"
   vmrp                   = "cluster/Resources" #Works with ESXi/Resources
   vmfolder               = "Cattle"
-  ds_cluster             = "Datastore Cluster" #You can use datastore variable instead
+  datastore_cluster      = "Datastore Cluster" #You can use datastore variable instead
   vmtemp                 = "TemplateName"
   instances              = 2
   vmname                 = "AdvancedVM"
