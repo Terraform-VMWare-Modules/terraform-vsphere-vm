@@ -28,10 +28,6 @@ output "Windows-uuid" {
   value       = vsphere_virtual_machine.Windows.*.uuid
 }
 
-output "Windows-disks" {
-  value = { for d in flatten(vsphere_virtual_machine.Windows.*.disk) : d.label => d.uuid }
-}
-
 output "Linux-VM" {
   description = "VM Names"
   value       = vsphere_virtual_machine.Linux.*.name
@@ -50,8 +46,4 @@ output "Linux-guest-ip" {
 output "Linux-uuid" {
   description = "UUID of the VM in vSphere"
   value       = vsphere_virtual_machine.Linux.*.uuid
-}
-
-output "Linux-disks" {
-  value = { for d in flatten(vsphere_virtual_machine.Linux.*.disk) : d.label => d.uuid }
 }
