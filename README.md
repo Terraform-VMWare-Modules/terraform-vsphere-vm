@@ -15,6 +15,7 @@ This Terraform module deploys single or multiple virtual machines of type (Linux
 - Ability to deploy either a datastore or a datastore cluster.
   - Add extra data disk (up to 15) to the VM.
   - Different datastores for data disks (datastore_id).
+  - Different storage policy for data disks (storage_policy_id).
   - Different scsi_controllers per disk, including data disks.
 - Ability to define depend on using variable vm_depends_on & tag_depends_on
 
