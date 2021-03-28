@@ -58,7 +58,7 @@ locals {
 resource "vsphere_virtual_machine" "Linux" {
   count      = var.is_windows_image ? 0 : var.instances
   depends_on = [var.vm_depends_on]
-  name       = "%{if var.vmnameliteral != ""}${var.vmnameliteral}%{else}${var.vmname}${count.index + 1}${var.vmnamesuffix}%{endif}"
+  name       = var.instances == 1 ? var.vmname : format(var.vmname, count.index + 1)
 
   resource_pool_id        = data.vsphere_resource_pool.pool.id
   folder                  = var.vmfolder
@@ -137,7 +137,7 @@ resource "vsphere_virtual_machine" "Linux" {
 
     customize {
       linux_options {
-        host_name    = "%{if var.vmnameliteral != ""}${var.vmnameliteral}%{else}${var.vmname}${count.index + 1}${var.vmnamesuffix}%{endif}"
+        host_name    = var.instances == 1 ? var.vmname : format(var.vmname, count.index + 1)
         domain       = var.vmdomain
         hw_clock_utc = var.hw_clock_utc
       }
@@ -171,7 +171,7 @@ resource "vsphere_virtual_machine" "Linux" {
 resource "vsphere_virtual_machine" "Windows" {
   count      = var.is_windows_image ? var.instances : 0
   depends_on = [var.vm_depends_on]
-  name       = "%{if var.vmnameliteral != ""}${var.vmnameliteral}%{else}${var.vmname}${count.index + 1}${var.vmnamesuffix}%{endif}"
+  name       = var.instances == 1 ? var.vmname : format(var.vmname, count.index + 1)
 
   resource_pool_id        = data.vsphere_resource_pool.pool.id
   folder                  = var.vmfolder
@@ -251,7 +251,7 @@ resource "vsphere_virtual_machine" "Windows" {
 
     customize {
       windows_options {
-        computer_name         = "%{if var.vmnameliteral != ""}${var.vmnameliteral}%{else}${var.vmname}${count.index + 1}${var.vmnamesuffix}%{endif}"
+        computer_name         = var.instances == 1 ? var.vmname : format(var.vmname, count.index + 1)
         admin_password        = var.local_adminpass
         workgroup             = var.workgroup
         join_domain           = var.windomain
