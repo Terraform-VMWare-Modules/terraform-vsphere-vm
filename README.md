@@ -58,6 +58,12 @@ module "example-server-linuxvm" {
 
 ```
 
+## VM name
+
+`vmname` is the format, with index coming from instance number, used to name the deployed VMs (see [`format` function](https://www.terraform.io/docs/language/functions/format.html)) (e.g. `terraform-vm-%02d`).
+
+When only one VM is requested, `vmname` is simply the name of the deployed VM.
+
 ## Advance Usage
 
 There are number of switches defined in the module, where you can use to enable different features for VM provisioning.
