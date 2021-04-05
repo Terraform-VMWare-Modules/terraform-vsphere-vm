@@ -11,8 +11,12 @@ resource "vsphere_tag_category" "category" {
 
 resource "vsphere_tag" "tag" {
   name        = "terraform-test-tag"
-  category_id = "${vsphere_tag_category.category.id}"
+  category_id = vsphere_tag_category.category.id
   description = "Managed by Terraform"
+}
+
+variable "env" {
+  default = "dev"
 }
 
 variable "vm" {
@@ -36,6 +40,7 @@ variable "vm" {
 module "example-server-basic" {
   source           = "../../"
   for_each         = var.vm
+  vmnameformat     = "%03d${var.env}"
   tag_depends_on   = [vsphere_tag.tag.id]
   tags             = each.value.tags
   vmtemp           = each.value.vmtemp

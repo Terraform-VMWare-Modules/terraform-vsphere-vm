@@ -87,18 +87,13 @@ variable "storage_policy_id" {
 
 ###########################################
 variable "vmname" {
-  description = "The name of the virtual machine used to deploy the vms."
+  description = "The name of the virtual machine used to deploy the vms. When only one VM is requested, `vmname` is simply the name of the deployed VM."
   default     = "terraformvm"
 }
 
-variable "vmnamesuffix" {
-  description = "vmname suffix after numbered index coming from instance variable."
-  default     = ""
-}
-
-variable "vmnameliteral" {
-  description = "vmname without any suffix or Prefix, only to be used for single instances."
-  default     = ""
+variable "vmnameformat" {
+  description = "vmname format. default is set to 2 decimal with leading 0. example: %03d for 3 decimal with leading zero or %02dprod for additional suffix"
+  default     = "%02d"
 }
 
 variable "vmtemp" {
