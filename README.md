@@ -85,7 +85,7 @@ module "example-server-windowsvm-advanced" {
   vmtemp                 = "TemplateName"
   instances              = 2
   vmname                 = "AdvancedVM"
-  vmnameformat           = "%03d" #Format to use three decimal with leading zero
+  vmnameformat           = "%03d" #To use three decimal with leading zero vmnames will be AdvancedVM001,AdvancedVM002
   vmdomain               = "somedomain.com"
   network = {
     "Name of the Port Group in vSphere" = ["10.13.113.2", "10.13.113.3"] # To use DHCP create Empty list ["",""]
