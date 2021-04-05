@@ -15,6 +15,10 @@ resource "vsphere_tag" "tag" {
   description = "Managed by Terraform"
 }
 
+variable "env" {
+  default = "dev"
+}
+
 variable "vm" {
   type = map(object({
     vmname                     = string
@@ -35,20 +39,21 @@ variable "vm" {
 }
 
 module "example-server-basic" {
-  source                     = "../../"
-  for_each                   = var.vm
-  tag_depends_on             = [vsphere_tag.tag.id]
-  tags                       = each.value.tags
-  vmtemp                     = each.value.vmtemp
-  is_windows_image           = each.value.is_windows_image
-  instances                  = each.value.instances
-  vmname                     = each.value.vmname
-  vmrp                       = each.value.vmrp
-  vmfolder                   = each.value.vmfolder
-  network                    = each.value.network
-  vmgateway                  = each.value.vmgateway
-  dc                         = each.value.dc
-  datastore                  = each.value.datastore
+  source           = "../../"
+  for_each         = var.vm
+  vmnameformat     = "%03d${var.env}"
+  tag_depends_on   = [vsphere_tag.tag.id]
+  tags             = each.value.tags
+  vmtemp           = each.value.vmtemp
+  is_windows_image = each.value.is_windows_image
+  instances        = each.value.instances
+  vmname           = each.value.vmname
+  vmrp             = each.value.vmrp
+  vmfolder         = each.value.vmfolder
+  network          = each.value.network
+  vmgateway        = each.value.vmgateway
+  dc               = each.value.dc
+  datastore        = each.value.datastore
   template_storage_policy_id = each.value.template_storage_policy_id
-  data_disk                  = each.value.data_disk
+  data_disk        = each.value.data_disk
 }

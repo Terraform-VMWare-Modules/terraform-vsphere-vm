@@ -1,15 +1,15 @@
 # Terraform vSphere Module
 
-![Terraform Version](https://img.shields.io/badge/Terraform-0.13.5-green.svg) [![TF Registry](https://img.shields.io/badge/terraform-registry-blue.svg)](https://registry.terraform.io/modules/Terraform-VMWare-Modules/vm/vsphere/) [![Changelog](https://img.shields.io/badge/changelog-release-green.svg)](https://github.com/Terraform-VMWare-Modules/terraform-vsphere-vm/releases) [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
+![Terraform Version](https://img.shields.io/badge/Terraform-0.14.5-green.svg) [![TF Registry](https://img.shields.io/badge/terraform-registry-blue.svg)](https://registry.terraform.io/modules/Terraform-VMWare-Modules/vm/vsphere/) [![Changelog](https://img.shields.io/badge/changelog-release-green.svg)](https://github.com/Terraform-VMWare-Modules/terraform-vsphere-vm/releases) [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 
-For Virtual Machine Provisioning with (Linux/Windows) customization. Based on Terraform v0.13, this module include most of the advance features that are available in the resource `vsphere_virtual_machine`.
+For Virtual Machine Provisioning with (Linux/Windows) customization. Based on Terraform v0.13 and up, this module include most of the advance features that are available in the resource `vsphere_virtual_machine`.
 
 ## Deploys (Single/Multiple) Virtual Machines to your vSphere environment
 
 This Terraform module deploys single or multiple virtual machines of type (Linux/Windows) with following features:
 
 - Ability to specify Linux or Windows VM customization.
-- Ability to add multiple network cards for the VM   
+- Ability to add multiple network cards for the VM
 - Ability to assign tags and custom variables.
 - Ability to configure advance features for the vm.
 - Ability to deploy either a datastore or a datastore cluster.
@@ -85,6 +85,7 @@ module "example-server-windowsvm-advanced" {
   vmtemp                 = "TemplateName"
   instances              = 2
   vmname                 = "AdvancedVM"
+  vmnameformat           = "%03d" #Format to use three decimal with leading zero
   vmdomain               = "somedomain.com"
   network = {
     "Name of the Port Group in vSphere" = ["10.13.113.2", "10.13.113.3"] # To use DHCP create Empty list ["",""]

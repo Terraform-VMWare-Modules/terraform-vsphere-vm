@@ -6,9 +6,9 @@ module "example-server-linuxvm" {
   instances     = 1
   vmname        = "example-server-windows"
   vmrp          = "esxi/Resources"
-  network_cards = ["Name of the Port Group in vSphere"]
-  ipv4 = {
-    "Name of the Port Group in vSphere" = ["10.0.0.1"] # To use DHCP create empty string for each instance
+  network = {
+    "Network01" = ["10.13.113.2", "10.13.113.3"] # To use DHCP create Empty list ["",""]
+    "Network02" = ["", ""]                       #Second Network will use the DHCP
   }
   dc        = "Datacenter"
   datastore = "Data Store name(use datastore_cluster for datastore cluster)"
@@ -31,11 +31,10 @@ module "example-server-linuxvm-advanced" {
   memory_hot_add_enabled = true
   vmname                 = "AdvancedVM"
   vmdomain               = "somedomain.com"
-  network_cards          = ["VM Network", "test-network"]
   ipv4submask            = ["24", "8"]
-  ipv4 = {
-    "VM Network" = ["192.168.0.4", ""] // Here the first instance will use Static Ip and Second set to DHCP
-    "test"       = ["", "192.168.0.3"]
+  network = {
+    "Network01" = ["10.13.113.2", "10.13.113.3"] # To use DHCP create Empty list ["",""]
+    "Network02" = ["", ""]                       #Second Network will use the DHCP
   }
   disk_label                = ["tpl-disk-1"]
   data_disk_label           = ["label1", "label2"]
