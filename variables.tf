@@ -52,7 +52,7 @@ variable "disk_datastore" {
   default     = ""
 }
 
-variable "disk_storage_policy_id" {
+variable "template_storage_policy_id" {
   description = "List of UUIDs of the storage policy to assign to the template disk."
   type        = list(any)
   default     = []

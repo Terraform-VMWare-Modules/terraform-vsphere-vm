@@ -115,7 +115,7 @@ resource "vsphere_virtual_machine" "Linux" {
       thin_provisioned  = data.vsphere_virtual_machine.template.disks[template_disks.key].thin_provisioned
       eagerly_scrub     = data.vsphere_virtual_machine.template.disks[template_disks.key].eagerly_scrub
       datastore_id      = var.disk_datastore != "" ? data.vsphere_datastore.disk_datastore[0].id : null
-      storage_policy_id = length(var.disk_storage_policy_id) > 0 ? var.disk_storage_policy_id[template_disks.key] : null
+      storage_policy_id = length(var.template_storage_policy_id) > 0 ? var.template_storage_policy_id[template_disks.key] : null
     }
   }
   // Additional disks defined by Terraform config
@@ -231,7 +231,7 @@ resource "vsphere_virtual_machine" "Windows" {
       thin_provisioned  = data.vsphere_virtual_machine.template.disks[template_disks.key].thin_provisioned
       eagerly_scrub     = data.vsphere_virtual_machine.template.disks[template_disks.key].eagerly_scrub
       datastore_id      = var.disk_datastore != "" ? data.vsphere_datastore.disk_datastore[0].id : null
-      storage_policy_id = length(var.disk_storage_policy_id) > 0 ? var.disk_storage_policy_id[template_disks.key] : null
+      storage_policy_id = length(var.template_storage_policy_id) > 0 ? var.template_storage_policy_id[template_disks.key] : null
     }
   }
 
