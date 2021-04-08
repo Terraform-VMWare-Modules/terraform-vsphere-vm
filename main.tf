@@ -109,12 +109,13 @@ resource "vsphere_virtual_machine" "Linux" {
     for_each = data.vsphere_virtual_machine.template.disks
     iterator = template_disks
     content {
-      label            = length(var.disk_label) > 0 ? var.disk_label[template_disks.key] : "disk${template_disks.key}"
-      size             = var.disk_size_gb != null ? var.disk_size_gb[template_disks.key] : data.vsphere_virtual_machine.template.disks[template_disks.key].size
-      unit_number      = var.scsi_controller != null ? var.scsi_controller * 15 + template_disks.key : template_disks.key
-      thin_provisioned = data.vsphere_virtual_machine.template.disks[template_disks.key].thin_provisioned
-      eagerly_scrub    = data.vsphere_virtual_machine.template.disks[template_disks.key].eagerly_scrub
-      datastore_id     = var.disk_datastore != "" ? data.vsphere_datastore.disk_datastore[0].id : null
+      label             = length(var.disk_label) > 0 ? var.disk_label[template_disks.key] : "disk${template_disks.key}"
+      size              = var.disk_size_gb != null ? var.disk_size_gb[template_disks.key] : data.vsphere_virtual_machine.template.disks[template_disks.key].size
+      unit_number       = var.scsi_controller != null ? var.scsi_controller * 15 + template_disks.key : template_disks.key
+      thin_provisioned  = data.vsphere_virtual_machine.template.disks[template_disks.key].thin_provisioned
+      eagerly_scrub     = data.vsphere_virtual_machine.template.disks[template_disks.key].eagerly_scrub
+      datastore_id      = var.disk_datastore != "" ? data.vsphere_datastore.disk_datastore[0].id : null
+      storage_policy_id = length(var.template_storage_policy_id) > 0 ? var.template_storage_policy_id[template_disks.key] : null
     }
   }
   // Additional disks defined by Terraform config
@@ -122,12 +123,13 @@ resource "vsphere_virtual_machine" "Linux" {
     for_each = var.data_disk
     iterator = terraform_disks
     content {
-      label            = terraform_disks.key
-      size             = lookup(terraform_disks.value, "size_gb", null)
-      unit_number      = lookup(terraform_disks.value, "data_disk_scsi_controller", 0) ? terraform_disks.value.data_disk_scsi_controller * 15 + index(keys(var.data_disk), terraform_disks.key) + (var.scsi_controller == tonumber(terraform_disks.value["data_disk_scsi_controller"]) ? local.template_disk_count : 0) : index(keys(var.data_disk), terraform_disks.key) + local.template_disk_count
-      thin_provisioned = lookup(terraform_disks.value, "thin_provisioned", "true")
-      eagerly_scrub    = lookup(terraform_disks.value, "eagerly_scrub", "false")
-      datastore_id     = lookup(terraform_disks.value, "datastore_id", null)
+      label             = terraform_disks.key
+      size              = lookup(terraform_disks.value, "size_gb", null)
+      unit_number       = lookup(terraform_disks.value, "data_disk_scsi_controller", 0) ? terraform_disks.value.data_disk_scsi_controller * 15 + index(keys(var.data_disk), terraform_disks.key) + (var.scsi_controller == tonumber(terraform_disks.value["data_disk_scsi_controller"]) ? local.template_disk_count : 0) : index(keys(var.data_disk), terraform_disks.key) + local.template_disk_count
+      thin_provisioned  = lookup(terraform_disks.value, "thin_provisioned", "true")
+      eagerly_scrub     = lookup(terraform_disks.value, "eagerly_scrub", "false")
+      datastore_id      = lookup(terraform_disks.value, "datastore_id", null)
+      storage_policy_id = lookup(terraform_disks.value, "storage_policy_id", null)
     }
   }
   clone {
@@ -182,6 +184,7 @@ resource "vsphere_virtual_machine" "Windows" {
   firmware                = var.firmware
   efi_secure_boot_enabled = var.efi_secure_boot
   enable_disk_uuid        = var.enable_disk_uuid
+  storage_policy_id       = var.storage_policy_id
 
   datastore_cluster_id = var.datastore_cluster != "" ? data.vsphere_datastore_cluster.datastore_cluster[0].id : null
   datastore_id         = var.datastore != "" ? data.vsphere_datastore.datastore[0].id : null
@@ -222,12 +225,13 @@ resource "vsphere_virtual_machine" "Windows" {
     for_each = data.vsphere_virtual_machine.template.disks
     iterator = template_disks
     content {
-      label            = length(var.disk_label) > 0 ? var.disk_label[template_disks.key] : "disk${template_disks.key}"
-      size             = var.disk_size_gb != null ? var.disk_size_gb[template_disks.key] : data.vsphere_virtual_machine.template.disks[template_disks.key].size
-      unit_number      = var.scsi_controller != null ? var.scsi_controller * 15 + template_disks.key : template_disks.key
-      thin_provisioned = data.vsphere_virtual_machine.template.disks[template_disks.key].thin_provisioned
-      eagerly_scrub    = data.vsphere_virtual_machine.template.disks[template_disks.key].eagerly_scrub
-      datastore_id     = var.disk_datastore != "" ? data.vsphere_datastore.disk_datastore[0].id : null
+      label             = length(var.disk_label) > 0 ? var.disk_label[template_disks.key] : "disk${template_disks.key}"
+      size              = var.disk_size_gb != null ? var.disk_size_gb[template_disks.key] : data.vsphere_virtual_machine.template.disks[template_disks.key].size
+      unit_number       = var.scsi_controller != null ? var.scsi_controller * 15 + template_disks.key : template_disks.key
+      thin_provisioned  = data.vsphere_virtual_machine.template.disks[template_disks.key].thin_provisioned
+      eagerly_scrub     = data.vsphere_virtual_machine.template.disks[template_disks.key].eagerly_scrub
+      datastore_id      = var.disk_datastore != "" ? data.vsphere_datastore.disk_datastore[0].id : null
+      storage_policy_id = length(var.template_storage_policy_id) > 0 ? var.template_storage_policy_id[template_disks.key] : null
     }
   }
 
@@ -236,12 +240,13 @@ resource "vsphere_virtual_machine" "Windows" {
     for_each = var.data_disk
     iterator = terraform_disks
     content {
-      label            = terraform_disks.key
-      size             = lookup(terraform_disks.value, "size_gb", null)
-      unit_number      = lookup(terraform_disks.value, "data_disk_scsi_controller", 0) ? terraform_disks.value.data_disk_scsi_controller * 15 + index(keys(var.data_disk), terraform_disks.key) + (var.scsi_controller == tonumber(terraform_disks.value["data_disk_scsi_controller"]) ? local.template_disk_count : 0) : index(keys(var.data_disk), terraform_disks.key) + local.template_disk_count
-      thin_provisioned = lookup(terraform_disks.value, "thin_provisioned", "true")
-      eagerly_scrub    = lookup(terraform_disks.value, "eagerly_scrub", "false")
-      datastore_id     = lookup(terraform_disks.value, "datastore_id", null)
+      label             = terraform_disks.key
+      size              = lookup(terraform_disks.value, "size_gb", null)
+      unit_number       = lookup(terraform_disks.value, "data_disk_scsi_controller", 0) ? terraform_disks.value.data_disk_scsi_controller * 15 + index(keys(var.data_disk), terraform_disks.key) + (var.scsi_controller == tonumber(terraform_disks.value["data_disk_scsi_controller"]) ? local.template_disk_count : 0) : index(keys(var.data_disk), terraform_disks.key) + local.template_disk_count
+      thin_provisioned  = lookup(terraform_disks.value, "thin_provisioned", "true")
+      eagerly_scrub     = lookup(terraform_disks.value, "eagerly_scrub", "false")
+      datastore_id      = lookup(terraform_disks.value, "datastore_id", null)
+      storage_policy_id = lookup(terraform_disks.value, "storage_policy_id", null)
     }
   }
   clone {

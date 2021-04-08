@@ -31,6 +31,7 @@ vm = {
         size_gb                   = 4,
         thin_provisioned          = true,
         data_disk_scsi_controller = 1,
+        storage_policy_id         = "D680B3D4-ACBE-40B5-BD9C-2EB1526A5EDD"
       },
       disk3 = {
         size_gb                   = 5,

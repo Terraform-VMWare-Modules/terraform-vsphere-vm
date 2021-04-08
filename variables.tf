@@ -52,6 +52,12 @@ variable "disk_datastore" {
   default     = ""
 }
 
+variable "template_storage_policy_id" {
+  description = "List of UUIDs of the storage policy to assign to the template disk."
+  type        = list(any)
+  default     = []
+}
+
 variable "scsi_bus_sharing" {
   description = "scsi_bus_sharing mode, acceptable values physicalSharing,virtualSharing,noSharing."
   type        = string
