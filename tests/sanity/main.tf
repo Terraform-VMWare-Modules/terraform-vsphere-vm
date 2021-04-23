@@ -15,28 +15,41 @@ resource "vsphere_tag" "tag" {
   description = "Managed by Terraform"
 }
 
+variable "env" {
+  default = "dev"
+}
+
+data "vsphere_storage_policy" "this" {
+  name = "Test"
+}
+
+output "disk_id" {
+  value = data.vsphere_storage_policy.this.id
+}
+
 variable "vm" {
   type = map(object({
-    vmname                     = string
-    vmtemp                     = string
-    dc                         = string
-    vmrp                       = string
-    vmfolder                   = string
-    datastore                  = string
-    template_storage_policy_id = list(string)
-    is_windows_image           = bool
-    tags                       = map(string)
-    instances                  = number
-    network                    = map(list(string))
-    vmgateway                  = string
-    dns_servers                = list(string)
-    data_disk                  = map(map(string))
+    vmname           = string
+    vmtemp           = string
+    dc               = string
+    vmrp             = string
+    vmfolder         = string
+    datastore        = string
+    is_windows_image = bool
+    tags             = map(string)
+    instances        = number
+    network          = map(list(string))
+    vmgateway        = string
+    dns_servers      = list(string)
+    data_disk        = map(map(string))
   }))
 }
 
 module "example-server-basic" {
   source                     = "../../"
   for_each                   = var.vm
+  vmnameformat               = "%03d${var.env}"
+  template_storage_policy_id = [data.vsphere_storage_policy.this.id]
   tag_depends_on             = [vsphere_tag.tag.id]
   tags                       = each.value.tags
   vmtemp                     = each.value.vmtemp
@@ -49,6 +62,6 @@ module "example-server-basic" {
   vmgateway                  = each.value.vmgateway
   dc                         = each.value.dc
   datastore                  = each.value.datastore
-  template_storage_policy_id = each.value.template_storage_policy_id
   data_disk                  = each.value.data_disk
 }
+
