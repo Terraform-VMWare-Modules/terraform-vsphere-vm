@@ -21,20 +21,19 @@ variable "env" {
 
 variable "vm" {
   type = map(object({
-    vmname                     = string
-    vmtemp                     = string
-    dc                         = string
-    vmrp                       = string
-    vmfolder                   = string
-    datastore                  = string
-    template_storage_policy_id = list(string)
-    is_windows_image           = bool
-    tags                       = map(string)
-    instances                  = number
-    network                    = map(list(string))
-    vmgateway                  = string
-    dns_servers                = list(string)
-    data_disk                  = map(map(string))
+    vmname           = string
+    vmtemp           = string
+    dc               = string
+    vmrp             = string
+    vmfolder         = string
+    datastore        = string
+    is_windows_image = bool
+    tags             = map(string)
+    instances        = number
+    network          = map(list(string))
+    vmgateway        = string
+    dns_servers      = list(string)
+    data_disk        = map(map(string))
   }))
 }
 
@@ -54,6 +53,5 @@ module "example-server-basic" {
   vmgateway        = each.value.vmgateway
   dc               = each.value.dc
   datastore        = each.value.datastore
-  template_storage_policy_id = each.value.template_storage_policy_id
   data_disk        = each.value.data_disk
 }

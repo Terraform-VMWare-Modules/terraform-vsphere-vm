@@ -141,7 +141,7 @@ resource "vsphere_virtual_machine" "vm" {
       dynamic "linux_options" {
         for_each     = var.is_windows_image ? [] : [1]
         content {
-          host_name    = "%{if var.vmnameliteral != ""}${var.vmnameliteral}%{else}${var.vmname}${count.index + 1}${var.vmnamesuffix}%{endif}"
+          host_name    = var.instances == 1 ? var.vmname : format("${var.vmname}${var.vmnameformat}", count.index + 1)
           domain       = var.vmdomain
           hw_clock_utc = var.hw_clock_utc
         }
