@@ -93,13 +93,18 @@ variable "storage_policy_id" {
 
 ###########################################
 variable "vmname" {
-  description = "The name of the virtual machine used to deploy the vms. When only one VM is requested, `vmname` is simply the name of the deployed VM."
+  description = "The name of the virtual machine used to deploy the vms. This name can scale out based on number of instances and vmnameformat - example can be found under exampel folder"
   default     = "terraformvm"
 }
 
 variable "vmnameformat" {
   description = "vmname format. default is set to 2 decimal with leading 0. example: %03d for 3 decimal with leading zero or %02dprod for additional suffix"
   default     = "%02d"
+}
+
+variable "staticvmname" {
+  description = "Static name of the virtual machin. When this option is used VM can not scale out using instance variable. You can use for_each outside the module to deploy multiple static vms with different names"
+  default     = null
 }
 
 variable "vmtemp" {
@@ -144,7 +149,7 @@ variable "vmgateway" {
   default     = null
 }
 
-variable "vmdns" {
+variable "dns_server_list" {
   type    = list(string)
   default = null
 }
@@ -244,7 +249,7 @@ variable "hw_clock_utc" {
   default     = true
 }
 
-variable "vmdomain" {
+variable "domain" {
   description = "default VM domain for linux guest customization."
   default     = "Development.com"
 }

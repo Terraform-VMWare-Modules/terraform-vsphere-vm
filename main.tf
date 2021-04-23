@@ -58,7 +58,7 @@ locals {
 resource "vsphere_virtual_machine" "vm" {
   count      = var.instances
   depends_on = [var.vm_depends_on]
-  name       = var.instances == 1 ? var.vmname : format("${var.vmname}${var.vmnameformat}", count.index + 1)
+  name       = var.staticvmname != null ? var.staticvmname : format("${var.vmname}${var.vmnameformat}", count.index + 1)
 
   resource_pool_id        = data.vsphere_resource_pool.pool.id
   folder                  = var.vmfolder
@@ -139,18 +139,18 @@ resource "vsphere_virtual_machine" "vm" {
 
     customize {
       dynamic "linux_options" {
-        for_each     = var.is_windows_image ? [] : [1]
+        for_each = var.is_windows_image ? [] : [1]
         content {
-          host_name    = var.instances == 1 ? var.vmname : format("${var.vmname}${var.vmnameformat}", count.index + 1)
-          domain       = var.vmdomain
+          host_name    = var.staticvmname != null ? var.staticvmname : format("${var.vmname}${var.vmnameformat}", count.index + 1)
+          domain       = var.domain
           hw_clock_utc = var.hw_clock_utc
         }
       }
 
       dynamic "windows_options" {
-        for_each              = var.is_windows_image ? [1] : []
+        for_each = var.is_windows_image ? [1] : []
         content {
-          computer_name         = var.instances == 1 ? var.vmname : format("${var.vmname}${var.vmnameformat}", count.index + 1)
+          computer_name         = var.staticvmname != null ? var.staticvmname : format("${var.vmname}${var.vmnameformat}", count.index + 1)
           admin_password        = var.local_adminpass
           workgroup             = var.workgroup
           join_domain           = var.windomain
@@ -173,7 +173,7 @@ resource "vsphere_virtual_machine" "vm" {
           ipv4_netmask = "%{if length(var.ipv4submask) == 1}${var.ipv4submask[0]}%{else}${var.ipv4submask[network_interface.key]}%{endif}"
         }
       }
-      dns_server_list = var.vmdns
+      dns_server_list = var.dns_server_list
       dns_suffix_list = var.dns_suffix_list
       ipv4_gateway    = var.vmgateway
     }
