@@ -9,14 +9,14 @@ module "example-server-linuxvm-advanced" {
   vmtemp                 = "TemplateName"
   instances              = 2
   vmname                 = "AdvancedVM"
-  vmdomain               = "somedomain.com"
+  domain               = "somedomain.com"
   ipv4submask            = ["24", "8"]
   network = {
     "Network01" = ["10.13.113.2", "10.13.113.3"] # To use DHCP create Empty list ["",""]
     "Network02" = ["", ""]                       #Second Network will use the DHCP
   }
   disk_datastore  = "vsanDatastore"
-  vmdns           = ["192.168.0.2", "192.168.0.1"]
+  dns_server_list = ["192.168.0.2", "192.168.0.1"]
   vmgateway       = "192.168.0.1"
   network_type    = ["vmxnet3", "vmxnet3"]
 }
