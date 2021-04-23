@@ -19,6 +19,14 @@ variable "env" {
   default = "dev"
 }
 
+data "vsphere_storage_policy" "this" {
+  name = "Test"
+}
+
+output "disk_id" {
+  value = data.vsphere_storage_policy.this.id
+}
+
 variable "vm" {
   type = map(object({
     vmname           = string
@@ -38,20 +46,22 @@ variable "vm" {
 }
 
 module "example-server-basic" {
-  source           = "../../"
-  for_each         = var.vm
-  vmnameformat     = "%03d${var.env}"
-  tag_depends_on   = [vsphere_tag.tag.id]
-  tags             = each.value.tags
-  vmtemp           = each.value.vmtemp
-  is_windows_image = each.value.is_windows_image
-  instances        = each.value.instances
-  vmname           = each.value.vmname
-  vmrp             = each.value.vmrp
-  vmfolder         = each.value.vmfolder
-  network          = each.value.network
-  vmgateway        = each.value.vmgateway
-  dc               = each.value.dc
-  datastore        = each.value.datastore
-  data_disk        = each.value.data_disk
+  source                     = "../../"
+  for_each                   = var.vm
+  vmnameformat               = "%03d${var.env}"
+  template_storage_policy_id = [data.vsphere_storage_policy.this.id]
+  tag_depends_on             = [vsphere_tag.tag.id]
+  tags                       = each.value.tags
+  vmtemp                     = each.value.vmtemp
+  is_windows_image           = each.value.is_windows_image
+  instances                  = each.value.instances
+  vmname                     = each.value.vmname
+  vmrp                       = each.value.vmrp
+  vmfolder                   = each.value.vmfolder
+  network                    = each.value.network
+  vmgateway                  = each.value.vmgateway
+  dc                         = each.value.dc
+  datastore                  = each.value.datastore
+  data_disk                  = each.value.data_disk
 }
+
