@@ -8,42 +8,22 @@ output "ResPool_ID" {
   value       = data.vsphere_resource_pool.pool.id
 }
 
-output "Windows-VM" {
+output "VM" {
   description = "VM Names"
-  value       = vsphere_virtual_machine.Windows.*.name
+  value       = vsphere_virtual_machine.vm.*.name
 }
 
-output "Windows-ip" {
+output "ip" {
   description = "default ip address of the deployed VM"
-  value       = vsphere_virtual_machine.Windows.*.default_ip_address
+  value       = vsphere_virtual_machine.vm.*.default_ip_address
 }
 
-output "Windows-guest-ip" {
+output "guest-ip" {
   description = "all the registered ip address of the VM"
-  value       = vsphere_virtual_machine.Windows.*.guest_ip_addresses
+  value       = vsphere_virtual_machine.vm.*.guest_ip_addresses
 }
 
-output "Windows-uuid" {
+output "uuid" {
   description = "UUID of the VM in vSphere"
-  value       = vsphere_virtual_machine.Windows.*.uuid
-}
-
-output "Linux-VM" {
-  description = "VM Names"
-  value       = vsphere_virtual_machine.Linux.*.name
-}
-
-output "Linux-ip" {
-  description = "default ip address of the deployed VM"
-  value       = vsphere_virtual_machine.Linux.*.default_ip_address
-}
-
-output "Linux-guest-ip" {
-  description = "all the registered ip address of the VM"
-  value       = vsphere_virtual_machine.Linux.*.guest_ip_addresses
-}
-
-output "Linux-uuid" {
-  description = "UUID of the VM in vSphere"
-  value       = vsphere_virtual_machine.Linux.*.uuid
+  value       = vsphere_virtual_machine.vm.*.uuid
 }
