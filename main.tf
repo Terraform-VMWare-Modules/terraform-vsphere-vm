@@ -86,12 +86,12 @@ resource "vsphere_virtual_machine" "vm" {
   scsi_bus_sharing       = var.scsi_bus_sharing
   scsi_type              = var.scsi_type != "" ? var.scsi_type : data.vsphere_virtual_machine.template.scsi_type
   scsi_controller_count = max(
-    max(flatten([
+    max(0,flatten([
       for item in values(var.data_disk) : [
         for elem, val in item :
         elem == "data_disk_scsi_controller" ? val : 0
       ]])...) + 1,
-    ceil((max(flatten([
+    ceil((max(0,flatten([
       for item in values(var.data_disk) : [
         for elem, val in item :
         elem == "unit_number" ? val : 0
