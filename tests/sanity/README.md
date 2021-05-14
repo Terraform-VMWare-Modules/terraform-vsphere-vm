@@ -50,6 +50,8 @@ vm = {
       "VM Port Group" = ["10.13.13.2", ""], # To use DHCP create Empty list for each instance
       "VM Port Group" = ["", ""]
     }
+    tags = {}
+    annotation = null
   },
   windowsvm = {
     vmname           = "example-server-windows",
@@ -68,6 +70,7 @@ vm = {
       "VM Port Group" = ["", ""]
     }
   }
+    tags = {}
 }
 ```
 
