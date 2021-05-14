@@ -12,6 +12,7 @@ variable "vm" {
     network          = map(list(string))
     vmgateway        = string
     dns_servers      = list(string)
+    data_disk        = map(map(string))
   }))
 }
 
@@ -29,4 +30,5 @@ module "example-server-basic" {
   vmgateway        = each.value.vmgateway
   dc               = each.value.dc
   datastore        = each.value.datastore #Either
+  data_disk        = each.value.data_disk
 }
