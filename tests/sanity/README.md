@@ -39,6 +39,12 @@ vm = {
         data_disk_scsi_controller = 1,
         datastore_id              = "datastore-90679"
       }
+      disk4 = {
+        size_gb                   = 5,
+        thin_provisioned          = true,
+        unit_number               = 30,
+        datastore_id              = "datastore-90679"
+      }
     }
     network = {
       "VM Port Group" = ["10.13.13.2", ""], # To use DHCP create Empty list for each instance
