@@ -125,11 +125,11 @@ module "example-server-windowsvm-advanced" {
 }
 
 output "vmnames" {
-  value = "${module.example-server-windowsvm-advanced.Windows-VM}"
+  value = module.example-server-windowsvm-advanced.VM
 }
 
 output "vmnameswip" {
-  value = "${module.example-server-windowsvm-advanced.Windows-ip}"
+  value = module.example-server-windowsvm-advanced.ip
 }
 ```
 

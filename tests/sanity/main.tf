@@ -56,3 +56,14 @@ module "example-server-basic" {
   data_disk        = each.value.data_disk
 }
 
+output "DC_ID" {
+  value = tomap({
+    for k, i in module.example-server-basic : k => i.DC_ID
+  })
+}
+
+output "VM" {
+  value = tomap({
+    for k, i in module.example-server-basic : k => i.VM
+  })
+}
