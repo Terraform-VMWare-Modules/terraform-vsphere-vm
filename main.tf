@@ -85,12 +85,18 @@ resource "vsphere_virtual_machine" "vm" {
   guest_id               = data.vsphere_virtual_machine.template.guest_id
   scsi_bus_sharing       = var.scsi_bus_sharing
   scsi_type              = var.scsi_type != "" ? var.scsi_type : data.vsphere_virtual_machine.template.scsi_type
-  scsi_controller_count = max(max(0, flatten([
-    for item in values(var.data_disk) : [
-      for elem, val in item :
-      elem == "data_disk_scsi_controller" ? val : 0
-    ]
-  ])...) + 1, var.scsi_controller)
+  scsi_controller_count = max(
+    max(0,flatten([
+      for item in values(var.data_disk) : [
+        for elem, val in item :
+        elem == "data_disk_scsi_controller" ? val : 0
+      ]])...) + 1,
+    ceil((max(0,flatten([
+      for item in values(var.data_disk) : [
+        for elem, val in item :
+        elem == "unit_number" ? val : 0
+      ]  ])...) + 1) / 15),
+    var.scsi_controller)
   wait_for_guest_net_routable = var.wait_for_guest_net_routable
   wait_for_guest_ip_timeout   = var.wait_for_guest_ip_timeout
   wait_for_guest_net_timeout  = var.wait_for_guest_net_timeout
@@ -125,7 +131,27 @@ resource "vsphere_virtual_machine" "vm" {
     content {
       label             = terraform_disks.key
       size              = lookup(terraform_disks.value, "size_gb", null)
-      unit_number       = lookup(terraform_disks.value, "data_disk_scsi_controller", 0) ? terraform_disks.value.data_disk_scsi_controller * 15 + index(keys(var.data_disk), terraform_disks.key) + (var.scsi_controller == tonumber(terraform_disks.value["data_disk_scsi_controller"]) ? local.template_disk_count : 0) : index(keys(var.data_disk), terraform_disks.key) + local.template_disk_count
+      unit_number = (
+        lookup(
+          terraform_disks.value, 
+          "unit_number", 
+          -1
+        ) < 0 ? (
+          lookup(
+            terraform_disks.value, 
+            "data_disk_scsi_controller", 
+            0
+          ) > 0 ? (
+            (terraform_disks.value.data_disk_scsi_controller * 15) +
+            index(keys(var.data_disk), terraform_disks.key) + 
+            (var.scsi_controller == tonumber(terraform_disks.value["data_disk_scsi_controller"]) ? local.template_disk_count : 0)
+          ) : (
+            index(keys(var.data_disk), terraform_disks.key) + local.template_disk_count
+          )
+        ) : (
+          tonumber(terraform_disks.value["unit_number"])
+        )
+      )
       thin_provisioned  = lookup(terraform_disks.value, "thin_provisioned", "true")
       eagerly_scrub     = lookup(terraform_disks.value, "eagerly_scrub", "false")
       datastore_id      = lookup(terraform_disks.value, "datastore_id", null)
