@@ -60,7 +60,7 @@ variable "io_reservation" {
 variable "io_share_level" {
   description = "The share allocation level for this disk. Can be one of low, normal, high, or custom. Default: normal."
   type        = list(string)
-  default     = [""]
+  default     = ["normal"]
 }
 
 variable "io_share_count" {
