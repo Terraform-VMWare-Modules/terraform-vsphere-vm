@@ -38,7 +38,7 @@ variable "vm" {
     cpu_share_count    = number
     memory_share_level = string
     memory_share_count = number
-    # io_reservation     = list(number)
+    io_reservation     = list(number)
     io_share_level = list(string)
     io_share_count = list(number)
   }))
