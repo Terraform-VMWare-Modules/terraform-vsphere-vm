@@ -21,19 +21,26 @@ variable "env" {
 
 variable "vm" {
   type = map(object({
-    vmname           = string
-    vmtemp           = string
-    dc               = string
-    vmrp             = string
-    vmfolder         = string
-    datastore        = string
-    is_windows_image = bool
-    tags             = map(string)
-    instances        = number
-    network          = map(list(string))
-    vmgateway        = string
-    dns_servers      = list(string)
-    data_disk        = map(map(string))
+    vmname             = string
+    vmtemp             = string
+    dc                 = string
+    vmrp               = string
+    vmfolder           = string
+    datastore          = string
+    is_windows_image   = bool
+    tags               = map(string)
+    instances          = number
+    network            = map(list(string))
+    vmgateway          = string
+    dns_servers        = list(string)
+    data_disk          = map(map(string))
+    cpu_share_level    = string
+    cpu_share_count    = number
+    memory_share_level = string
+    memory_share_count = number
+    io_reservation     = list(number)
+    io_share_level     = list(string)
+    io_share_count     = list(number)
   }))
 }
 
@@ -54,6 +61,12 @@ module "example-server-basic" {
   dc               = each.value.dc
   datastore        = each.value.datastore
   data_disk        = each.value.data_disk
+  cpu_share_level  = each.value.cpu_share_level
+  # cpu_share_count    = each.value.cpu_share_level == "custom" ? each.value.cpu_share_count : null
+  # memory_share_level = each.value.memory_share_level
+  # memory_share_count = each.value.memory_share_level == "custom" ? each.value.memory_share_count : null
+  # io_share_level     = each.value.io_share_level
+  # io_share_count     = each.value.io_share_level == "custom" ? each.value.io_share_count : null
 }
 
 output "DC_ID" {

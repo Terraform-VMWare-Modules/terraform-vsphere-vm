@@ -79,9 +79,13 @@ resource "vsphere_virtual_machine" "vm" {
   cpu_hot_add_enabled    = var.cpu_hot_add_enabled
   cpu_hot_remove_enabled = var.cpu_hot_remove_enabled
   cpu_reservation        = var.cpu_reservation
+  cpu_share_level        = var.cpu_share_level
+  cpu_share_count        = var.cpu_share_level == "custom" ? var.cpu_share_count : null
   memory_reservation     = var.memory_reservation
   memory                 = var.ram_size
   memory_hot_add_enabled = var.memory_hot_add_enabled
+  memory_share_level     = var.memory_share_level
+  memory_share_count     = var.memory_share_level == "custom" ? var.memory_share_count : null
   guest_id               = data.vsphere_virtual_machine.template.guest_id
   scsi_bus_sharing       = var.scsi_bus_sharing
   scsi_type              = var.scsi_type != "" ? var.scsi_type : data.vsphere_virtual_machine.template.scsi_type
@@ -122,6 +126,9 @@ resource "vsphere_virtual_machine" "vm" {
       eagerly_scrub     = data.vsphere_virtual_machine.template.disks[template_disks.key].eagerly_scrub
       datastore_id      = var.disk_datastore != "" ? data.vsphere_datastore.disk_datastore[0].id : null
       storage_policy_id = length(var.template_storage_policy_id) > 0 ? var.template_storage_policy_id[template_disks.key] : null
+      io_reservation    = length(var.io_reservation) > 0 ? var.io_reservation[template_disks.key] : null
+      io_share_level    = length(var.io_share_level) > 0 ? var.io_share_level[template_disks.key] : "normal"
+      io_share_count    = length(var.io_share_level) > 0 && var.io_share_level[template_disks.key] == "custom" ? var.io_share_count[template_disks.key] : null
     }
   }
   // Additional disks defined by Terraform config
@@ -156,6 +163,9 @@ resource "vsphere_virtual_machine" "vm" {
       eagerly_scrub     = lookup(terraform_disks.value, "eagerly_scrub", "false")
       datastore_id      = lookup(terraform_disks.value, "datastore_id", null)
       storage_policy_id = lookup(terraform_disks.value, "storage_policy_id", null)
+      io_reservation    = lookup(terraform_disks.value, "io_reservation", null)
+      io_share_level    = lookup(terraform_disks.value, "io_share_level", "normal")
+      io_share_count    = lookup(terraform_disks.value, "io_share_level", null) == "custom" ? lookup(terraform_disks.value, "io_share_count") : null
     }
   }
   clone {

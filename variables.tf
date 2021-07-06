@@ -51,6 +51,23 @@ variable "disk_datastore" {
   type        = string
   default     = ""
 }
+variable "io_reservation" {
+  description = "The I/O reservation (guarantee) that this disk has, in IOPS. The default is no reservation."
+  type        = list(number)
+  default     = []
+}
+
+variable "io_share_level" {
+  description = "The share allocation level for this disk. Can be one of low, normal, high, or custom. Default: normal."
+  type        = list(string)
+  default     = ["normal"]
+}
+
+variable "io_share_count" {
+  description = "The share count for this disk when the share level is custom."
+  type        = list(number)
+  default     = []
+}
 
 variable "template_storage_policy_id" {
   description = "List of UUIDs of the storage policy to assign to the template disk."
@@ -124,6 +141,18 @@ variable "cpu_number" {
 variable "cpu_reservation" {
   description = "The amount of CPU (in MHz) that this virtual machine is guaranteed."
   default     = null
+}
+
+variable "cpu_share_level" {
+  description = "The allocation level for CPU resources. Can be one of high, low, normal, or custom. Default: custom."
+  type        = string
+  default     = "normal"
+}
+
+variable "cpu_share_count" {
+  description = "The number of CPU shares allocated to the virtual machine when the cpu_share_level is custom."
+  type        = number
+  default     = 4000
 }
 
 variable "ram_size" {
@@ -241,6 +270,17 @@ variable "memory_reservation" {
   default     = null
 }
 
+variable "memory_share_level" {
+  description = "The allocation level for memory resources. Can be one of high, low, normal, or custom"
+  type        = string
+  default     = "normal"
+}
+
+variable "memory_share_count" {
+  description = "(Optional) The number of memory shares allocated to the virtual machine when the memory_share_level is custom"
+  type        = number
+  default     = 81920
+}
 
 #Linux Customization Variables
 variable "hw_clock_utc" {
