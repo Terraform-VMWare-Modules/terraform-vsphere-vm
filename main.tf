@@ -66,9 +66,9 @@ resource "vsphere_virtual_machine" "vm" {
   custom_attributes       = var.custom_attributes
   annotation              = var.annotation
   extra_config            = var.extra_config
-  firmware                = var.firmware
-  efi_secure_boot_enabled = var.efi_secure_boot
-  enable_disk_uuid        = var.enable_disk_uuid
+  firmware                = var.firmware == null ? data.vsphere_virtual_machine.template.firmware : var.firmware
+  efi_secure_boot_enabled = var.efi_secure_boot == null ? data.vsphere_virtual_machine.template.efi_secure_boot_enabled : var.efi_secure_boot
+  enable_disk_uuid        = var.enable_disk_uuid == null ? data.vsphere_virtual_machine.template.enable_disk_uuid : var.enable_disk_uuid
   storage_policy_id       = var.storage_policy_id
 
   datastore_cluster_id = var.datastore_cluster != "" ? data.vsphere_datastore_cluster.datastore_cluster[0].id : null
