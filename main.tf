@@ -49,6 +49,11 @@ data "vsphere_tag" "tag" {
   depends_on  = [var.tag_depends_on]
 }
 
+data "vsphere_folder" "folder" {
+  count       = var.vmfolder != null ? 1 : 0
+  path        = "/${data.vsphere_datacenter.dc.name}/vm/${var.vmfolder}"
+}
+
 locals {
   interface_count     = length(var.ipv4submask) #Used for Subnet handeling
   template_disk_count = length(data.vsphere_virtual_machine.template.disks)
