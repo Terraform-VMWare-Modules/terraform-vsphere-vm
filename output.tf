@@ -27,3 +27,8 @@ output "uuid" {
   description = "UUID of the VM in vSphere"
   value       = vsphere_virtual_machine.vm.*.uuid
 }
+
+output "disk" {
+  description = "Disks of the deployed VM"
+  value       = vsphere_virtual_machine.vm.*.disk
+}
