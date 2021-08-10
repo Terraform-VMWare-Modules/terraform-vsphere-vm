@@ -117,7 +117,6 @@ resource "vsphere_virtual_machine" "vm" {
       io_share_count    = var.io_share_level != null && var.io_share_level[template_disks.key] == "custom" ? var.io_share_count[template_disks.key] : null
     }
   }
-
   // Additional disks defined by Terraform config
   dynamic "disk" {
     for_each = var.data_disk
