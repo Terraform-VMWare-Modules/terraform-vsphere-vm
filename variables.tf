@@ -277,11 +277,6 @@ variable "memory_share_count" {
   default     = 81920
 }
 
-variable "enable_disk_uuid" {
-  description = "Expose the UUIDs of attached virtual disks to the virtual machine, allowing access to them in the guest."
-  default     = null
-}
-
 #Linux Customization Variables
 variable "hw_clock_utc" {
   description = "Tells the operating system that the hardware clock is set to UTC."
@@ -456,11 +451,5 @@ variable "migrate_wait_timeout" {
 variable "force_power_off" {
   description = "If a guest shutdown failed or timed out while updating or destroying (see shutdown_wait_timeout), force the power-off of the virtual machine."
   type        = bool
-  default     = null
-}
-
-variable "migrate_wait_timeout" {
-  description = "The amount of time, in minutes, to wait for a graceful guest shutdown when making necessary updates to the virtual machine. If force_power_off is set to true, the VM will be force powered-off after this timeout, otherwise an error is returned."
-  type        = string
   default     = null
 }
