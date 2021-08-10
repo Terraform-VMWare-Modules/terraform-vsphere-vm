@@ -70,6 +70,12 @@ variable "io_share_count" {
   default     = []
 }
 
+variable "thin_provisioned" {
+  description = "If true, this disk is thin provisioned, with space for the file being allocated on an as-needed basis."
+  type        = list
+  default     = null
+}
+
 variable "template_storage_policy_id" {
   description = "List of UUIDs of the storage policy to assign to the template disk."
   type        = list(any)
