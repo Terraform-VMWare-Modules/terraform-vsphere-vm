@@ -210,8 +210,14 @@ resource "vsphere_virtual_machine" "vm" {
       dynamic "network_interface" {
         for_each = keys(var.network)
         content {
-          ipv4_address = var.network[keys(var.network)[network_interface.key]][count.index]
-          ipv4_netmask = "%{if length(var.ipv4submask) == 1}${var.ipv4submask[0]}%{else}${var.ipv4submask[network_interface.key]}%{endif}"
+          ipv4_address = split("/", var.network[keys(var.network)[network_interface.key]][count.index])[0]
+          ipv4_netmask = var.network[keys(var.network)[network_interface.key]][count.index] == "" ? null : (
+                           length(split("/", var.network[keys(var.network)[network_interface.key]][count.index])) == 2 ? (
+                             split("/", var.network[keys(var.network)[network_interface.key]][count.index])[1]
+                           ) : (
+                             length(var.ipv4submask) == 1 ? var.ipv4submask[0] : var.ipv4submask[network_interface.key]
+                           )
+                         )
         }
       }
       dns_server_list = var.dns_server_list

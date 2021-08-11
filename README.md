@@ -51,7 +51,7 @@ module "example-server-linuxvm" {
   vmname    = "example-server-linux"
   vmrp      = "esxi/Resources - or name of a resource pool"
   network = {
-    "Name of the Port Group in vSphere" = ["10.13.113.2", "10.13.113.3"] # To use DHCP create Empty list ["",""]
+    "Name of the Port Group in vSphere" = ["10.13.113.2", "10.13.113.3"] # To use DHCP create Empty list ["",""]; You can also use a CIDR annotation;
   }
   vmgateway = "10.13.113.1"
   dc        = "Datacenter"
@@ -94,7 +94,7 @@ module "example-server-windowsvm-advanced" {
   vmnameformat      = "%03d" #To use three decimal with leading zero vmnames will be AdvancedVM001,AdvancedVM002
   domain            = "somedomain.com"
   network = {
-    "Name of the Port Group in vSphere" = ["10.13.113.2", "10.13.113.3"] # To use DHCP create Empty list ["",""]
+    "Name of the Port Group in vSphere" = ["10.13.113.2", "10.13.113.3"] # To use DHCP create Empty list ["",""]; You can also use a CIDR annotation;
     "Second Network Card"               = ["", ""]
   }
   ipv4submask  = ["24", "8"]
