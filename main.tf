@@ -107,7 +107,7 @@ resource "vsphere_virtual_machine" "vm" {
       label = length(var.disk_label) > 0 ? var.disk_label[template_disks.key] : "disk${template_disks.key}"
       size = var.disk_size_gb != null ? var.disk_size_gb[template_disks.key] : data.vsphere_virtual_machine.template.disks[template_disks.key].size
       unit_number = var.scsi_controller != null ? var.scsi_controller * 15 + template_disks.key : template_disks.key
-      thin_provisioned = data.vsphere_virtual_machine.template.disks[template_disks.key].thin_provisioned
+      thin_provisioned  = lookup(terraform_disks.value, "thin_provisioned", "true")
       eagerly_scrub = data.vsphere_virtual_machine.template.disks[template_disks.key].eagerly_scrub
       datastore_id = var.disk_datastore != "" ? data.vsphere_datastore.disk_datastore[0].id : null
       storage_policy_id = length(var.template_storage_policy_id) > 0 ? var.template_storage_policy_id[template_disks.key] : null
