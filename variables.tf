@@ -98,7 +98,7 @@ variable "scsi_controller" {
 }
 
 variable "enable_disk_uuid" {
-  description = "Expose the UUIDs of attached virtual disks to the virtual machine, allowing access to them in the guest."
+  description = "Expose the UUIDs of attached virtual disks to the virtual machine, allowing access to them in the guest. Default: Inherited from cloned template"
   type        = bool
   default     = null
 }
@@ -232,13 +232,13 @@ variable "dns_suffix_list" {
 }
 
 variable "firmware" {
-  description = "The firmware interface to use on the virtual machine. Can be one of bios or EFI."
-  default     = "bios"
+  description = "The firmware interface to use on the virtual machine. Can be one of bios or EFI. Default: Inherited from cloned template"
+  default     = null
 }
 
 variable "efi_secure_boot" {
-  description = "Enables EFI secure boot. Can be only be true when firmware is EFI."
-  default     = "false"
+  description = "Enables EFI secure boot. Can be only be true when firmware is EFI. Default: Inherited from cloned template"
+  default     = null
 }
 
 variable "num_cores_per_socket" {
