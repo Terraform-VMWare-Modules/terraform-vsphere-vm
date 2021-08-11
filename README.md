@@ -145,10 +145,6 @@ This module is the work of many contributors. We appreciate your help!
 
 To contribute, please read the [contribution guidelines](https://github.com/Terraform-VMWare-Modules/terraform-vsphere-vm/blob/master/CONTRIBUTING.md)
 
-## Authors
-
-Created by [Arman Keyoumarsi](https://github.com/Arman-Keyoumarsi)
-
 ## License
 
 [MIT](LICENSE)

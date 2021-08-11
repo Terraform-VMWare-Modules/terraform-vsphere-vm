@@ -82,6 +82,7 @@ module "example-server-basic" {
   memory_share_count = 2000
   cpu_share_level    = "custom"
   cpu_share_count    = 2000
+  #ipv4submask        = ["28", "26"]
 }
 
 output "DC_ID" {

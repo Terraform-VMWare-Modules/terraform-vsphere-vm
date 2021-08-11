@@ -169,7 +169,7 @@ variable "vmrp" {
 }
 
 variable "vmfolder" {
-  description = "The path to the folder to put this virtual machine in, relative to the datacenter that the resource pool is in."
+  description = "The path to the folder to put this virtual machine in, relative to the datacenter that the resource pool is in. Path - The absolute path of the folder. For example, given a default datacenter of default-dc, a folder of type vm, and a folder name of terraform-test-folder, the resulting path would be /default-dc/vm/terraform-test-folder."
   default     = null
 }
 
