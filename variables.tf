@@ -69,6 +69,12 @@ variable "io_share_count" {
   default     = []
 }
 
+variable "disk_mode" {
+  description = "The disk mode for the disk."
+  type        = list(string)
+  default     = []
+}
+
 variable "template_storage_policy_id" {
   description = "List of UUIDs of the storage policy to assign to the template disk."
   type        = list(any)
