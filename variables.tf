@@ -124,6 +124,12 @@ variable "staticvmname" {
   default     = null
 }
 
+variable "fqdnvmname" {
+  description = "If true, the vm will be created using domain variable appended"
+  type        = bool
+  default     = false
+}
+
 variable "vmtemp" {
   description = "Name of the template available in the vSphere."
 }
@@ -290,7 +296,7 @@ variable "hw_clock_utc" {
 }
 
 variable "domain" {
-  description = "default VM domain for linux guest customization."
+  description = "default VM domain for linux guest customization and fqdn name (if fqdnvmname is true)."
   default     = "Development.com"
 }
 
