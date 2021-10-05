@@ -1,6 +1,6 @@
 # Smoke Test
 
-You need to run the plan using vars.tfvars 
+You need to run the plan using private.tfvars 
 
 ### Example:
 
@@ -26,6 +26,7 @@ vm = {
     network = {
       "VM Networks" = ["10.13.13.2"],
     }
+    disk_size_gb = [ 20 ]
   }
 }
 ```
