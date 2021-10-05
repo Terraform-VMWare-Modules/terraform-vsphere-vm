@@ -7,6 +7,7 @@ variable "vm" {
   type = map(object({
     vmname           = string
     vmtemp           = string
+    content_library  = string
     annotation       = string
     dc               = string
     vmrp             = string
@@ -24,6 +25,7 @@ module "example-server-basic" {
   source           = "../../"
   for_each         = var.vm
   vmtemp           = each.value.vmtemp
+  content_library  = each.value.content_library
   annotation       = each.value.annotation
   is_windows_image = each.value.is_windows_image
   instances        = each.value.instances
