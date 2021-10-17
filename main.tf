@@ -134,6 +134,7 @@ resource "vsphere_virtual_machine" "vm" {
       io_reservation    = length(var.io_reservation) > 0 ? var.io_reservation[template_disks.key] : null
       io_share_level    = length(var.io_share_level) > 0 ? var.io_share_level[template_disks.key] : "normal"
       io_share_count    = length(var.io_share_level) > 0 && var.io_share_level[template_disks.key] == "custom" ? var.io_share_count[template_disks.key] : null
+      disk_mode         = length(var.disk_mode) > 0 ? var.disk_mode[template_disks.key] : null
     }
   }
   // Additional disks defined by Terraform config
@@ -171,6 +172,7 @@ resource "vsphere_virtual_machine" "vm" {
       io_reservation    = lookup(terraform_disks.value, "io_reservation", null)
       io_share_level    = lookup(terraform_disks.value, "io_share_level", "normal")
       io_share_count    = lookup(terraform_disks.value, "io_share_level", null) == "custom" ? lookup(terraform_disks.value, "io_share_count") : null
+      disk_mode         = lookup(terraform_disks.value, "disk_mode", null)
     }
   }
   clone {
