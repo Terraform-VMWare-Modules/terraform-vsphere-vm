@@ -7,7 +7,6 @@ variable "vm" {
   type = map(object({
     vmname           = string
     vmtemp           = string
-    content_library  = string
     annotation       = string
     dc               = string
     vmrp             = string
@@ -16,7 +15,6 @@ variable "vm" {
     is_windows_image = bool
     instances        = number
     network          = map(list(string))
-    disk_size_gb     = list(number)
     vmgateway        = string
     dns_servers      = list(string)
   }))
@@ -26,7 +24,6 @@ module "example-server-basic" {
   source           = "../../"
   for_each         = var.vm
   vmtemp           = each.value.vmtemp
-  content_library  = each.value.content_library
   annotation       = each.value.annotation
   is_windows_image = each.value.is_windows_image
   instances        = each.value.instances
@@ -34,7 +31,6 @@ module "example-server-basic" {
   vmrp             = each.value.vmrp
   vmfolder         = each.value.vmfolder
   network          = each.value.network
-  disk_size_gb     = each.value.disk_size_gb
   vmgateway        = each.value.vmgateway
   dc               = each.value.dc
   datastore        = each.value.datastore #Either

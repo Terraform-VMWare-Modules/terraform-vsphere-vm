@@ -50,5 +50,25 @@ module "example-server-multi" {
   dc        = "Datacenter"
   datastore = "Data Store name(use datastore_cluster for datastore cluster)"
 }
-
 # Vmname Output -> advancevm001dev, advancevm002dev
+#
+//Example of appending domain name to vm name
+
+variable "domain" {
+  default = "somedomain.com"
+}
+module "example-server-multi" {
+  source       = "Terraform-VMWare-Modules/vm/vsphere"
+  version      = "Latest X.X.X"
+  vmtemp       = "TemplateName"
+  instances    = 2
+  vmname       = "advancevm"
+  vmnameformat = "%03d.${var.domain}"
+  vmrp         = "esxi/Resources"
+  network = {
+    "Name of the Port Group in vSphere" = ["10.13.113.2", ""]
+  }
+  dc        = "Datacenter"
+  datastore = "Data Store name(use datastore_cluster for datastore cluster)"
+}
+# Vmname Output -> advancevm001.somedomain.com, advancevm002dev.somedomain.com
