@@ -134,6 +134,11 @@ variable "vmtemp" {
   description = "Name of the template available in the vSphere."
 }
 
+variable "content_library" {
+  description = "Name of the content library where the OVF template is stored."
+  default     = null
+}
+
 variable "instances" {
   description = "number of instances you want deploy from the template."
   default     = 1

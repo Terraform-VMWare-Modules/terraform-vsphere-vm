@@ -1,6 +1,6 @@
 # Smoke Test
 
-You need to run the plan using vars.tfvars 
+You need to run the plan using private.tfvars 
 
 ### Example:
 
@@ -13,6 +13,7 @@ vm = {
   linuxvm = {
     vmname            = "example-server-linux",
     vmtemp            = "fill"
+    content_library   = null
     annotation        = "Terraform Smoke Test"
     instances         = 0
     is_windows_image  = false
@@ -25,6 +26,7 @@ vm = {
     network = {
       "VM Networks" = ["10.13.13.2"],
     }
+    disk_size_gb = [ 20 ]
   }
 }
 ```
