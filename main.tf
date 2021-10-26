@@ -257,6 +257,7 @@ resource "vsphere_virtual_machine" "vm" {
       dns_server_list = var.dns_server_list
       dns_suffix_list = var.dns_suffix_list
       ipv4_gateway    = var.vmgateway
+      timeout         = var.wait_for_guest_customization_timeout
     }
   }
 
