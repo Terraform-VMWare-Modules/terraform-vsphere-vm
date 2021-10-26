@@ -388,6 +388,12 @@ variable "wait_for_guest_net_timeout" {
   default     = 5
 }
 
+variable "wait_for_guest_customization_timeout" {
+  description = "(Optional) The time, in minutes that Terraform waits for customization to complete before failing. The default is 10 minutes, and setting the value to 0 or a negative value disables the waiter altogether."
+  type        =  number
+  default     =  10
+}
+
 variable "ignored_guest_ips" {
   description = "List of IP addresses and CIDR networks to ignore while waiting for an available IP address using either of the waiters. Any IP addresses in this list will be ignored if they show up so that the waiter will continue to wait for a real IP address."
   type        = list(string)
