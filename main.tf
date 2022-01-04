@@ -67,6 +67,7 @@ data "vsphere_tag" "tag" {
 data "vsphere_folder" "folder" {
   count = var.vmfolder != null ? 1 : 0
   path  = "/${data.vsphere_datacenter.dc.name}/vm/${var.vmfolder}"
+  depends_on  = [var.vm_depends_on]
 }
 
 locals {
