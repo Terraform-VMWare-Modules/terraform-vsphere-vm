@@ -11,6 +11,12 @@ variable "network_delimiter" {
   default     = null
 }
 
+variable "network_ipv6" {
+  description = "Define PortGroup and IPv6s/CIDR for each VM. If no CIDR provided, the subnet mask is taken from var.ipv6submask."
+  type        = map(list(string))
+  default     = {}
+}
+
 variable "network_type" {
   description = "Define network type for each network interface."
   type        = list(any)
@@ -21,6 +27,12 @@ variable "ipv4submask" {
   description = "ipv4 Subnet mask. Warning: The order must follow the alphabetic order from var.network."
   type        = list(any)
   default     = ["24"]
+}
+
+variable "ipv6submask" {
+  description = "ipv6 Subnet mask. Warning: The order must follow the alphabetic order from var.network."
+  type        = list(any)
+  default     = ["64"]
 }
 
 #Data Disk section
@@ -209,6 +221,11 @@ variable "vmfolder" {
 
 variable "vmgateway" {
   description = "VM gateway to set during provisioning."
+  default     = null
+}
+
+variable "vmgateway_ipv6" {
+  description = "VM IPv6 gateway to set during provisioning."
   default     = null
 }
 

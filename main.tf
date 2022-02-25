@@ -255,13 +255,22 @@ resource "vsphere_virtual_machine" "vm" {
               split("/", var.network[keys(var.network)[network_interface.key]][count.index])[1]
               ) : (
               length(var.ipv4submask) == 1 ? var.ipv4submask[0] : var.ipv4submask[network_interface.key]
+              )
             )
-          )
+          ipv6_address = length(keys(var.network_ipv6)) == 0 ? null : split("/", var.network_ipv6[keys(var.network_ipv6)[network_interface.key]][count.index])[0]
+          ipv6_netmask = length(keys(var.network_ipv6)) == 0 ? null : var.network_ipv6[keys(var.network_ipv6)[network_interface.key]][count.index] == "" ? null : (
+            length(split("/", var.network_ipv6[keys(var.network_ipv6)[network_interface.key]][count.index])) == 2 ? (
+              split("/", var.network_ipv6[keys(var.network_ipv6)[network_interface.key]][count.index])[1]
+              ) : (
+              length(var.ipv6submask) == 1 ? var.ipv6submask[0] : var.ipv6submask[network_interface.key]
+              )
+            ) 
         }
       }
       dns_server_list = var.dns_server_list
       dns_suffix_list = var.dns_suffix_list
       ipv4_gateway    = var.vmgateway
+      ipv6_gateway    = var.vmgateway_ipv6
     }
   }
 
