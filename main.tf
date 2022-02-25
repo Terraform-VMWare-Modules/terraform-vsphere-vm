@@ -217,7 +217,7 @@ resource "vsphere_virtual_machine" "vm" {
       dynamic "linux_options" {
         for_each = var.is_windows_image ? [] : [1]
         content {
-          host_name    = var.staticvmname != null ? var.staticvmname : format("${var.vmname}${var.vmnameformat}", count.index + 1)
+          host_name    = (var.statichostname == null && var.hostname == null) ? (var.staticvmname != null ? var.staticvmname : format("${var.vmname}${var.vmnameformat}", count.index + 1)) : (var.statichostname != null ? var.statichostname : format("${var.hostname}${var.hostnameformat}", count.index + 1))
           domain       = var.domain
           hw_clock_utc = var.hw_clock_utc
         }
@@ -226,7 +226,7 @@ resource "vsphere_virtual_machine" "vm" {
       dynamic "windows_options" {
         for_each = var.is_windows_image ? [1] : []
         content {
-          computer_name         = var.staticvmname != null ? var.staticvmname : format("${var.vmname}${var.vmnameformat}", count.index + 1)
+          computer_name         = (var.statichostname == null && var.hostname == null) ? (var.staticvmname != null ? var.staticvmname : format("${var.vmname}${var.vmnameformat}", count.index + 1)) : (var.statichostname != null ? var.statichostname : format("${var.hostname}${var.hostnameformat}", count.index + 1))
           admin_password        = var.local_adminpass
           workgroup             = var.workgroup
           join_domain           = var.windomain

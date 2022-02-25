@@ -115,6 +115,21 @@ variable "storage_policy_id" {
 }
 
 ###########################################
+variable "hostname" {
+  description = "The hostname used for customization. This name can scale out based on number of instances and hostnameformat - example can be found under example folder"
+  default     = "terraformvm"
+}
+
+variable "hostnameformat" {
+  description = "hostname format. default is set to 2 decimal with leading 0. example: %03d for 3 decimal with leading zero or %02dprod for additional suffix"
+  default     = "%02d"
+}
+
+variable "statichostname" {
+  description = "Static hostname for customization. When this option is used VM can not scale out using instance variable. You can use for_each outside the module to deploy multiple static vms with different names"
+  default     = null
+}
+
 variable "vmname" {
   description = "The name of the virtual machine used to deploy the vms. This name can scale out based on number of instances and vmnameformat - example can be found under exampel folder"
   default     = "terraformvm"
