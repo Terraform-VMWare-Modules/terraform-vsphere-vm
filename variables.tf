@@ -124,6 +124,10 @@ variable "vmnameformat" {
   description = "vmname format. default is set to 2 decimal with leading 0. example: %03d for 3 decimal with leading zero or %02dprod for additional suffix"
   default     = "%02d"
 }
+variable "vmstartcount" {
+  description = "vmname start count value. default is set to 1. example: a value of 4 (with default format and 2 instances) will make first instance suffix 04 and second instance suffix 05"
+  default     = 1
+}
 
 variable "staticvmname" {
   description = "Static name of the virtual machin. When this option is used VM can not scale out using instance variable. You can use for_each outside the module to deploy multiple static vms with different names"
