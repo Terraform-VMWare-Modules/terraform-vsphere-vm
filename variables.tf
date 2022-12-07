@@ -236,6 +236,12 @@ variable "timeout" {
   default     = 30
 }
 
+variable "customize_timeout" {
+  description = "The timeout, in minutes, to wait for the virtual machine customizations to complete."
+  type        = number
+  default     = 10
+}
+
 variable "dns_suffix_list" {
   description = "A list of DNS search domains to add to the DNS configuration on the virtual machine."
   type        = list(string)
