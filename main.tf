@@ -216,6 +216,10 @@ resource "vsphere_virtual_machine" "vm" {
     customize {
       timeout = var.customize_timeout
       
+      lifecycle {
+        ignore_changes = [timeout]
+      }
+      
       dynamic "linux_options" {
         for_each = var.is_windows_image ? [] : [1]
         content {
