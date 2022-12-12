@@ -208,6 +208,13 @@ resource "vsphere_virtual_machine" "vm" {
       disk_mode         = lookup(terraform_disks.value, "disk_mode", null)
     }
   }
+  
+  lifecycle {
+    ignore_changes = [
+      clone[0].customize[0].timeout
+    ]
+  }
+  
   clone {
     template_uuid = var.content_library == null ? data.vsphere_virtual_machine.template[0].id : data.vsphere_content_library_item.library_item_template[0].id
     linked_clone  = var.linked_clone
@@ -215,10 +222,6 @@ resource "vsphere_virtual_machine" "vm" {
 
     customize {
       timeout = var.customize_timeout
-      
-      lifecycle {
-        ignore_changes = [timeout]
-      }
       
       dynamic "linux_options" {
         for_each = var.is_windows_image ? [] : [1]
