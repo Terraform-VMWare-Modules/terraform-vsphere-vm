@@ -13,9 +13,21 @@ module "example-server-windowsvm-advanced" {
   instances         = 2
   vmname            = "AdvancedVM"
   domain          = "somedomain.com"
-  network = {
-    "Name of the Port Group in vSphere" = ["10.13.113.2", "10.13.113.3"] # To use DHCP create Empty list ["",""]
-  }
+  network      = [
+      {
+        ip_address     = "10.13.113.2"
+        network_type   = "vmxnet3"
+        port_group     = "Name of the Port Group in vSphere"
+        netmask        = ""
+    },
+    {
+        ip_address     = "10.13.113.3"
+        network_type   = "vmxnet3"
+        port_group     = "Name of the Port Group in vSphere"
+        netmask        = ""
+    },
+  ]
+
   template_storage_policy_id = [data.vsphere_storage_policy.this.id] #Policy ID for the template disks
   data_disk = {
     disk1 = {

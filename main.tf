@@ -27,7 +27,7 @@ data "vsphere_resource_pool" "pool" {
 
 data "vsphere_network" "network" {
   count         = length(var.network)
-  name          = keys(var.network)[count.index]
+  name          = var.network[count.index]["port_group"]
   datacenter_id = data.vsphere_datacenter.dc.id
 }
 
@@ -71,7 +71,6 @@ data "vsphere_folder" "folder" {
 }
 
 locals {
-  interface_count     = length(var.ipv4submask) #Used for Subnet handeling
   template_disk_count = var.content_library == null ? length(data.vsphere_virtual_machine.template[0].disks) : 0
 }
 
@@ -129,10 +128,10 @@ resource "vsphere_virtual_machine" "vm" {
   ignored_guest_ips = var.ignored_guest_ips
 
   dynamic "network_interface" {
-    for_each = keys(var.network) #data.vsphere_network.network[*].id #other option
+    for_each = var.network
     content {
       network_id   = data.vsphere_network.network[network_interface.key].id
-      adapter_type = var.network_type != null ? var.network_type[network_interface.key] : (var.content_library == null ? data.vsphere_virtual_machine.template[0].network_interface_types[0] : null)
+      adapter_type = network_interface.value["network_type"]
     }
   }
   // Disks defined in the original template
@@ -243,18 +242,13 @@ resource "vsphere_virtual_machine" "vm" {
       }
 
       dynamic "network_interface" {
-        for_each = keys(var.network)
+        for_each = var.network
         content {
-          ipv4_address = split("/", var.network[keys(var.network)[network_interface.key]][count.index])[0]
-          ipv4_netmask = var.network[keys(var.network)[network_interface.key]][count.index] == "" ? null : (
-            length(split("/", var.network[keys(var.network)[network_interface.key]][count.index])) == 2 ? (
-              split("/", var.network[keys(var.network)[network_interface.key]][count.index])[1]
-              ) : (
-              length(var.ipv4submask) == 1 ? var.ipv4submask[0] : var.ipv4submask[network_interface.key]
-            )
-          )
+          ipv4_address = split("/", network_interface.value["ip_address"])[0]
+          ipv4_netmask = network_interface.value["netmask"] == "" ? null : length(split("/",network_interface.value["ip_address"])) == 2 ? split("/", network_interface.value["ip_address"])[1] : network_interface.value["netmask"]
         }
       }
+
       dns_server_list = var.dns_server_list
       dns_suffix_list = var.dns_suffix_list
       ipv4_gateway    = var.vmgateway

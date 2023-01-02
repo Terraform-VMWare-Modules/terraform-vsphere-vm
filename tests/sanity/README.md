@@ -19,10 +19,18 @@ vm = {
     vmfolder         = "fill"
     vmgateway        = "10.13.13.1"
     dns_servers      = ["1.1.1.1"]
-    network = {
-      "VM Port Group" = ["10.13.13.2", ""], # To use DHCP create Empty list for each instance
-      "VM Port Group" = ["", ""]
-    }
+    network = [
+    {
+      ip_address = "10.13.113.2"
+      port_group = "VM Port Group"
+    },
+    {
+      ip_address = "" #use DHCP
+      port_group = "VM Port Group"
+    },
+
+  ] 
+
   },
   windowsvm = {
     vmtemp           = "fill"
@@ -33,10 +41,17 @@ vm = {
     datastore        = "fill"  
     dns_servers      = null
     vmgateway        = "10.13.13.1"
-    network = {
-      "VM Port Group" = ["10.13.13.2", ""], # To use DHCP create Empty list for each instance
-      "VM Port Group" = ["", ""]
-    }
+    network = [
+    {
+      ip_address = "10.13.113.2"
+      port_group = "VM Port Group"
+    },
+    {
+      ip_address = "" #use DHCP
+      port_group = "VM Port Group"
+    },
+  ] 
+
   }
 }
 ```

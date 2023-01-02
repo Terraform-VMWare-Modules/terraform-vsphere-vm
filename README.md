@@ -50,9 +50,18 @@ module "example-server-linuxvm" {
   instances = 2
   vmname    = "example-server-linux"
   vmrp      = "esxi/Resources - or name of a resource pool"
-  network = {
-    "Name of the Port Group in vSphere" = ["10.13.113.2", "10.13.113.3"] # To use DHCP create Empty list ["",""]; You can also use a CIDR annotation;
-  }
+  network = [
+    {
+      ip_address = "10.13.113.2"
+      port_group = "Name of the Port Group in vSphere"
+    },
+    {
+      ip_address = "10.13.113.3"
+      port_group = "Name of the Port Group in vSphere"
+    },
+
+  ] 
+
   vmgateway = "10.13.113.1"
   dc        = "Datacenter"
   datastore = "Data Store name(use datastore_cluster for datastore cluster)"
@@ -93,12 +102,30 @@ module "example-server-windowsvm-advanced" {
   vmname            = "AdvancedVM"
   vmnameformat      = "%03d" #To use three decimal with leading zero vmnames will be AdvancedVM001,AdvancedVM002
   domain            = "somedomain.com"
-  network = {
-    "Name of the Port Group in vSphere" = ["10.13.113.2", "10.13.113.3"] # To use DHCP create Empty list ["",""]; You can also use a CIDR annotation;
-    "Second Network Card"               = ["", ""]
-  }
-  ipv4submask  = ["24", "8"]
-  network_type = ["vmxnet3", "vmxnet3"]
+  network = [
+    {
+      ip_address     = "10.13.113.2"
+      network_type   = "vmxnet3"
+      port_group     = "Name of the Port Group in vSphere"
+    },
+    {
+      ip_address     = "10.13.113.3"
+      network_type   = "vmxnet3"
+      port_group     = "Name of the Port Group in vSphere"
+    },
+   {
+      ip_address     = ""
+      network_type   = "vmxnet3"
+      port_group     = "Second Network Card"
+    },
+   {
+      ip_address     = ""
+      network_type   = "vmxnet3"
+      port_group     = "Second Network Card"
+    },
+
+  ] 
+
   tags = {
     "terraform-test-category" = "terraform-test-tag"
   }

@@ -1,20 +1,8 @@
 #Network Section
 variable "network" {
-  description = "Define PortGroup and IPs/CIDR for each VM. If no CIDR provided, the subnet mask is taken from var.ipv4submask."
-  type        = map(list(string))
-  default     = {}
-}
-
-variable "network_type" {
-  description = "Define network type for each network interface."
-  type        = list(any)
-  default     = null
-}
-
-variable "ipv4submask" {
-  description = "ipv4 Subnet mask. Warning: The order must follow the alphabetic order from var.network."
-  type        = list(any)
-  default     = ["24"]
+  description = "Define Network interfaces for each VM"
+  type        = list(map(string))
+  default     = []
 }
 
 #Data Disk section

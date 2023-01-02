@@ -5,9 +5,15 @@ module "example-server-single" {
   vmtemp       = "TemplateName"
   staticvmname = "liternalvmname"
   vmrp         = "esxi/Resources"
-  network = {
-    "Name of the Port Group in vSphere" = ["10.13.113.2"]
-  }
+  network      = [
+      {
+        ip_address     = "10.13.113.2"
+        network_type   = "vmxnet3"
+        port_group     = "Name of the Port Group in vSphere"
+        netmask        = ""
+    },
+  ]
+
   dc        = "Datacenter"
   datastore = "Data Store name(use datastore_cluster for datastore cluster)"
 }
@@ -25,9 +31,14 @@ module "example-server-single" {
   vmtemp       = "TemplateName"
   staticvmname = "liternalvmname"
   vmrp         = "esxi/Resources"
-  network = {
-    "Name of the Port Group in vSphere" = ["10.13.113.2"]
-  }
+  network      = [
+      {
+        ip_address     = "10.13.113.2"
+        network_type   = "vmxnet3"
+        port_group     = "Name of the Port Group in vSphere"
+        netmask        = ""
+    },
+  ]
   dc        = "Datacenter"
   datastore = "Data Store name(use datastore_cluster for datastore cluster)"
 }
@@ -44,9 +55,20 @@ module "example-server-multi" {
   vmname       = "advancevm"
   vmnameformat = "%03d${var.env}"
   vmrp         = "esxi/Resources"
-  network = {
-    "Name of the Port Group in vSphere" = ["10.13.113.2", ""]
-  }
+  network      = [
+      {
+        ip_address     = "10.13.113.2"
+        network_type   = "vmxnet3"
+        port_group     = "Name of the Port Group in vSphere"
+        netmask        = ""
+    },
+    {
+        ip_address     = ""
+        network_type   = "vmxnet3"
+        port_group     = "Name of the Port Group in vSphere"
+        netmask        = ""
+    },
+  ]
   dc        = "Datacenter"
   datastore = "Data Store name(use datastore_cluster for datastore cluster)"
 }
@@ -65,9 +87,20 @@ module "example-server-multi" {
   vmname       = "advancevm"
   vmnameformat = "%03d.${var.domain}"
   vmrp         = "esxi/Resources"
-  network = {
-    "Name of the Port Group in vSphere" = ["10.13.113.2", ""]
-  }
+  network      = [
+      {
+        ip_address     = "10.13.113.2"
+        network_type   = "vmxnet3"
+        port_group     = "Name of the Port Group in vSphere"
+        netmask        = ""
+    },
+    {
+        ip_address     = ""
+        network_type   = "vmxnet3"
+        port_group     = "Name of the Port Group in vSphere"
+        netmask        = ""
+    },
+  ]
   dc        = "Datacenter"
   datastore = "Data Store name(use datastore_cluster for datastore cluster)"
 }

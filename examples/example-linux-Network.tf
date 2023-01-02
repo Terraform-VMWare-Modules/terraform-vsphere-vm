@@ -10,15 +10,36 @@ module "example-server-linuxvm-advanced" {
   instances         = 2
   vmname            = "AdvancedVM"
   domain            = "somedomain.com"
-  ipv4submask       = ["24", "8"]
-  network = {
-    "Network01" = ["10.13.113.2", "10.13.113.3"] # To use DHCP create Empty list ["",""]
-    "Network02" = ["", ""]                       #Second Network will use the DHCP
-  }
+  network      = [
+      {
+        ip_address     = "10.13.113.2"
+        network_type   = "vmxnet3"
+        port_group     = "Network01"
+        netmask        = ""
+      },
+      {
+        ip_address     = "10.13.113.3"
+        network_type   = "vmxnet3"
+        port_group     = "Network01"
+        netmask        = ""
+      },
+      {
+        ip_address     = ""
+        network_type   = "vmxnet3"
+        port_group     = "Network02"
+        netmask        = ""
+      },
+      {
+        ip_address     = ""
+        network_type   = "vmxnet3"
+        port_group     = "Network02"
+        netmask        = ""
+      },
+  ]
+
   disk_datastore  = "vsanDatastore"
   dns_server_list = ["192.168.0.2", "192.168.0.1"]
   vmgateway       = "192.168.0.1"
-  network_type    = ["vmxnet3", "vmxnet3"]
 }
 
 // Example of Linux VM with Network CIDR
@@ -33,14 +54,41 @@ module "example-server-linuxvm-advanced" {
   instances         = 2
   vmname            = "AdvancedVM"
   domain            = "somedomain.com"
-  network = {
-    "Network01" = ["10.13.113.2/28", "10.13.113.3/28"] # To use DHCP create Empty list ["",""]
-    "Network02" = ["", ""]                             #Second Network will use the DHCP
-    "Network03" = ["10.13.0.2/26", "10.13.0.3/26"]
-  }
+  network      = [
+      {
+        ip_address     = "10.13.113.2/28"
+        network_type   = "vmxnet3"
+        port_group     = "Network01"
+      },
+      {
+        ip_address     = "10.13.113.3/28"
+        network_type   = "vmxnet3"
+        port_group     = "Network01"
+      },
+      {
+        ip_address     = ""
+        network_type   = "vmxnet3"
+        port_group     = "Network02"
+      },
+      {
+        ip_address     = ""
+        network_type   = "vmxnet3"
+        port_group     = "Network02"
+      },
+      {
+        ip_address     = "10.13.0.2/26"
+        network_type   = "vmxnet3"
+        port_group     = "Network03"
+      },
+      {
+        ip_address     = "10.13.0.3/26"
+        network_type   = "vmxnet3"
+        port_group     = "Network03"
+      },
+
+  ]
   disk_datastore  = "vsanDatastore"
   dns_server_list = ["192.168.0.2", "192.168.0.1"]
   vmgateway       = "192.168.0.1"
-  network_type    = ["vmxnet3", "vmxnet3"]
 }
 
