@@ -65,9 +65,9 @@ data "vsphere_tag" "tag" {
 }
 
 data "vsphere_folder" "folder" {
-  count = var.vmfolder != null ? 1 : 0
-  path  = "/${data.vsphere_datacenter.dc.name}/vm/${var.vmfolder}"
-  depends_on  = [var.vm_depends_on]
+  count      = var.vmfolder != null ? 1 : 0
+  path       = "/${data.vsphere_datacenter.dc.name}/vm/${var.vmfolder}"
+  depends_on = [var.vm_depends_on]
 }
 
 locals {
@@ -143,8 +143,8 @@ resource "vsphere_virtual_machine" "vm" {
       label             = length(var.disk_label) > 0 ? var.disk_label[template_disks.key] : "disk${template_disks.key}"
       size              = var.disk_size_gb != null ? var.disk_size_gb[template_disks.key] : data.vsphere_virtual_machine.template[0].disks[template_disks.key].size
       unit_number       = var.scsi_controller != null ? var.scsi_controller * 15 + template_disks.key : template_disks.key
-      thin_provisioned  = data.vsphere_virtual_machine.template[0].disks[template_disks.key].thin_provisioned
-      eagerly_scrub     = data.vsphere_virtual_machine.template[0].disks[template_disks.key].eagerly_scrub
+      thin_provisioned  = var.override_template_thin_provisioned != null ? var.override_template_thin_provisioned : data.vsphere_virtual_machine.template[0].disks[template_disks.key].thin_provisioned
+      eagerly_scrub     = var.override_template_eagerly_scrub != null ? var.override_template_eagerly_scrub : data.vsphere_virtual_machine.template[0].disks[template_disks.key].eagerly_scrub
       datastore_id      = var.disk_datastore != "" ? data.vsphere_datastore.disk_datastore[0].id : null
       storage_policy_id = length(var.template_storage_policy_id) > 0 ? var.template_storage_policy_id[template_disks.key] : null
       io_reservation    = length(var.io_reservation) > 0 ? var.io_reservation[template_disks.key] : null
@@ -157,9 +157,9 @@ resource "vsphere_virtual_machine" "vm" {
     for_each = var.content_library == null ? [] : [1]
     iterator = template_disks
     content {
-      label             = length(var.disk_label) > 0 ? var.disk_label[template_disks.key] : "disk${template_disks.key}"
-      size              = var.disk_size_gb[template_disks.key]
-      unit_number       = var.scsi_controller != null ? var.scsi_controller * 15 + template_disks.key : template_disks.key
+      label       = length(var.disk_label) > 0 ? var.disk_label[template_disks.key] : "disk${template_disks.key}"
+      size        = var.disk_size_gb[template_disks.key]
+      unit_number = var.scsi_controller != null ? var.scsi_controller * 15 + template_disks.key : template_disks.key
       // thin_provisioned  = data.vsphere_virtual_machine.template[0].disks[template_disks.key].thin_provisioned
       // eagerly_scrub     = data.vsphere_virtual_machine.template[0].disks[template_disks.key].eagerly_scrub
       datastore_id      = var.disk_datastore != "" ? data.vsphere_datastore.disk_datastore[0].id : null

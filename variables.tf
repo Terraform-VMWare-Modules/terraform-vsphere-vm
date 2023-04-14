@@ -470,3 +470,15 @@ variable "force_power_off" {
   type        = bool
   default     = null
 }
+
+variable "override_template_eagerly_scrub" {
+  description = "Override the eagerly_scrub parameter of the source template."
+  type        = bool
+  default     = null
+}
+
+variable "override_template_thin_provisioned" {
+  description = "Override the thin_provisioned parameter of the source template."
+  type        = bool
+  default     = null
+}
