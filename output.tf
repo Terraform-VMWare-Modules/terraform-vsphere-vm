@@ -5,7 +5,7 @@ output "DC_ID" {
 
 output "ResPool_ID" {
   description = "Resource Pool id"
-  value       = data.vsphere_resource_pool.pool.id
+  value       = var.vmrp != "" ? data.vsphere_resource_pool.pool[0].id : var.vmrpid
 }
 
 output "VM" {

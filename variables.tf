@@ -179,8 +179,14 @@ variable "dc" {
   description = "Name of the datacenter you want to deploy the VM to."
 }
 
+variable "vmrpid" {
+  description = "ID of cluster resource pool that VM will be deployed to. you use following to choose default pool in the cluster (esxi1) or (Cluster)/Resources."
+  default     = ""
+}
+
 variable "vmrp" {
   description = "Cluster resource pool that VM will be deployed to. you use following to choose default pool in the cluster (esxi1) or (Cluster)/Resources."
+  default     = ""
 }
 
 variable "vmfolder" {
