@@ -21,6 +21,7 @@ data "vsphere_datastore" "disk_datastore" {
 }
 
 data "vsphere_resource_pool" "pool" {
+  count         = var.vmrp != "" ? 1 : 0
   name          = var.vmrp
   datacenter_id = data.vsphere_datacenter.dc.id
 }
@@ -81,7 +82,7 @@ resource "vsphere_virtual_machine" "vm" {
   depends_on = [var.vm_depends_on]
   name       = var.staticvmname != null ? var.staticvmname : format("${var.vmname}${var.vmnameformat}", count.index + 1)
 
-  resource_pool_id        = data.vsphere_resource_pool.pool.id
+  resource_pool_id        = var.vmrp != "" ? data.vsphere_resource_pool.pool[0].id : var.vmrpid
   folder                  = var.vmfolder
   tags                    = var.tag_ids != null ? var.tag_ids : data.vsphere_tag.tag[*].id
   custom_attributes       = var.custom_attributes
