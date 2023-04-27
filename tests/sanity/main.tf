@@ -52,6 +52,7 @@ module "example-server-basic" {
   datastore        = each.value.datastore
   #starting of static values
   instances      = 2
+  vmstartcount   = 4
   vmnameformat   = "%03d${var.env}.somedomain.com"
   vmname         = "terraform-sanitytest"
   annotation     = "Terraform Sanity Test"

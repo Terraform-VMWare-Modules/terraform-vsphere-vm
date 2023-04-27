@@ -14,6 +14,7 @@ variable "vm" {
     datastore        = string
     is_windows_image = bool
     instances        = number
+    vmstartcount     = optional(number, 1)
     network          = map(list(string))
     vmgateway        = string
     dns_servers      = list(string)
@@ -27,6 +28,7 @@ module "example-server-basic" {
   annotation       = each.value.annotation
   is_windows_image = each.value.is_windows_image
   instances        = each.value.instances
+  vmstartcount     = each.value.vmstartcount
   vmname           = each.value.vmname
   vmrp             = each.value.vmrp
   vmfolder         = each.value.vmfolder
