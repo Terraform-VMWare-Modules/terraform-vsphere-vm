@@ -1,3 +1,8 @@
+#######################################
+# This workspace is for smoke test
+# do not modify this file
+# #####################################
+
 variable "vm" {
   type = map(object({
     vmname           = string

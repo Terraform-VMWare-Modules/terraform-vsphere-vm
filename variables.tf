@@ -1,6 +1,6 @@
 #Network Section
 variable "network" {
-  description = "Define PortGroup and IPs for each VM"
+  description = "Define PortGroup and IPs/CIDR for each VM. If no CIDR provided, the subnet mask is taken from var.ipv4submask."
   type        = map(list(string))
   default     = {}
 }
@@ -12,7 +12,7 @@ variable "network_type" {
 }
 
 variable "ipv4submask" {
-  description = "ipv4 Subnet mask."
+  description = "ipv4 Subnet mask. Warning: The order must follow the alphabetic order from var.network."
   type        = list(any)
   default     = ["24"]
 }
@@ -51,6 +51,29 @@ variable "disk_datastore" {
   type        = string
   default     = ""
 }
+variable "io_reservation" {
+  description = "The I/O reservation (guarantee) that this disk has, in IOPS. The default is no reservation."
+  type        = list(number)
+  default     = []
+}
+
+variable "io_share_level" {
+  description = "The share allocation level for this disk. Can be one of low, normal, high, or custom. Default: normal."
+  type        = list(string)
+  default     = ["normal"]
+}
+
+variable "io_share_count" {
+  description = "The share count for this disk when the share level is custom."
+  type        = list(number)
+  default     = []
+}
+
+variable "disk_mode" {
+  description = "The disk mode for the disk."
+  type        = list(string)
+  default     = []
+}
 
 variable "template_storage_policy_id" {
   description = "List of UUIDs of the storage policy to assign to the template disk."
@@ -81,7 +104,7 @@ variable "scsi_controller" {
 }
 
 variable "enable_disk_uuid" {
-  description = "Expose the UUIDs of attached virtual disks to the virtual machine, allowing access to them in the guest."
+  description = "Expose the UUIDs of attached virtual disks to the virtual machine, allowing access to them in the guest. Default: Inherited from cloned template"
   type        = bool
   default     = null
 }
@@ -117,6 +140,11 @@ variable "vmtemp" {
   description = "Name of the template available in the vSphere."
 }
 
+variable "content_library" {
+  description = "Name of the content library where the OVF template is stored."
+  default     = null
+}
+
 variable "instances" {
   description = "number of instances you want deploy from the template."
   default     = 1
@@ -132,6 +160,18 @@ variable "cpu_reservation" {
   default     = null
 }
 
+variable "cpu_share_level" {
+  description = "The allocation level for CPU resources. Can be one of high, low, normal, or custom. Default: custom."
+  type        = string
+  default     = "normal"
+}
+
+variable "cpu_share_count" {
+  description = "The number of CPU shares allocated to the virtual machine when the cpu_share_level is custom."
+  type        = number
+  default     = 4000
+}
+
 variable "ram_size" {
   description = "VM RAM size in megabytes."
   default     = 4096
@@ -141,12 +181,18 @@ variable "dc" {
   description = "Name of the datacenter you want to deploy the VM to."
 }
 
+variable "vmrpid" {
+  description = "ID of cluster resource pool that VM will be deployed to. you use following to choose default pool in the cluster (esxi1) or (Cluster)/Resources."
+  default     = ""
+}
+
 variable "vmrp" {
   description = "Cluster resource pool that VM will be deployed to. you use following to choose default pool in the cluster (esxi1) or (Cluster)/Resources."
+  default     = ""
 }
 
 variable "vmfolder" {
-  description = "The path to the folder to put this virtual machine in, relative to the datacenter that the resource pool is in."
+  description = "The path to the folder to put this virtual machine in, relative to the datacenter that the resource pool is in. Path - The absolute path of the folder. For example, given a default datacenter of default-dc, a folder of type vm, and a folder name of terraform-test-folder, the resulting path would be /default-dc/vm/terraform-test-folder."
   default     = null
 }
 
@@ -209,13 +255,13 @@ variable "dns_suffix_list" {
 }
 
 variable "firmware" {
-  description = "The firmware interface to use on the virtual machine. Can be one of bios or EFI."
-  default     = "bios"
+  description = "The firmware interface to use on the virtual machine. Can be one of bios or EFI. Default: Inherited from cloned template"
+  default     = null
 }
 
 variable "efi_secure_boot" {
-  description = "Enables EFI secure boot. Can be only be true when firmware is EFI."
-  default     = "false"
+  description = "Enables EFI secure boot. Can be only be true when firmware is EFI. Default: Inherited from cloned template"
+  default     = null
 }
 
 variable "num_cores_per_socket" {
@@ -247,6 +293,17 @@ variable "memory_reservation" {
   default     = null
 }
 
+variable "memory_share_level" {
+  description = "The allocation level for memory resources. Can be one of high, low, normal, or custom"
+  type        = string
+  default     = "normal"
+}
+
+variable "memory_share_count" {
+  description = "(Optional) The number of memory shares allocated to the virtual machine when the memory_share_level is custom"
+  type        = number
+  default     = 81920
+}
 
 #Linux Customization Variables
 variable "hw_clock_utc" {

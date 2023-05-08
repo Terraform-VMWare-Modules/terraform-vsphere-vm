@@ -5,7 +5,7 @@ output "DC_ID" {
 
 output "ResPool_ID" {
   description = "Resource Pool id"
-  value       = data.vsphere_resource_pool.pool.id
+  value       = var.vmrp != "" ? data.vsphere_resource_pool.pool[0].id : var.vmrpid
 }
 
 output "VM" {
@@ -26,4 +26,9 @@ output "guest-ip" {
 output "uuid" {
   description = "UUID of the VM in vSphere"
   value       = vsphere_virtual_machine.vm.*.uuid
+}
+
+output "disk" {
+  description = "Disks of the deployed VM"
+  value       = vsphere_virtual_machine.vm.*.disk
 }
