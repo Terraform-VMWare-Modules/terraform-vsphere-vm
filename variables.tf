@@ -125,6 +125,11 @@ variable "vmnameformat" {
   default     = "%02d"
 }
 
+variable "vmnamesuffix" {
+  description = "suffix added to the name in vsphere only. default is empty."
+  default     = ""
+}
+
 variable "staticvmname" {
   description = "Static name of the virtual machin. When this option is used VM can not scale out using instance variable. You can use for_each outside the module to deploy multiple static vms with different names"
   default     = null
