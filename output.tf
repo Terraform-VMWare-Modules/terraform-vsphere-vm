@@ -32,3 +32,8 @@ output "disk" {
   description = "Disks of the deployed VM"
   value       = vsphere_virtual_machine.vm.*.disk
 }
+
+output "vm" {
+  description = "All vm parameters"
+  value       = vsphere_virtual_machine.vm.*
+}
