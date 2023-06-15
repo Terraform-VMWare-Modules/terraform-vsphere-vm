@@ -80,7 +80,7 @@ locals {
 resource "vsphere_virtual_machine" "vm" {
   count      = var.instances
   depends_on = [var.vm_depends_on]
-  name       = var.staticvmname != null ? var.staticvmname : format("${var.vmname}${var.vmnameformat}", count.index + 1)
+  name       = "${var.staticvmname != null ? var.staticvmname : format("${var.vmname}${var.vmnameformat}", count.index + 1)}${var.fqdnvmname == true ? ".${var.domain}" : ""}"
 
   resource_pool_id        = var.vmrp != "" ? data.vsphere_resource_pool.pool[0].id : var.vmrpid
   folder                  = var.vmfolder
