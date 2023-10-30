@@ -28,7 +28,7 @@ data "vsphere_resource_pool" "pool" {
 
 data "vsphere_network" "network" {
   count         = length(var.network)
-  name          = keys(var.network)[count.index]
+  name          = var.network_delimiter != null ? split(var.network_delimiter,keys(var.network)[count.index])[1] : keys(var.network)[count.index]
   datacenter_id = data.vsphere_datacenter.dc.id
 }
 

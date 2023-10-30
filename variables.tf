@@ -5,6 +5,12 @@ variable "network" {
   default     = {}
 }
 
+variable "network_delimiter" {
+  description = "If network name needs a delimiter for sequencing, define an UNUSED character here, otherwise leave as null"
+  type        = string
+  default     = null
+}
+
 variable "network_type" {
   description = "Define network type for each network interface."
   type        = list(any)
