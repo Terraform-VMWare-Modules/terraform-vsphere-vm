@@ -207,6 +207,9 @@ resource "vsphere_virtual_machine" "vm" {
       io_share_level    = lookup(terraform_disks.value, "io_share_level", "normal")
       io_share_count    = lookup(terraform_disks.value, "io_share_level", null) == "custom" ? lookup(terraform_disks.value, "io_share_count") : null
       disk_mode         = lookup(terraform_disks.value, "disk_mode", null)
+      disk_sharing      = lookup(terraform_disks.value, "disk_sharing", null)
+      attach            = lookup(terraform_disks.value, "attach", null)
+      path              = lookup(terraform_disks.value, "path", null)
     }
   }
   clone {
