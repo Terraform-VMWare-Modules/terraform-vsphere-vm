@@ -104,7 +104,7 @@ resource "vsphere_virtual_machine" "vm" {
   cpu_share_level        = var.cpu_share_level
   cpu_share_count        = var.cpu_share_level == "custom" ? var.cpu_share_count : null
   memory_reservation     = var.memory_reservation
-  memory                 = var.ram_size
+  memory                 = var.ram_size * 1024
   memory_hot_add_enabled = var.memory_hot_add_enabled
   memory_share_level     = var.memory_share_level
   memory_share_count     = var.memory_share_level == "custom" ? var.memory_share_count : null
