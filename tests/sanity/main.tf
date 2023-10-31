@@ -52,7 +52,10 @@ module "example-server-basic" {
   datastore        = each.value.datastore
   #starting of static values
   instances      = 2
-  vmnameformat   = "%03d${var.env}.somedomain.com"
+  vmstartcount   = 5
+  vmnameformat   = "%03d${var.env}"
+  domain         = "somedomain.com"
+  fqdnvmname     = true
   vmname         = "terraform-sanitytest"
   annotation     = "Terraform Sanity Test"
   tag_depends_on = [vsphere_tag.tag.id]
