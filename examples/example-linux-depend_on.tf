@@ -25,7 +25,7 @@ module "example-server-linuxvm-advanced" {
   vmtemp                 = "TemplateName"
   instances              = 2
   cpu_number             = 2
-  ram_size               = 2096
+  ram_size               = 2
   cpu_hot_add_enabled    = true
   cpu_hot_remove_enabled = true
   memory_hot_add_enabled = true
