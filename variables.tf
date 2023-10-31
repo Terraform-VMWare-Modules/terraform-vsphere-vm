@@ -167,8 +167,8 @@ variable "cpu_share_count" {
 }
 
 variable "ram_size" {
-  description = "VM RAM size in megabytes."
-  default     = 4096
+  description = "VM RAM size in gigabytes."
+  default     = 4
 }
 
 variable "dc" {
