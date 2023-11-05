@@ -28,7 +28,7 @@ data "vsphere_resource_pool" "pool" {
 
 data "vsphere_network" "network" {
   count         = length(var.network)
-  name          = keys(var.network)[count.index]
+  name          = var.network_delimiter != null ? split(var.network_delimiter,keys(var.network)[count.index])[1] : keys(var.network)[count.index]
   datacenter_id = data.vsphere_datacenter.dc.id
 }
 
@@ -207,6 +207,9 @@ resource "vsphere_virtual_machine" "vm" {
       io_share_level    = lookup(terraform_disks.value, "io_share_level", "normal")
       io_share_count    = lookup(terraform_disks.value, "io_share_level", null) == "custom" ? lookup(terraform_disks.value, "io_share_count") : null
       disk_mode         = lookup(terraform_disks.value, "disk_mode", null)
+      disk_sharing      = lookup(terraform_disks.value, "disk_sharing", null)
+      attach            = lookup(terraform_disks.value, "attach", null)
+      path              = lookup(terraform_disks.value, "path", null)
     }
   }
   clone {
