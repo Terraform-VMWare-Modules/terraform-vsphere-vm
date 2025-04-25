@@ -122,7 +122,7 @@ variable "storage_policy_id" {
 
 ###########################################
 variable "vmname" {
-  description = "The name of the virtual machine used to deploy the vms. This name can scale out based on number of instances and vmnameformat - example can be found under exampel folder"
+  description = "The name of the virtual machine used to deploy the vms. This name can scale out based on number of instances and vmnameformat - example can be found under example folder"
   default     = "terraformvm"
 }
 
@@ -137,8 +137,14 @@ variable "vmstartcount" {
 }
 
 variable "staticvmname" {
-  description = "Static name of the virtual machin. When this option is used VM can not scale out using instance variable. You can use for_each outside the module to deploy multiple static vms with different names"
+  description = "Static name of the virtual machine. When this option is used VM can not scale out using instance variable. You can use for_each outside the module to deploy multiple static vms with different names"
   default     = null
+}
+
+variable "sanitanizehostname" {
+  description = "If true, the hostname customization of the vm will be sanitanized to replace underscores with hyphens, for linux the hostname will be lowercase."
+  type        = bool
+  default     = false
 }
 
 variable "fqdnvmname" {
