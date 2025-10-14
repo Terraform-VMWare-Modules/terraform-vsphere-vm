@@ -98,6 +98,11 @@ module "example-server-windowsvm-advanced" {
     "Second Network Card"               = ["", ""]
   }
   ipv4submask  = ["24", "8"]
+
+  network_ipv6 = {
+    "Name of the Port Group in vSphere" = ["2001:DB8::2", "2001:DB8::3"] # 
+  }
+  ipv6submask  = ["64", "64"]
   network_type = ["vmxnet3", "vmxnet3"]
   tags = {
     "terraform-test-category" = "terraform-test-tag"
@@ -121,6 +126,7 @@ module "example-server-windowsvm-advanced" {
   dns_server_list  = ["192.168.0.2", "192.168.0.1"]
   enable_disk_uuid = true
   vmgateway        = "192.168.0.1"
+  vmgateway_ipv6   = "2001:DB8::1"
   auto_logon       = true
   run_once         = ["command01", "command02"] // You can also run Powershell commands
   orgname          = "Terraform-Module"
